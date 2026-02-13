@@ -1,0 +1,264 @@
+/* TMNT: Splintered Fate — Mobile App UI
+   All rules scoped to @media (max-width: 600px) with body.mobile-app
+   Desktop is completely unaffected. */
+
+@media (max-width: 600px) {
+
+  /* ---- App Shell ---- */
+  body.mobile-app {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+    --topbar-height: 48px;
+    --mobile-bottom-nav-height: 56px;
+  }
+
+  /* ---- Compact Topbar ---- */
+  body.mobile-app #topbar {
+    height: 48px;
+    padding: 0 var(--sp-3);
+    gap: var(--sp-2);
+  }
+
+  body.mobile-app .topbar-left {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  body.mobile-app .topbar-logo {
+    height: 28px;
+  }
+
+  body.mobile-app .topbar-subtitle {
+    display: none;
+  }
+
+  body.mobile-app .topbar-characters {
+    display: none;
+  }
+
+  body.mobile-app #auth-container {
+    display: none;
+  }
+
+  /* ---- Character Indicator (topbar) ---- */
+  .mobile-char-indicator {
+    display: none;
+  }
+
+  body.mobile-app .mobile-char-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-left: auto;
+    margin-right: var(--sp-2);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body.mobile-app .mobile-char-indicator img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    object-fit: cover;
+  }
+
+  body.mobile-app .mobile-char-indicator span {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  /* ---- Full-Screen Character Picker ---- */
+  .mobile-char-picker {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-6);
+    gap: var(--sp-6);
+  }
+
+  .mobile-char-picker.hidden {
+    display: none;
+  }
+
+  .mobile-char-picker-title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    color: var(--primary);
+    letter-spacing: 2px;
+  }
+
+  .mobile-char-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+    max-width: 320px;
+    width: 100%;
+  }
+
+  .mobile-char-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+    cursor: pointer;
+    padding: var(--sp-3);
+    border-radius: var(--radius);
+    border: 2px solid transparent;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-char-cell:active {
+    background: var(--muted);
+  }
+
+  .mobile-char-cell.active {
+    border-color: var(--primary);
+    background: var(--el-bg);
+  }
+
+  .mobile-char-cell img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    object-fit: cover;
+    transition: border-color var(--transition-fast);
+  }
+
+  .mobile-char-cell.active img {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary);
+  }
+
+  .mobile-char-cell span {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .mobile-char-cell.active span {
+    color: var(--primary);
+  }
+
+  /* ---- Bottom Navigation Bar ---- */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-sticky);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 56px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mobile-bottom-nav.hidden {
+    display: none;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--sp-1) var(--sp-2);
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-nav-item.active {
+    color: var(--primary);
+  }
+
+  .mobile-nav-item .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mobile-nav-item span {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* ---- Main Layout: Full-Screen Panels ---- */
+  body.mobile-app #main {
+    height: calc(100vh - 48px - 56px);
+    height: calc(100dvh - 48px - 56px);
+    flex-direction: column;
+  }
+
+  body.mobile-app .tab-bar {
+    display: none;
+  }
+
+  body.mobile-app .sidebar-toggle {
+    display: none !important;
+  }
+
+  body.mobile-app #browse-panel {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  body.mobile-app #browse-panel.mobile-panel-hidden {
+    display: none;
+  }
+
+  body.mobile-app #sidebar {
+    position: static;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-left: none;
+    box-shadow: none;
+    display: none;
+    overflow-y: auto;
+  }
+
+  body.mobile-app #sidebar.mobile-panel-active {
+    display: flex;
+  }
+
+  /* ---- Build Sub-Toggle ---- */
+  .mobile-build-toggle {
+    margin-right: auto;
+  }
+
+  /* ---- Panel Transition ---- */
+  .mobile-panel-enter {
+    animation: mobileSlideIn 0.2s ease forwards;
+  }
+
+  @keyframes mobileSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

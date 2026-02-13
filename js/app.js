@@ -12,6 +12,7 @@ import { initInspirationsTab } from './ui/inspirations-tab.js';
 import { initSidebar } from './ui/sidebar.js';
 import { initUpgradesTab } from './ui/upgrades-tab.js';
 import { initSupabase } from './supabase.js';
+import { initMobile } from './ui/mobile.js';
 
 async function init() {
   // Load persisted state from localStorage (instant, no network)
@@ -33,6 +34,9 @@ async function init() {
 
   // Apply initial theme
   applyTheme();
+
+  // Initialize mobile UI (must come after all other modules)
+  initMobile();
 
   // Render the initial active tab
   renderActiveTab();
