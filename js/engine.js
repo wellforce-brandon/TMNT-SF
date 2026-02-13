@@ -91,6 +91,12 @@ function isPartMet(part, buildPowerNames, buildPowerSet) {
       return p && p.type === 'dark';
     });
   }
+  if (partLower === 'light') {
+    return buildPowerNames.some(n => {
+      const p = powersByName.get(n);
+      return p && p.type === 'light';
+    });
+  }
   if (partLower === 'frost') {
     return buildPowerSet.has('Frost');
   }

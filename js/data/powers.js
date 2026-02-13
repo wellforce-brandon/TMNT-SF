@@ -719,7 +719,7 @@ export const powers = [
     slot: 'dash',
     effect: 'Throw 1 / 2 / 3 Shuriken forward at the start of Dash',
     tier: 'secondary',
-    requires: 'After Shuriken Attacks + Quick Feet/First Strike',
+    requires: 'After Shuriken Attacks + Throwing Arts: Ricochet/Throwing Arts: Chakram + Quick Feet/First Strike',
     combo: null,
     requiredPowers: null
   },
@@ -767,7 +767,7 @@ export const powers = [
     slot: 'strike',
     effect: 'Attacks apply 1 / 2 / 3 stack(s) of Blinding Light for 3s / 4s / 5s. Each stack reduces damage dealt by 4% / 6% / 8%. Max 5 Stacks',
     tier: 'secondary',
-    requires: 'After Light Attacks',
+    requires: 'After Light',
     combo: null,
     requiredPowers: null
   },
@@ -777,7 +777,7 @@ export const powers = [
     slot: 'passive',
     effect: '+40% / 60% / 80% Positive Effect duration',
     tier: 'secondary',
-    requires: 'After Light Attacks',
+    requires: 'After Light',
     combo: null,
     requiredPowers: null
   },
@@ -787,7 +787,7 @@ export const powers = [
     slot: 'passive',
     effect: 'Reduce damage received by 2% / 2.5% / 3% for each Astral Light power obtained',
     tier: 'secondary',
-    requires: 'After Light Attacks',
+    requires: 'After Light',
     combo: null,
     requiredPowers: null
   },
@@ -797,7 +797,7 @@ export const powers = [
     slot: 'ability',
     effect: 'Special and Tool grants Light Shell for 1.5s / 3s / 4.5s',
     tier: 'secondary',
-    requires: 'After Light Attacks',
+    requires: 'After Light',
     combo: null,
     requiredPowers: null
   },
@@ -807,7 +807,7 @@ export const powers = [
     slot: 'special',
     effect: 'Gain 1 Splinter\'s Revive(s). +30 / 60 Max Health',
     tier: 'secondary',
-    requires: 'After Light Attacks',
+    requires: 'After Light',
     combo: null,
     requiredPowers: null
   },
