@@ -187,6 +187,9 @@ async function handleAuthChange(event, session) {
   const wasLoggedIn = currentSession !== null;
   currentSession = session;
 
+  // Emit immediately so the auth button updates before cloud sync
+  emitAuthChanged();
+
   if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
     try {
       const cloudData = await loadUpgradesFromCloud();
@@ -225,8 +228,6 @@ async function handleAuthChange(event, session) {
   } else if (event === 'SIGNED_OUT') {
     stopCloudSync();
   }
-
-  emitAuthChanged();
 }
 
 // ---- Initialization ----
