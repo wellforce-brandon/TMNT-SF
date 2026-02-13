@@ -1,0 +1,150 @@
+/* ===========================================
+   TMNT: Splintered Fate - CSS Variables
+   Game-constant element colors, spacing, typography
+   =========================================== */
+
+:root {
+  /* Element Type Colors (game-constant, not themed) */
+  --el-water: #1a8fc4;
+  --el-water-bg: rgba(26, 143, 196, 0.12);
+  --el-water-border: rgba(26, 143, 196, 0.35);
+
+  --el-flame: #d94e1f;
+  --el-flame-bg: rgba(217, 78, 31, 0.12);
+  --el-flame-border: rgba(217, 78, 31, 0.35);
+
+  --el-ooze: #5fa31e;
+  --el-ooze-bg: rgba(95, 163, 30, 0.12);
+  --el-ooze-border: rgba(95, 163, 30, 0.35);
+
+  --el-utrom: #8b5cf6;
+  --el-utrom-bg: rgba(139, 92, 246, 0.12);
+  --el-utrom-border: rgba(139, 92, 246, 0.35);
+
+  --el-ninja: #888888;
+  --el-ninja-bg: rgba(136, 136, 136, 0.12);
+  --el-ninja-border: rgba(136, 136, 136, 0.35);
+
+  --el-light: #d4a017;
+  --el-light-bg: rgba(212, 160, 23, 0.12);
+  --el-light-border: rgba(212, 160, 23, 0.35);
+
+  --el-dark: #9333ea;
+  --el-dark-bg: rgba(147, 51, 234, 0.12);
+  --el-dark-border: rgba(147, 51, 234, 0.35);
+
+  --el-robotics: #3b82f6;
+  --el-robotics-bg: rgba(59, 130, 246, 0.12);
+  --el-robotics-border: rgba(59, 130, 246, 0.35);
+
+  --el-legendary: #b8860b;
+  --el-legendary-bg: rgba(184, 134, 11, 0.12);
+  --el-legendary-border: rgba(184, 134, 11, 0.35);
+
+  /* Contextual element color (set via data-type attribute) */
+  --el-color: var(--el-water);
+  --el-bg: var(--el-water-bg);
+  --el-border: var(--el-water-border);
+
+  /* Typography */
+  --font-display: 'Bangers', cursive;
+  --font-body: 'DM Sans', sans-serif;
+  --text-xs: 0.7rem;
+  --text-sm: 0.8rem;
+  --text-base: 0.9rem;
+  --text-md: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: 1.4rem;
+  --text-2xl: 1.8rem;
+  --text-3xl: 2.2rem;
+
+  /* Spacing Scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* Layout */
+  --sidebar-width: 320px;
+  --topbar-height: 64px;
+  --tab-bar-height: 48px;
+  --filter-bar-height: 52px;
+
+  /* Transitions */
+  --transition-fast: 0.12s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-sticky: 10;
+  --z-sidebar: 20;
+  --z-modal-overlay: 50;
+  --z-modal: 60;
+  --z-tooltip: 70;
+}
+
+/* Element type attribute selectors */
+[data-type="water"] {
+  --el-color: var(--el-water);
+  --el-bg: var(--el-water-bg);
+  --el-border: var(--el-water-border);
+}
+
+[data-type="flame"] {
+  --el-color: var(--el-flame);
+  --el-bg: var(--el-flame-bg);
+  --el-border: var(--el-flame-border);
+}
+
+[data-type="ooze"] {
+  --el-color: var(--el-ooze);
+  --el-bg: var(--el-ooze-bg);
+  --el-border: var(--el-ooze-border);
+}
+
+[data-type="utrom"] {
+  --el-color: var(--el-utrom);
+  --el-bg: var(--el-utrom-bg);
+  --el-border: var(--el-utrom-border);
+}
+
+[data-type="ninja"] {
+  --el-color: var(--el-ninja);
+  --el-bg: var(--el-ninja-bg);
+  --el-border: var(--el-ninja-border);
+}
+
+[data-type="light"] {
+  --el-color: var(--el-light);
+  --el-bg: var(--el-light-bg);
+  --el-border: var(--el-light-border);
+}
+
+[data-type="dark"] {
+  --el-color: var(--el-dark);
+  --el-bg: var(--el-dark-bg);
+  --el-border: var(--el-dark-border);
+}
+
+[data-type="robotics"] {
+  --el-color: var(--el-robotics);
+  --el-bg: var(--el-robotics-bg);
+  --el-border: var(--el-robotics-border);
+}
+
+[data-type="legendary"] {
+  --el-color: var(--el-legendary);
+  --el-bg: var(--el-legendary-bg);
+  --el-border: var(--el-legendary-border);
+}

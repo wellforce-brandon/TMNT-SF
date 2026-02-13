@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMNT: Splintered Fate - Run Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header id="topbar">
+    <div class="topbar-left">
+      <h1 class="topbar-title">TMNT: Splintered Fate</h1>
+      <span class="topbar-subtitle">Run Builder</span>
+    </div>
+    <div class="topbar-characters" id="character-selector"></div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="theme-toggle" title="Toggle light/dark theme">
+        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settings-btn" title="Upgrades &amp; Settings">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div id="main">
+    <!-- Browse Panel (Left) -->
+    <div id="browse-panel">
+      <nav class="tab-bar" id="tab-bar"></nav>
+      <div class="filter-bar" id="filter-bar"></div>
+      <div class="card-grid" id="card-grid"></div>
+    </div>
+
+    <!-- Run Sidebar (Right) -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Current Run</h2>
+        <button class="btn btn-small btn-ghost" id="clear-build">Clear</button>
+      </div>
+      <div id="sidebar-content">
+        <div class="sidebar-section" id="sidebar-character"></div>
+        <div class="sidebar-section" id="sidebar-stats"></div>
+        <div class="sidebar-section" id="sidebar-tool"></div>
+        <div class="sidebar-section" id="sidebar-artifact"></div>
+        <div class="sidebar-section" id="sidebar-powers"></div>
+        <div class="sidebar-section" id="sidebar-masteries"></div>
+        <div class="sidebar-section" id="sidebar-inspirations"></div>
+        <div class="sidebar-section" id="sidebar-focus"></div>
+        <div class="sidebar-section" id="sidebar-synergies"></div>
+        <div class="sidebar-section" id="sidebar-damage"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Upgrades Modal -->
+  <div class="modal-overlay" id="upgrades-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Upgrades &amp; Settings</h2>
+        <button class="icon-btn modal-close" id="close-upgrades">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" id="upgrades-content">
+        <div class="settings-row" id="settings-auto-theme"></div>
+        <div class="upgrades-columns">
+          <div class="upgrade-column" id="dragon-upgrades">
+            <h3 class="upgrade-column-title">Dragon Upgrades</h3>
+          </div>
+          <div class="upgrade-column" id="dreamer-upgrades">
+            <h3 class="upgrade-column-title">Dreamer Upgrades</h3>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-small" id="max-all-upgrades">Max All</button>
+          <button class="btn btn-small btn-ghost" id="reset-all-upgrades">Reset All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile sidebar toggle -->
+  <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle build sidebar">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18l6-6-6-6"/>
+    </svg>
+  </button>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
