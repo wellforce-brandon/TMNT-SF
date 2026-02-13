@@ -9,7 +9,7 @@ const TABS = [
   { id: 'artifacts', label: 'Artifacts' },
   { id: 'masteries', label: 'Masteries' },
   { id: 'inspirations', label: 'Inspirations' },
-  { id: 'upgrades', label: 'Upgrades' }
+  { id: 'upgrades', label: 'HQ Upgrades' }
 ];
 
 export function initTabs() {
