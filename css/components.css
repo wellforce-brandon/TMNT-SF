@@ -341,6 +341,11 @@
   line-height: 1.4;
 }
 
+.effect-value {
+  color: var(--primary);
+  font-weight: 700;
+}
+
 .card-meta {
   display: flex;
   gap: var(--sp-2);
@@ -431,6 +436,12 @@
   justify-content: center;
   font-size: var(--text-xs);
   font-weight: 700;
+  z-index: 3;
+}
+
+/* When card has edge zones, offset checkmark left of the + tap button */
+.card.upgrade-card.in-build::after {
+  right: calc(10% + var(--sp-1));
 }
 
 .card.synergy-highlight {

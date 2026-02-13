@@ -30,7 +30,7 @@ function resolveEffectForLevel(text, level) {
       const vals = [v1, v2];
       if (v3) vals.push(v3);
       const idx = Math.min(level - 1, vals.length - 1);
-      return vals[idx];
+      return `<span class="effect-value">${vals[idx]}</span>`;
     }
   );
 }

@@ -314,8 +314,7 @@ export function computeCharacterStats(baseChar, upgradeState) {
   };
 
   return {
-    health: applyPercent(baseChar.health, 'maxHealth'),
-    maxHealth: applyPercent(baseChar.maxHealth, 'maxHealth'),
+    health: Math.min(applyPercent(baseChar.health, 'maxHealth'), baseChar.maxHealth),
     attackDamage: applyPercent(baseChar.attackDamage, 'attackDamage'),
     dashAttack: applyPercent(baseChar.dashAttack, 'dashAttackDamage'),
     specialAttack: applyPercent(baseChar.specialAttack, 'specialAttack'),

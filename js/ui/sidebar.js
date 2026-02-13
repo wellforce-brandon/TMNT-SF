@@ -96,9 +96,7 @@ function renderStatsSection() {
     <div class="sidebar-section-title">Stats</div>
     <div class="stat-grid">
       <div><span class="stat-label">HP</span></div>
-      <div><span class="stat-value">${computed.health}</span> <span class="stat-base">(base ${char.health})</span></div>
-      <div><span class="stat-label">Max HP</span></div>
-      <div><span class="stat-value">${computed.maxHealth}</span> <span class="stat-base">(base ${char.maxHealth})</span></div>
+      <div><span class="stat-value">${computed.health}</span> <span class="stat-base">(base ${char.health}, max ${char.maxHealth})</span></div>
       <div><span class="stat-label">Attack</span></div>
       <div><span class="stat-value">${computed.attackDamage}</span> <span class="stat-base">(base ${char.attackDamage})</span></div>
       <div><span class="stat-label">Dash Atk</span></div>
