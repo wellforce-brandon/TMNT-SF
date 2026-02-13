@@ -2,7 +2,7 @@
 // Character selector, theme toggle, settings button
 
 import { characters, characterThemeMap } from '../data/characters.js';
-import { state, settings, selectCharacter, setThemeMode, on } from '../state.js';
+import { state, settings, selectCharacter, setThemeMode, setActiveTab, on } from '../state.js';
 
 export function initTopbar() {
   renderCharacterSelector();
@@ -29,7 +29,8 @@ function renderCharacterSelector() {
   container.innerHTML = characters.map(char => `
     <button class="char-btn ${state.character === char.id ? 'active' : ''}"
             data-character="${char.id}">
-      ${char.name}
+      <img class="char-btn-portrait" src="assets/faces/${char.id}.png" alt="${char.name}">
+      <span class="char-btn-name">${char.name}</span>
     </button>
   `).join('');
 
@@ -51,39 +52,14 @@ function initThemeToggle() {
 }
 
 function updateThemeToggleVisibility() {
-  const btn = document.getElementById('theme-toggle');
-  if (!btn) return;
-
-  // Hide theme toggle when auto-theme is on and a character is selected
-  if (settings.autoTheme && state.character) {
-    btn.style.display = 'none';
-  } else {
-    btn.style.display = '';
-  }
+  // Toggle is always visible — it switches between light/dark variants
 }
 
 function initSettingsButton() {
   const btn = document.getElementById('settings-btn');
-  const modal = document.getElementById('upgrades-modal');
-  const closeBtn = document.getElementById('close-upgrades');
-
-  if (btn && modal) {
+  if (btn) {
     btn.addEventListener('click', () => {
-      modal.classList.add('open');
-    });
-  }
-
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('open');
-    });
-  }
-
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('open');
-      }
+      setActiveTab('upgrades');
     });
   }
 }
@@ -92,9 +68,9 @@ export function applyTheme() {
   const html = document.documentElement;
 
   if (settings.autoTheme && state.character) {
-    const theme = characterThemeMap[state.character];
-    if (theme) {
-      html.setAttribute('data-theme', theme);
+    const themeMap = characterThemeMap[state.character];
+    if (themeMap) {
+      html.setAttribute('data-theme', themeMap[settings.themeMode]);
       return;
     }
   }

@@ -10,7 +10,7 @@ import { initArtifactsTab } from './ui/artifacts-tab.js';
 import { initMasteriesTab } from './ui/masteries-tab.js';
 import { initInspirationsTab } from './ui/inspirations-tab.js';
 import { initSidebar } from './ui/sidebar.js';
-import { initUpgradesModal } from './ui/upgrades-modal.js';
+import { initUpgradesTab } from './ui/upgrades-tab.js';
 
 function init() {
   // Load persisted state from localStorage
@@ -25,7 +25,7 @@ function init() {
   initMasteriesTab();
   initInspirationsTab();
   initSidebar();
-  initUpgradesModal();
+  initUpgradesTab();
 
   // Apply initial theme
   applyTheme();

@@ -3,7 +3,7 @@
 
 import { characters } from '../data/characters.js';
 import { powers } from '../data/powers.js';
-import { state, upgradeState, removePower, setTool, setArtifact, toggleMastery, setInspirationLevel, clearBuild, on } from '../state.js';
+import { state, upgradeState, removePower, setTool, setArtifact, toggleMastery, setInspirationLevel, isStartingInspiration, clearBuild, on } from '../state.js';
 import { runFullAnalysis, computeCharacterStats } from '../engine.js';
 
 const TYPE_LABELS = {
@@ -76,8 +76,7 @@ function renderCharacterSection() {
 
   const char = characters.find(c => c.id === state.character);
   container.innerHTML = `
-    <div class="sidebar-section-title">Character</div>
-    <div style="font-weight: 700; font-size: var(--text-md); color: var(--primary)">${char.name}</div>
+    <img class="sidebar-nameplate" src="assets/nameplates/${char.id}.png" alt="${char.name}">
   `;
 }
 
@@ -250,10 +249,11 @@ function renderInspirationsSection() {
 
   let html = `<div class="sidebar-section-title">Inspirations</div>`;
   for (const [name, level] of active) {
+    const isStarter = isStartingInspiration(name);
     html += `
-      <div class="sidebar-item" data-sidebar-insp="${name}">
-        <span>${name} (Lv${level})</span>
-        <span class="sidebar-item-remove">x</span>
+      <div class="sidebar-item${isStarter ? ' sidebar-item-locked' : ''}" data-sidebar-insp="${name}">
+        <span>${name} (Lv${level})${isStarter ? ' \u2022 Starting' : ''}</span>
+        ${isStarter ? '' : '<span class="sidebar-item-remove">x</span>'}
       </div>
     `;
   }

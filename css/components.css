@@ -79,11 +79,14 @@
 }
 
 /* Theme toggle icon visibility */
+/* Dark themes: show sun icon, hide moon */
 [data-theme="dark"] .icon-sun,
 [data-theme="raphael"] .icon-sun,
 [data-theme="metalhead"] .icon-sun,
 [data-theme="casey-jones"] .icon-sun,
-[data-theme="donatello"] .icon-sun {
+[data-theme="donatello"] .icon-sun,
+[data-theme="michelangelo-dark"] .icon-sun,
+[data-theme="leonardo-dark"] .icon-sun {
   display: inline-block;
 }
 
@@ -91,33 +94,45 @@
 [data-theme="raphael"] .icon-moon,
 [data-theme="metalhead"] .icon-moon,
 [data-theme="casey-jones"] .icon-moon,
-[data-theme="donatello"] .icon-moon {
+[data-theme="donatello"] .icon-moon,
+[data-theme="michelangelo-dark"] .icon-moon,
+[data-theme="leonardo-dark"] .icon-moon {
   display: none;
 }
 
+/* Light themes: show moon icon, hide sun */
 [data-theme="light"] .icon-sun,
 [data-theme="michelangelo"] .icon-sun,
-[data-theme="leonardo"] .icon-sun {
+[data-theme="leonardo"] .icon-sun,
+[data-theme="raphael-light"] .icon-sun,
+[data-theme="metalhead-light"] .icon-sun,
+[data-theme="casey-jones-light"] .icon-sun,
+[data-theme="donatello-light"] .icon-sun {
   display: none;
 }
 
 [data-theme="light"] .icon-moon,
 [data-theme="michelangelo"] .icon-moon,
-[data-theme="leonardo"] .icon-moon {
+[data-theme="leonardo"] .icon-moon,
+[data-theme="raphael-light"] .icon-moon,
+[data-theme="metalhead-light"] .icon-moon,
+[data-theme="casey-jones-light"] .icon-moon,
+[data-theme="donatello-light"] .icon-moon {
   display: inline-block;
 }
 
 /* ---- Character Buttons ---- */
 .char-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--sp-2);
+  gap: 2px;
   font-family: var(--font-body);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   font-weight: 600;
-  padding: var(--sp-1) var(--sp-3);
+  padding: var(--sp-1);
   border-radius: var(--radius);
-  border: 1.5px solid var(--border);
+  border: 2px solid transparent;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
@@ -127,14 +142,42 @@
 
 .char-btn:hover {
   border-color: var(--border-hover);
-  background: var(--muted);
   color: var(--foreground);
 }
 
 .char-btn.active {
   border-color: var(--primary);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  color: var(--primary);
+}
+
+.char-btn-portrait {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.char-btn:hover .char-btn-portrait {
+  border-color: var(--border-hover);
+}
+
+.char-btn.active .char-btn-portrait {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.char-btn-name {
+  line-height: 1;
+}
+
+/* ---- Sidebar Nameplate ---- */
+.sidebar-nameplate {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  display: block;
 }
 
 /* ---- Tabs ---- */
@@ -178,6 +221,16 @@
   margin-right: var(--sp-1);
 }
 
+.inspiration-group-header {
+  padding: var(--sp-2) 0 var(--sp-1);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--sp-2);
+}
+
+.inspiration-group-header:first-child {
+  padding-top: 0;
+}
+
 .filter-pill {
   font-family: var(--font-body);
   font-size: var(--text-xs);
@@ -204,7 +257,8 @@
   color: var(--el-color);
 }
 
-.filter-pill[data-filter="all"].active {
+.filter-pill[data-filter="all"].active,
+.filter-pill[data-section].active {
   border-color: var(--primary);
   background: var(--primary);
   color: var(--primary-foreground);
@@ -353,6 +407,12 @@
   border: 1px solid var(--el-legendary-border);
 }
 
+.badge-starting {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: var(--text-xs);
+}
+
 /* ---- Card States ---- */
 .card.in-build {
   opacity: 0.55;
@@ -388,6 +448,14 @@
 
 .card.locked {
   opacity: 0.4;
+}
+
+.card.starting-inspiration {
+  border-left: 3px solid var(--primary);
+}
+
+.card.starting-inspiration.in-build {
+  opacity: 0.75;
 }
 
 /* Element-colored left border on cards */
@@ -428,6 +496,16 @@
 
 .sidebar-item:hover {
   background: var(--muted);
+}
+
+.sidebar-item-locked {
+  cursor: default;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.sidebar-item-locked:hover {
+  background: transparent;
 }
 
 .sidebar-item-dot {
@@ -759,6 +837,34 @@
   border-color: var(--primary);
   background: var(--primary);
   color: var(--primary-foreground);
+}
+
+/* ---- Upgrade Controls (slider + ±buttons) ---- */
+.upgrade-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+}
+
+.upgrade-controls .level-btn {
+  flex-shrink: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.upgrade-controls .upgrade-slider {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Upgrade card: disable hover lift since it's not clickable to add */
+.upgrade-card {
+  cursor: default;
+}
+
+.upgrade-card:hover {
+  transform: none;
 }
 
 /* ---- Damage Display ---- */

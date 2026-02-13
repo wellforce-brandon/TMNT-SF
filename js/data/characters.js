@@ -13,7 +13,7 @@ export const characters = [
     specialAttack: 40,
     specialChargeRate: 1.0,
     defaultTool: 'Taunt',
-    inspirations: ['Mikey Inspiration 1', 'Mikey Inspiration 2']
+    inspirations: ['Michelangelo Inspiration 1', 'Michelangelo Inspiration 2']
   },
   {
     id: 'leonardo',
@@ -26,7 +26,7 @@ export const characters = [
     specialAttack: 45,
     specialChargeRate: 1.0,
     defaultTool: 'Shuriken',
-    inspirations: ['Leo Inspiration 1', 'Leo Inspiration 2']
+    inspirations: ['Leonardo Inspiration 1', 'Leonardo Inspiration 2']
   },
   {
     id: 'raphael',
@@ -39,7 +39,7 @@ export const characters = [
     specialAttack: 50,
     specialChargeRate: 0.9,
     defaultTool: 'Turtle Line',
-    inspirations: ['Raph Inspiration 1', 'Raph Inspiration 2']
+    inspirations: ['Raphael Inspiration 1', 'Raphael Inspiration 2']
   },
   {
     id: 'donatello',
@@ -52,7 +52,7 @@ export const characters = [
     specialAttack: 55,
     specialChargeRate: 1.1,
     defaultTool: 'Hardened Shell',
-    inspirations: ['Donnie Inspiration 1', 'Donnie Inspiration 2']
+    inspirations: ['Donatello Inspiration 1', 'Donatello Inspiration 2']
   },
   {
     id: 'casey',
@@ -65,7 +65,7 @@ export const characters = [
     specialAttack: 42,
     specialChargeRate: 1.0,
     defaultTool: 'The Juice',
-    inspirations: ['Casey Inspiration 1', 'Casey Inspiration 2']
+    inspirations: ['Casey Jones Inspiration 1', 'Casey Jones Inspiration 2']
   },
   {
     id: 'metalhead',
@@ -82,12 +82,12 @@ export const characters = [
   }
 ];
 
-// Theme mapping for character selection
+// Theme mapping for character selection (dark/light variants)
 export const characterThemeMap = {
-  michelangelo: 'michelangelo',
-  leonardo: 'leonardo',
-  raphael: 'raphael',
-  donatello: 'donatello',
-  casey: 'casey-jones',
-  metalhead: 'metalhead'
+  michelangelo: { dark: 'michelangelo-dark', light: 'michelangelo' },
+  leonardo:     { dark: 'leonardo-dark',     light: 'leonardo' },
+  raphael:      { dark: 'raphael',           light: 'raphael-light' },
+  donatello:    { dark: 'donatello',         light: 'donatello-light' },
+  casey:        { dark: 'casey-jones',       light: 'casey-jones-light' },
+  metalhead:    { dark: 'metalhead',         light: 'metalhead-light' }
 };

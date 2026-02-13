@@ -6,6 +6,8 @@ import { characters } from './data/characters.js';
 const STORAGE_KEY_UPGRADES = 'tmnt-sf-upgrades';
 const STORAGE_KEY_SETTINGS = 'tmnt-sf-settings';
 const STORAGE_KEY_BUILD = 'tmnt-sf-build';
+const STORAGE_KEY_ARTIFACT_UPGRADES = 'tmnt-sf-artifact-upgrades';
+const STORAGE_KEY_INSPIRATION_UPGRADES = 'tmnt-sf-inspiration-upgrades';
 
 // ---- Event System ----
 const listeners = new Map();
@@ -50,6 +52,33 @@ export const settings = {
 // ---- Upgrade State ----
 export const upgradeState = {};
 
+// ---- Permanent Artifact/Inspiration Upgrade State ----
+// Tracks permanently unlocked levels (persist across runs)
+export const artifactUpgrades = {};      // { [artifactName]: unlockedLevel }
+export const inspirationUpgrades = {};   // { [inspirationName]: unlockedLevel }
+
+// ---- Helpers ----
+
+function getStartingInspirations(charId) {
+  if (!charId) return [];
+  const char = characters.find(c => c.id === charId);
+  return char ? char.inspirations : [];
+}
+
+function applyStartingInspirations(charId) {
+  const starters = getStartingInspirations(charId);
+  for (const name of starters) {
+    const minLevel = getInspirationUpgradeLevel(name);
+    if (!state.inspirations[name] || state.inspirations[name] < minLevel) {
+      state.inspirations[name] = minLevel;
+    }
+  }
+}
+
+export function isStartingInspiration(inspirationName) {
+  return getStartingInspirations(state.character).includes(inspirationName);
+}
+
 // ---- State Mutations ----
 
 export function selectCharacter(charId) {
@@ -66,6 +95,8 @@ export function selectCharacter(charId) {
   // Reset character-specific selections
   state.masteries = [];
   state.inspirations = {};
+  applyStartingInspirations(state.character);
+  saveBuild();
   emit('character-changed', state.character);
   emit('build-changed', state);
 }
@@ -107,13 +138,23 @@ export function setArtifact(artifactName, level) {
     state.artifactLevel = 1;
   } else {
     state.artifact = artifactName;
-    if (level !== undefined) state.artifactLevel = level;
+    const minLevel = getArtifactUpgradeLevel(artifactName);
+    if (level !== undefined) {
+      state.artifactLevel = Math.max(level, minLevel);
+    } else {
+      state.artifactLevel = Math.max(state.artifactLevel, minLevel);
+    }
   }
   emit('build-changed', state);
   saveBuild();
 }
 
 export function setArtifactLevel(level) {
+  // Enforce permanent upgrade minimum
+  if (state.artifact) {
+    const minLevel = getArtifactUpgradeLevel(state.artifact);
+    if (level < minLevel) level = minLevel;
+  }
   state.artifactLevel = level;
   emit('build-changed', state);
   saveBuild();
@@ -131,6 +172,13 @@ export function toggleMastery(masteryName) {
 }
 
 export function setInspirationLevel(inspirationName, level) {
+  // Don't allow turning off starting inspirations
+  if (level === 0 && isStartingInspiration(inspirationName)) return;
+
+  // Enforce permanent upgrade minimum
+  const minLevel = isStartingInspiration(inspirationName) ? getInspirationUpgradeLevel(inspirationName) : 0;
+  if (level < minLevel) level = minLevel;
+
   if (level === 0) {
     delete state.inspirations[inspirationName];
   } else {
@@ -180,6 +228,7 @@ export function clearBuild() {
   } else {
     state.tool = null;
   }
+  applyStartingInspirations(state.character);
   emit('build-changed', state);
   saveBuild();
 }
@@ -206,6 +255,48 @@ export function resetAllUpgrades() {
   }
   emit('upgrades-changed', upgradeState);
   saveUpgrades();
+}
+
+// ---- Permanent Artifact/Inspiration Upgrade Mutations ----
+
+export function getArtifactUpgradeLevel(name) {
+  return artifactUpgrades[name] || 1;
+}
+
+export function getInspirationUpgradeLevel(name) {
+  return inspirationUpgrades[name] || 1;
+}
+
+export function setArtifactUpgradeLevel(name, level) {
+  if (level <= 1) {
+    delete artifactUpgrades[name];
+  } else {
+    artifactUpgrades[name] = level;
+  }
+  // If this artifact is currently in build, enforce minimum level
+  if (state.artifact === name && state.artifactLevel < level) {
+    state.artifactLevel = level;
+  }
+  emit('artifact-upgrades-changed', artifactUpgrades);
+  emit('build-changed', state);
+  saveArtifactUpgrades();
+  saveBuild();
+}
+
+export function setInspirationUpgradeLevel(name, level) {
+  if (level <= 1) {
+    delete inspirationUpgrades[name];
+  } else {
+    inspirationUpgrades[name] = level;
+  }
+  // If this inspiration is active in build, enforce minimum level
+  if (state.inspirations[name] && state.inspirations[name] < level) {
+    state.inspirations[name] = level;
+  }
+  emit('inspiration-upgrades-changed', inspirationUpgrades);
+  emit('build-changed', state);
+  saveInspirationUpgrades();
+  saveBuild();
 }
 
 // ---- Settings Mutations ----
@@ -289,12 +380,40 @@ function saveSettings() {
   }
 }
 
+function saveArtifactUpgrades() {
+  try {
+    localStorage.setItem(STORAGE_KEY_ARTIFACT_UPGRADES, JSON.stringify(artifactUpgrades));
+  } catch (e) {
+    // localStorage unavailable
+  }
+}
+
+function saveInspirationUpgrades() {
+  try {
+    localStorage.setItem(STORAGE_KEY_INSPIRATION_UPGRADES, JSON.stringify(inspirationUpgrades));
+  } catch (e) {
+    // localStorage unavailable
+  }
+}
+
 export function loadPersistedState() {
   try {
     // Load upgrades
     const upgStr = localStorage.getItem(STORAGE_KEY_UPGRADES);
     if (upgStr) {
       Object.assign(upgradeState, JSON.parse(upgStr));
+    }
+
+    // Load permanent artifact upgrades
+    const artUpgStr = localStorage.getItem(STORAGE_KEY_ARTIFACT_UPGRADES);
+    if (artUpgStr) {
+      Object.assign(artifactUpgrades, JSON.parse(artUpgStr));
+    }
+
+    // Load permanent inspiration upgrades
+    const inspUpgStr = localStorage.getItem(STORAGE_KEY_INSPIRATION_UPGRADES);
+    if (inspUpgStr) {
+      Object.assign(inspirationUpgrades, JSON.parse(inspUpgStr));
     }
 
     // Load settings
@@ -315,6 +434,8 @@ export function loadPersistedState() {
       if (data.masteries) state.masteries = data.masteries;
       if (data.inspirations) state.inspirations = data.inspirations;
     }
+    // Ensure starting inspirations are always present (respects permanent levels)
+    applyStartingInspirations(state.character);
   } catch (e) {
     // localStorage unavailable or corrupt data
   }

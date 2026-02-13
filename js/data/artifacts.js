@@ -1,288 +1,320 @@
 // TMNT: Splintered Fate - Artifacts Data
-// 24 artifacts organized by category with 3 scaling levels each
+// 24 artifacts from tmntsplinteredfate.pages.dev
+// Element-boosting & utility: 6 levels; Advanced: 3 levels
 
 export const artifacts = [
   // =====================
-  // ELEMENT-BOOSTING (7)
+  // ELEMENT-BOOSTING (7) — 6 levels each
   // =====================
   {
     name: 'Manhole Cover',
-    effect: 'Increases Water power offering rate.',
+    effect: 'Double Select chance when selecting Water powers. Guarantees your next Power Selection is of the Water category.',
     levels: [
       { level: 1, effect: '+10% Water power offering rate' },
-      { level: 2, effect: '+20% Water power offering rate' },
-      { level: 3, effect: '+35% Water power offering rate' }
+      { level: 2, effect: '+12.5% Water power offering rate' },
+      { level: 3, effect: '+15% Water power offering rate' },
+      { level: 4, effect: '+17.5% Water power offering rate' },
+      { level: 5, effect: '+20% Water power offering rate' },
+      { level: 6, effect: '+22.5% Water power offering rate' }
     ],
     tags: ['water'],
     category: 'element'
   },
   {
     name: 'Foot Clan Medallion',
-    effect: 'Increases Flame power offering rate.',
+    effect: 'Double Select chance when selecting Flame powers. Guarantees your next Power Selection is of the Flame category.',
     levels: [
       { level: 1, effect: '+10% Flame power offering rate' },
-      { level: 2, effect: '+20% Flame power offering rate' },
-      { level: 3, effect: '+35% Flame power offering rate' }
+      { level: 2, effect: '+12.5% Flame power offering rate' },
+      { level: 3, effect: '+15% Flame power offering rate' },
+      { level: 4, effect: '+17.5% Flame power offering rate' },
+      { level: 5, effect: '+20% Flame power offering rate' },
+      { level: 6, effect: '+22.5% Flame power offering rate' }
     ],
     tags: ['flame'],
     category: 'element'
   },
   {
     name: 'Broken Ooze Canister',
-    effect: 'Increases Ooze power offering rate.',
+    effect: 'Double Select chance when selecting Ooze powers. Guarantees your next Power Selection is of the Ooze category.',
     levels: [
       { level: 1, effect: '+10% Ooze power offering rate' },
-      { level: 2, effect: '+20% Ooze power offering rate' },
-      { level: 3, effect: '+35% Ooze power offering rate' }
+      { level: 2, effect: '+12.5% Ooze power offering rate' },
+      { level: 3, effect: '+15% Ooze power offering rate' },
+      { level: 4, effect: '+17.5% Ooze power offering rate' },
+      { level: 5, effect: '+20% Ooze power offering rate' },
+      { level: 6, effect: '+22.5% Ooze power offering rate' }
     ],
     tags: ['ooze'],
     category: 'element'
   },
   {
     name: 'Sword of Tengu',
-    effect: 'Increases Utrom power offering rate.',
+    effect: 'Double Select chance when selecting Utrom powers. Guarantees your next Power Selection is of the Utrom category.',
     levels: [
       { level: 1, effect: '+10% Utrom power offering rate' },
-      { level: 2, effect: '+20% Utrom power offering rate' },
-      { level: 3, effect: '+35% Utrom power offering rate' }
+      { level: 2, effect: '+12.5% Utrom power offering rate' },
+      { level: 3, effect: '+15% Utrom power offering rate' },
+      { level: 4, effect: '+17.5% Utrom power offering rate' },
+      { level: 5, effect: '+20% Utrom power offering rate' },
+      { level: 6, effect: '+22.5% Utrom power offering rate' }
     ],
     tags: ['utrom'],
     category: 'element'
   },
   {
     name: 'Tessen',
-    effect: 'Increases Ninja power offering rate.',
+    effect: 'Double Select chance when selecting Ninja powers. Guarantees your next Power Selection is of the Ninja category.',
     levels: [
       { level: 1, effect: '+10% Ninja power offering rate' },
-      { level: 2, effect: '+20% Ninja power offering rate' },
-      { level: 3, effect: '+35% Ninja power offering rate' }
+      { level: 2, effect: '+12.5% Ninja power offering rate' },
+      { level: 3, effect: '+15% Ninja power offering rate' },
+      { level: 4, effect: '+17.5% Ninja power offering rate' },
+      { level: 5, effect: '+20% Ninja power offering rate' },
+      { level: 6, effect: '+22.5% Ninja power offering rate' }
     ],
     tags: ['ninja'],
     category: 'element'
   },
   {
     name: 'Mystical Seal of Protection',
-    effect: 'Increases Astral power offering rate.',
+    effect: 'Double Select chance when selecting Astral powers. Guarantees your next Power Selection is of the Astral category.',
     levels: [
       { level: 1, effect: '+10% Astral power offering rate' },
-      { level: 2, effect: '+20% Astral power offering rate' },
-      { level: 3, effect: '+35% Astral power offering rate' }
+      { level: 2, effect: '+12.5% Astral power offering rate' },
+      { level: 3, effect: '+15% Astral power offering rate' },
+      { level: 4, effect: '+17.5% Astral power offering rate' },
+      { level: 5, effect: '+20% Astral power offering rate' },
+      { level: 6, effect: '+22.5% Astral power offering rate' }
     ],
     tags: ['astral'],
     category: 'element'
   },
   {
     name: 'Positronic Motherboard',
-    effect: 'Increases Robotics power offering rate.',
+    effect: 'Double Select chance when selecting Robotics powers. Guarantees your next Power Selection is of the Robotics category.',
     levels: [
       { level: 1, effect: '+10% Robotics power offering rate' },
-      { level: 2, effect: '+20% Robotics power offering rate' },
-      { level: 3, effect: '+35% Robotics power offering rate' }
+      { level: 2, effect: '+12.5% Robotics power offering rate' },
+      { level: 3, effect: '+15% Robotics power offering rate' },
+      { level: 4, effect: '+17.5% Robotics power offering rate' },
+      { level: 5, effect: '+20% Robotics power offering rate' },
+      { level: 6, effect: '+22.5% Robotics power offering rate' }
     ],
     tags: ['robotics'],
     category: 'element'
   },
 
   // =====================
-  // ECONOMY/META (6)
+  // UTILITY (6) — 6 levels each
   // =====================
   {
     name: 'Stockgen ID Card',
-    effect: 'Increased Scrap from enemies.',
+    effect: 'Chance of gaining Bonus Scrap when defeating MOUSERs or Super Foot Soldiers.',
     levels: [
-      { level: 1, effect: '+10% Scrap from enemies' },
-      { level: 2, effect: '+20% Scrap from enemies' },
-      { level: 3, effect: '+35% Scrap from enemies' }
+      { level: 1, effect: '+10% bonus Scrap chance' },
+      { level: 2, effect: '+12.5% bonus Scrap chance' },
+      { level: 3, effect: '+15% bonus Scrap chance' },
+      { level: 4, effect: '+17.5% bonus Scrap chance' },
+      { level: 5, effect: '+20% bonus Scrap chance' },
+      { level: 6, effect: '+22.5% bonus Scrap chance' }
     ],
     tags: ['economy', 'scrap'],
-    category: 'economy'
+    category: 'utility'
   },
   {
     name: 'Turnstone',
-    effect: 'Better shop inventory.',
+    effect: 'Chance to gain bonus Dragon Coins or Dreamer Coins upon defeating a veteran or champion enemy.',
     levels: [
-      { level: 1, effect: '+10% chance for upgraded shop items' },
-      { level: 2, effect: '+20% chance for upgraded shop items' },
-      { level: 3, effect: '+35% chance for upgraded shop items' }
+      { level: 1, effect: '+10% bonus coin chance' },
+      { level: 2, effect: '+12.5% bonus coin chance' },
+      { level: 3, effect: '+15% bonus coin chance' },
+      { level: 4, effect: '+17.5% bonus coin chance' },
+      { level: 5, effect: '+20% bonus coin chance' },
+      { level: 6, effect: '+22.5% bonus coin chance' }
     ],
-    tags: ['economy', 'shop'],
-    category: 'economy'
+    tags: ['economy', 'coins'],
+    category: 'utility'
   },
   {
     name: 'Battle Shell Fuzzy Dice',
-    effect: 'Increased luck and critical strike chance.',
+    effect: 'Double Select chance during any Turtle Upgrade selections.',
     levels: [
-      { level: 1, effect: '+5% luck and crit chance' },
-      { level: 2, effect: '+10% luck and crit chance' },
-      { level: 3, effect: '+18% luck and crit chance' }
+      { level: 1, effect: '+10% double select chance' },
+      { level: 2, effect: '+12.5% double select chance' },
+      { level: 3, effect: '+15% double select chance' },
+      { level: 4, effect: '+17.5% double select chance' },
+      { level: 5, effect: '+20% double select chance' },
+      { level: 6, effect: '+22.5% double select chance' }
     ],
-    tags: ['luck', 'crit'],
-    category: 'economy'
+    tags: ['luck', 'upgrades'],
+    category: 'utility'
   },
   {
     name: 'Insulated Pizza Box',
-    effect: 'Extended boost duration.',
+    effect: 'Boosts last for additional rooms. Granted by an ally in Docks.',
     levels: [
-      { level: 1, effect: '+15% boost duration' },
-      { level: 2, effect: '+30% boost duration' },
-      { level: 3, effect: '+50% boost duration' }
+      { level: 1, effect: 'Boosts last for an additional 2 rooms' },
+      { level: 2, effect: 'Boosts last for an additional 3 rooms' },
+      { level: 3, effect: 'Boosts last for an additional 4 rooms' },
+      { level: 4, effect: 'Boosts last for an additional 5 rooms' },
+      { level: 5, effect: 'Boosts last for an additional 6 rooms' },
+      { level: 6, effect: 'Boosts last for an additional 7 rooms' }
     ],
     tags: ['boost', 'duration'],
-    category: 'economy'
+    category: 'utility'
   },
-  {
-    name: 'Splintered Drumsticks',
-    effect: 'Increased power selection bonus.',
-    levels: [
-      { level: 1, effect: '+1 additional power choice per offering' },
-      { level: 2, effect: '+1 additional power choice, +10% rare rate' },
-      { level: 3, effect: '+2 additional power choices, +20% rare rate' }
-    ],
-    tags: ['power', 'selection'],
-    category: 'economy'
-  },
-  {
-    name: 'Mysterious Gofu',
-    effect: 'Random bonus per floor.',
-    levels: [
-      { level: 1, effect: '1 random minor bonus per floor' },
-      { level: 2, effect: '1 random moderate bonus per floor' },
-      { level: 3, effect: '2 random bonuses per floor (can stack)' }
-    ],
-    tags: ['random', 'bonus'],
-    category: 'economy'
-  },
-
-  // =====================
-  // DEFENSE/UTILITY (6)
-  // =====================
   {
     name: 'Heart of Tengu',
-    effect: 'Increased dodge chance.',
+    effect: 'Dodge chance. Increase duration of Invulnerability upon a Dash.',
     levels: [
       { level: 1, effect: '+5% dodge chance' },
-      { level: 2, effect: '+10% dodge chance' },
-      { level: 3, effect: '+18% dodge chance' }
+      { level: 2, effect: '+7.5% dodge chance' },
+      { level: 3, effect: '+10% dodge chance' },
+      { level: 4, effect: '+12.5% dodge chance' },
+      { level: 5, effect: '+15% dodge chance' },
+      { level: 6, effect: '+17.5% dodge chance' }
     ],
     tags: ['dodge', 'defense'],
-    category: 'defense'
+    category: 'utility'
   },
   {
     name: 'Astral Charm',
-    effect: 'Increased astral healing.',
+    effect: "Invulnerability duration upon consuming a Splinter's Revive.",
     levels: [
-      { level: 1, effect: '+10% astral healing received' },
-      { level: 2, effect: '+20% astral healing received' },
-      { level: 3, effect: '+35% astral healing received' }
+      { level: 1, effect: '+3s invulnerability on revive' },
+      { level: 2, effect: '+3.5s invulnerability on revive' },
+      { level: 3, effect: '+4s invulnerability on revive' },
+      { level: 4, effect: '+4.5s invulnerability on revive' },
+      { level: 5, effect: '+5s invulnerability on revive' },
+      { level: 6, effect: '+5.5s invulnerability on revive' }
     ],
-    tags: ['astral', 'healing'],
-    category: 'defense'
-  },
-  {
-    name: 'Vintage Blowtorch',
-    effect: 'Damage over time on all attacks.',
-    levels: [
-      { level: 1, effect: 'Attacks deal 3% bonus damage over 3 seconds' },
-      { level: 2, effect: 'Attacks deal 6% bonus damage over 3 seconds' },
-      { level: 3, effect: 'Attacks deal 10% bonus damage over 4 seconds' }
-    ],
-    tags: ['damage', 'dot'],
-    category: 'defense'
-  },
-  {
-    name: 'Busted Snare',
-    effect: 'Chance to slow enemies on hit.',
-    levels: [
-      { level: 1, effect: '8% chance to slow enemies by 20% for 2 seconds' },
-      { level: 2, effect: '15% chance to slow enemies by 25% for 3 seconds' },
-      { level: 3, effect: '25% chance to slow enemies by 35% for 3 seconds' }
-    ],
-    tags: ['slow', 'control'],
-    category: 'defense'
-  },
-  {
-    name: "Casey's Portrait",
-    effect: 'Increased revive health.',
-    levels: [
-      { level: 1, effect: 'Revive with 25% HP (up from 15%)' },
-      { level: 2, effect: 'Revive with 35% HP' },
-      { level: 3, effect: 'Revive with 50% HP + 3 seconds invulnerability' }
-    ],
-    tags: ['revive', 'health'],
-    category: 'defense'
-  },
-  {
-    name: 'Clan Hamato Seal',
-    effect: 'Extra revive charge.',
-    levels: [
-      { level: 1, effect: '+1 revive charge per run' },
-      { level: 2, effect: '+2 revive charges per run' },
-      { level: 3, effect: '+3 revive charges per run' }
-    ],
-    tags: ['revive', 'survivability'],
-    category: 'defense'
+    tags: ['revive', 'defense'],
+    category: 'utility'
   },
 
   // =====================
-  // RISK/REWARD (4)
+  // ADVANCED (11) — 3 levels each
   // =====================
   {
     name: 'War Staff',
-    effect: '+100% damage taken, massive currency gains.',
+    effect: '+100% damage taken from all sources. Increased currencies granted by Bosses.',
     levels: [
-      { level: 1, effect: '+100% damage taken, +50% currency gains' },
-      { level: 2, effect: '+100% damage taken, +100% currency gains' },
-      { level: 3, effect: '+100% damage taken, +175% currency gains' }
+      { level: 1, effect: '+100% damage taken. +60% currencies from Bosses' },
+      { level: 2, effect: '+100% damage taken. +80% currencies from Bosses' },
+      { level: 3, effect: '+100% damage taken. +100% currencies from Bosses' }
     ],
     tags: ['risk', 'currency'],
-    category: 'risk'
+    category: 'advanced'
+  },
+  {
+    name: 'Untuned Guitar',
+    effect: 'When you finish a room, all players permanently gain elemental damage. Does not stack.',
+    levels: [
+      { level: 1, effect: '+2% elemental damage per room cleared' },
+      { level: 2, effect: '+3% elemental damage per room cleared' },
+      { level: 3, effect: '+4% elemental damage per room cleared' }
+    ],
+    tags: ['buff', 'damage'],
+    category: 'advanced'
+  },
+  {
+    name: 'Vintage Blowtorch',
+    effect: 'Periodically, your next Final Strike Stuns non-boss enemies.',
+    levels: [
+      { level: 1, effect: 'Every 7 seconds, next Final Strike stuns' },
+      { level: 2, effect: 'Every 6 seconds, next Final Strike stuns' },
+      { level: 3, effect: 'Every 5 seconds, next Final Strike stuns' }
+    ],
+    tags: ['stun', 'control'],
+    category: 'advanced'
+  },
+  {
+    name: 'Busted Snare',
+    effect: 'When you finish a room, all players heal. Does not stack.',
+    levels: [
+      { level: 1, effect: 'Heal 2 Health per room cleared' },
+      { level: 2, effect: 'Heal 3 Health per room cleared' },
+      { level: 3, effect: 'Heal 4 Health per room cleared' }
+    ],
+    tags: ['healing'],
+    category: 'advanced'
+  },
+  {
+    name: 'Splintered Drumsticks',
+    effect: 'When you finish a room, all players gain Scrap. Does not stack.',
+    levels: [
+      { level: 1, effect: '+10 Scrap per room cleared' },
+      { level: 2, effect: '+15 Scrap per room cleared' },
+      { level: 3, effect: '+20 Scrap per room cleared' }
+    ],
+    tags: ['economy', 'scrap'],
+    category: 'advanced'
+  },
+  {
+    name: "Casey's Portrait",
+    effect: "Defeating bosses increases all players' Max Health.",
+    levels: [
+      { level: 1, effect: '+5 Max Health per boss defeated' },
+      { level: 2, effect: '+6 Max Health per boss defeated' },
+      { level: 3, effect: '+7 Max Health per boss defeated' }
+    ],
+    tags: ['health', 'boss'],
+    category: 'advanced'
+  },
+  {
+    name: 'Mysterious Gofu',
+    effect: 'Gain a random Tool at the start of each Chapter.',
+    levels: [
+      { level: 1, effect: 'Gain a random level 1 Tool per Chapter' },
+      { level: 2, effect: 'Gain a random level 2 Tool per Chapter' },
+      { level: 3, effect: 'Gain a random level 3 Tool per Chapter' }
+    ],
+    tags: ['tool', 'random'],
+    category: 'advanced'
+  },
+  {
+    name: 'Clan Hamato Seal',
+    effect: "Gain one Splinter's Revive. Revive restores additional Health.",
+    levels: [
+      { level: 1, effect: "+1 Splinter's Revive. +10% additional Health on revive" },
+      { level: 2, effect: "+1 Splinter's Revive. +15% additional Health on revive" },
+      { level: 3, effect: "+1 Splinter's Revive. +20% additional Health on revive" }
+    ],
+    tags: ['revive', 'survivability'],
+    category: 'advanced'
   },
   {
     name: 'Cracked Stasis Beacon',
-    effect: 'Chance to freeze time, chance to freeze you.',
+    effect: "You're much slower. Beat a Boss while carrying this for extra Scrap.",
     levels: [
-      { level: 1, effect: '5% chance to freeze time for 2s, 3% chance to freeze self for 1s' },
-      { level: 2, effect: '8% chance to freeze time for 3s, 3% chance to freeze self for 1s' },
-      { level: 3, effect: '12% chance to freeze time for 4s, 3% chance to freeze self for 1s' }
+      { level: 1, effect: 'Much slower. +500 Scrap on Boss defeat' },
+      { level: 2, effect: 'Much slower. +650 Scrap on Boss defeat' },
+      { level: 3, effect: 'Much slower. +800 Scrap on Boss defeat' }
     ],
-    tags: ['risk', 'freeze', 'time'],
-    category: 'risk'
+    tags: ['risk', 'scrap'],
+    category: 'advanced'
   },
   {
     name: "Kitsune's Cup",
-    effect: 'Heal on kill, damage on hit.',
+    effect: "You can't heal. Gain bonus Dreamer Coins.",
     levels: [
-      { level: 1, effect: 'Heal 2% max HP on kill, take 1% max HP damage on hit' },
-      { level: 2, effect: 'Heal 4% max HP on kill, take 1% max HP damage on hit' },
-      { level: 3, effect: 'Heal 6% max HP on kill, take 1.5% max HP damage on hit' }
+      { level: 1, effect: "Can't heal. +50% Dreamer Coins" },
+      { level: 2, effect: "Can't heal. +65% Dreamer Coins" },
+      { level: 3, effect: "Can't heal. +80% Dreamer Coins" }
     ],
-    tags: ['risk', 'healing', 'damage'],
-    category: 'risk'
+    tags: ['risk', 'coins'],
+    category: 'advanced'
   },
   {
     name: 'Giant Tusk Fragment',
-    effect: 'Stronger when at low health.',
+    effect: "You can't heal. Gain bonus Dragon Coins.",
     levels: [
-      { level: 1, effect: '+20% damage when below 40% HP' },
-      { level: 2, effect: '+35% damage when below 40% HP' },
-      { level: 3, effect: '+50% damage when below 40% HP, +15% dodge' }
+      { level: 1, effect: "Can't heal. +50% Dragon Coins" },
+      { level: 2, effect: "Can't heal. +65% Dragon Coins" },
+      { level: 3, effect: "Can't heal. +80% Dragon Coins" }
     ],
-    tags: ['risk', 'damage', 'low-health'],
-    category: 'risk'
-  },
-
-  // =====================
-  // BUFF (1)
-  // =====================
-  {
-    name: 'Untuned Guitar',
-    effect: 'Periodic damage buff to all attacks.',
-    levels: [
-      { level: 1, effect: 'Every 10 seconds, gain +15% damage for 3 seconds' },
-      { level: 2, effect: 'Every 8 seconds, gain +25% damage for 4 seconds' },
-      { level: 3, effect: 'Every 6 seconds, gain +35% damage for 5 seconds' }
-    ],
-    tags: ['buff', 'damage'],
-    category: 'buff'
+    tags: ['risk', 'coins'],
+    category: 'advanced'
   }
 ];

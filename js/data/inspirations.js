@@ -1,5 +1,6 @@
 // TMNT: Splintered Fate - Inspirations Data
-// 2 per character, each with 3 scaling levels
+// 2 per character from tmntsplinteredfate.pages.dev
+// Most have 3 levels; Leo #2 and Donnie #2 have 2 levels
 
 export const inspirations = [
   // =====================
@@ -7,20 +8,20 @@ export const inspirations = [
   // =====================
   {
     character: 'michelangelo',
-    name: 'Party Spirit',
+    name: 'Michelangelo Inspiration 1',
     levels: [
-      { level: 1, effect: '+10% attack speed after using a Special for 4 seconds.' },
-      { level: 2, effect: '+20% attack speed after using a Special for 5 seconds.' },
-      { level: 3, effect: '+30% attack speed after using a Special for 6 seconds. Specials also release a shockwave dealing 50% attack damage.' }
+      { level: 1, effect: '+5% Attack area size. +5% Attack damage.' },
+      { level: 2, effect: '+10% Attack area size. +10% Attack damage.' },
+      { level: 3, effect: '+15% Attack area size. +15% Attack damage.' }
     ]
   },
   {
     character: 'michelangelo',
-    name: 'Shell Surfer',
+    name: 'Michelangelo Inspiration 2',
     levels: [
-      { level: 1, effect: '+15% move speed while dashing. Dash cooldown reduced by 10%.' },
-      { level: 2, effect: '+25% move speed while dashing. Dash cooldown reduced by 20%.' },
-      { level: 3, effect: '+35% move speed while dashing. Dash cooldown reduced by 30%. Dashing through enemies applies 1 Ooze stack.' }
+      { level: 1, effect: '+5% Multi-Hit chance.' },
+      { level: 2, effect: '+10% Multi-Hit chance.' },
+      { level: 3, effect: '+15% Multi-Hit chance.' }
     ]
   },
 
@@ -29,20 +30,19 @@ export const inspirations = [
   // =====================
   {
     character: 'leonardo',
-    name: 'Way of the Blade',
+    name: 'Leonardo Inspiration 1',
     levels: [
-      { level: 1, effect: '+10% critical hit chance on all attacks.' },
-      { level: 2, effect: '+15% critical hit chance on all attacks. Critical hits deal 20% bonus damage.' },
-      { level: 3, effect: '+20% critical hit chance on all attacks. Critical hits deal 35% bonus damage and restore 3% max HP.' }
+      { level: 1, effect: '+5 Master Strike damage.' },
+      { level: 2, effect: '+10 Master Strike damage.' },
+      { level: 3, effect: '+15 Master Strike damage.' }
     ]
   },
   {
     character: 'leonardo',
-    name: 'Commander\'s Resolve',
+    name: 'Leonardo Inspiration 2',
     levels: [
-      { level: 1, effect: '+10% damage and +5% damage reduction during boss encounters.' },
-      { level: 2, effect: '+15% damage and +10% damage reduction during boss encounters.' },
-      { level: 3, effect: '+20% damage and +15% damage reduction during boss encounters. Boss phase transitions restore 10% max HP.' }
+      { level: 1, effect: 'Grants +1 Special charge.' },
+      { level: 2, effect: 'Grants +2 Special charges.' }
     ]
   },
 
@@ -51,20 +51,20 @@ export const inspirations = [
   // =====================
   {
     character: 'raphael',
-    name: 'Unbridled Fury',
+    name: 'Raphael Inspiration 1',
     levels: [
-      { level: 1, effect: '+10% attack damage when below 50% HP.' },
-      { level: 2, effect: '+20% attack damage when below 50% HP. +5% lifesteal on attacks.' },
-      { level: 3, effect: '+30% attack damage when below 50% HP. +10% lifesteal on attacks. Taking lethal damage triggers a burst dealing 200% attack damage to all nearby enemies (once per room).' }
+      { level: 1, effect: '+5% Special Critical Hit chance.' },
+      { level: 2, effect: '+10% Special Critical Hit chance.' },
+      { level: 3, effect: '+15% Special Critical Hit chance.' }
     ]
   },
   {
     character: 'raphael',
-    name: 'Sai Storm',
+    name: 'Raphael Inspiration 2',
     levels: [
-      { level: 1, effect: 'Every 6th hit throws a sai projectile dealing 75% attack damage.' },
-      { level: 2, effect: 'Every 5th hit throws a sai projectile dealing 100% attack damage.' },
-      { level: 3, effect: 'Every 4th hit throws two sai projectiles dealing 100% attack damage each. Sai projectiles apply Flame on hit.' }
+      { level: 1, effect: '+3% Attack Critical Hit chance. +3% Critical Damage.' },
+      { level: 2, effect: '+6% Attack Critical Hit chance. +6% Critical Damage.' },
+      { level: 3, effect: '+9% Attack Critical Hit chance. +9% Critical Damage.' }
     ]
   },
 
@@ -73,42 +73,41 @@ export const inspirations = [
   // =====================
   {
     character: 'donatello',
-    name: 'Inventor\'s Brilliance',
+    name: 'Donatello Inspiration 1',
     levels: [
-      { level: 1, effect: 'Tools charge 15% faster.' },
-      { level: 2, effect: 'Tools charge 25% faster. Tool effects last 20% longer.' },
-      { level: 3, effect: 'Tools charge 35% faster. Tool effects last 30% longer. Using a tool grants +15% special damage for 5 seconds.' }
+      { level: 1, effect: 'Restore 1 Health upon starting an encounter.' },
+      { level: 2, effect: 'Restore 2 Health upon starting an encounter.' },
+      { level: 3, effect: 'Restore 3 Health upon starting an encounter.' }
     ]
   },
   {
     character: 'donatello',
-    name: 'Ooze Synthesis',
+    name: 'Donatello Inspiration 2',
     levels: [
-      { level: 1, effect: '+15% Ooze damage. Ooze effects last 1 second longer.' },
-      { level: 2, effect: '+25% Ooze damage. Ooze effects last 2 seconds longer. Ooze stacks apply 10% faster.' },
-      { level: 3, effect: '+40% Ooze damage. Ooze effects last 3 seconds longer. Enemies at max Ooze stacks take 20% more damage from all sources.' }
+      { level: 1, effect: 'Tool charges 20% faster.' },
+      { level: 2, effect: 'Tool charges 40% faster.' }
     ]
   },
 
   // =====================
-  // CASEY
+  // CASEY JONES
   // =====================
   {
     character: 'casey',
-    name: 'Vigilante Justice',
+    name: 'Casey Jones Inspiration 1',
     levels: [
-      { level: 1, effect: '+10% damage. Defeating enemies grants a 3-second speed boost.' },
-      { level: 2, effect: '+15% damage. Defeating enemies grants a 5-second speed and damage boost.' },
-      { level: 3, effect: '+20% damage. Defeating enemies grants a 5-second speed and damage boost. Every 10th defeat fully restores The Juice cooldown.' }
+      { level: 1, effect: 'Special applies Guard Break for +1s to enemies hit.' },
+      { level: 2, effect: 'Special applies Guard Break for +2s to enemies hit.' },
+      { level: 3, effect: 'Special applies Guard Break for +3s to enemies hit.' }
     ]
   },
   {
     character: 'casey',
-    name: 'All or Nothing',
+    name: 'Casey Jones Inspiration 2',
     levels: [
-      { level: 1, effect: '+15% critical hit damage. -5% max HP.' },
-      { level: 2, effect: '+30% critical hit damage. -5% max HP. +10% critical hit chance.' },
-      { level: 3, effect: '+50% critical hit damage. -5% max HP. +15% critical hit chance. Critical hits have a 20% chance to reset dash cooldown.' }
+      { level: 1, effect: 'Using your Special makes your next attack a Final Strike with +33% Crit Chance.' },
+      { level: 2, effect: 'Using your Special makes your next attack a Final Strike with +66% Crit Chance.' },
+      { level: 3, effect: 'Using your Special makes your next attack a Final Strike with +100% Crit Chance.' }
     ]
   },
 
@@ -117,20 +116,20 @@ export const inspirations = [
   // =====================
   {
     character: 'metalhead',
-    name: 'Combat Protocol',
+    name: 'Metalhead Inspiration 1',
     levels: [
-      { level: 1, effect: '+10% attack damage. Special attacks stun enemies for 0.5 seconds.' },
-      { level: 2, effect: '+15% attack damage. Special attacks stun enemies for 1 second.' },
-      { level: 3, effect: '+20% attack damage. Special attacks stun enemies for 1.5 seconds. Stunned enemies take 25% more damage.' }
+      { level: 1, effect: 'On Boss defeat, upgrade a random enhancement and gain 25 Scrap.' },
+      { level: 2, effect: 'On Boss defeat, upgrade a random enhancement and gain 50 Scrap.' },
+      { level: 3, effect: 'On Boss defeat, upgrade a random enhancement and gain 75 Scrap.' }
     ]
   },
   {
     character: 'metalhead',
-    name: 'Adaptive Plating',
+    name: 'Metalhead Inspiration 2',
     levels: [
-      { level: 1, effect: '+10% damage reduction. Regenerate 0.5% max HP every 5 seconds.' },
-      { level: 2, effect: '+15% damage reduction. Regenerate 1% max HP every 5 seconds.' },
-      { level: 3, effect: '+20% damage reduction. Regenerate 1.5% max HP every 5 seconds. At full HP, excess healing converts to a barrier (up to 15% max HP).' }
+      { level: 1, effect: 'Tool applies Guard Break to enemies hit for 3 seconds.' },
+      { level: 2, effect: 'Tool applies Guard Break to enemies hit for 6 seconds.' },
+      { level: 3, effect: 'Tool applies Guard Break to enemies hit for 9 seconds.' }
     ]
   }
 ];
