@@ -8,7 +8,7 @@ import { renderSidebar } from './sidebar.js';
 const MOBILE_BREAKPOINT = 600;
 let isMobile = false;
 let currentPanel = 'powers';
-let buildSubTab = 'powers'; // track Powers vs Tools within Build
+let buildSubTab = 'powers'; // track active sub-tab within Build
 
 // ---- Bottom Nav Items ----
 
@@ -23,22 +23,6 @@ const NAV_ITEMS = [
     id: 'upgrades', label: 'HQ',
     icon: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 20V10M6 20V4M18 20v-6"/>
-    </svg>`
-  },
-  {
-    id: 'artifacts', label: 'Artifacts',
-    icon: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/>
-    </svg>`
-  },
-  {
-    id: 'inspirations', label: 'Inspire',
-    icon: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
-      <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
-      <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
     </svg>`
   },
   {
@@ -231,14 +215,14 @@ function navigateTo(navId) {
 }
 
 function activatePanel(tabId) {
-  // Map tab to nav item
+  // Map tab to nav item (all Build sub-tabs → 'powers')
   const navMap = {
     powers: 'powers',
     tools: 'powers',
-    artifacts: 'artifacts',
-    inspirations: 'inspirations',
-    upgrades: 'upgrades',
-    masteries: 'upgrades'
+    artifacts: 'powers',
+    inspirations: 'powers',
+    masteries: 'powers',
+    upgrades: 'upgrades'
   };
   currentPanel = navMap[tabId] || 'powers';
   navigateTo(currentPanel);
@@ -254,12 +238,18 @@ function animatePanel() {
   target.classList.add('mobile-panel-enter');
 }
 
-// ---- Build Sub-Toggle (Powers / Tools) ----
+// ---- Build Sub-Toggle (Powers / Tools / Artifacts / Inspire / Masteries) ----
+
+const BUILD_TABS = ['powers', 'tools', 'artifacts', 'inspirations', 'masteries'];
+const BUILD_TAB_LABELS = {
+  powers: 'Powers', tools: 'Tools', artifacts: 'Artifacts',
+  inspirations: 'Inspire', masteries: 'Masteries'
+};
 
 function injectBuildSubToggle() {
   if (!isMobile) return;
   const tab = state.activeTab;
-  if (tab !== 'powers' && tab !== 'tools') return;
+  if (!BUILD_TABS.includes(tab)) return;
 
   const filterBar = document.getElementById('filter-bar');
   if (!filterBar) return;
@@ -268,10 +258,9 @@ function injectBuildSubToggle() {
   const toggle = document.createElement('div');
   toggle.className = 'mobile-build-toggle view-toggle';
   toggle.style.marginBottom = 'var(--sp-2)';
-  toggle.innerHTML = `
-    <button class="view-toggle-btn ${tab === 'powers' ? 'active' : ''}" data-build-sub="powers">Powers</button>
-    <button class="view-toggle-btn ${tab === 'tools' ? 'active' : ''}" data-build-sub="tools">Tools</button>
-  `;
+  toggle.innerHTML = BUILD_TABS.map(t =>
+    `<button class="view-toggle-btn ${tab === t ? 'active' : ''}" data-build-sub="${t}">${BUILD_TAB_LABELS[t]}</button>`
+  ).join('');
   filterBar.prepend(toggle);
 
   toggle.querySelectorAll('[data-build-sub]').forEach(btn => {
@@ -284,38 +273,11 @@ function injectBuildSubToggle() {
   });
 }
 
-// ---- HQ Filter Bar Patching ----
-
-function patchHQFilterBar() {
-  if (!isMobile || state.activeTab !== 'upgrades') return;
-
-  const filterBar = document.getElementById('filter-bar');
-  if (!filterBar) return;
-
-  // Remove Artifacts + Inspirations redirect pills (they have their own nav items)
-  filterBar.querySelectorAll('[data-section="artifacts"], [data-section="inspirations"]').forEach(el => el.remove());
-
-  // Add Masteries pill if not present
-  const group = filterBar.querySelector('.filter-group');
-  if (group && !group.querySelector('[data-section="masteries"]')) {
-    const settingsBtn = group.querySelector('[data-section="settings"]');
-    const btn = document.createElement('button');
-    btn.className = 'filter-pill';
-    btn.dataset.section = 'masteries';
-    btn.textContent = 'Masteries';
-    btn.addEventListener('click', () => {
-      setActiveTab('masteries');
-      currentPanel = 'upgrades';
-      updateNavActiveState();
-    });
-    // Insert before Settings
-    if (settingsBtn) {
-      group.insertBefore(btn, settingsBtn);
-    } else {
-      group.appendChild(btn);
-    }
-  }
-}
+// ---- HQ Filter Bar ----
+// No patching needed — upgrades-tab.js renders the correct pills
+// (Dragon / Dreamer / Artifacts→ / Inspirations→ / Settings).
+// Redirect clicks call setActiveTab() which triggers tab-changed,
+// and the mobile listener maps those tabs to the Build nav.
 
 // ---- Event Listeners ----
 
@@ -333,13 +295,14 @@ function setupMobileListeners() {
     if (!isMobile) return;
 
     // Sync bottom nav when tab changes programmatically
+    // All Build sub-tabs map to 'powers' nav item
     const navMap = {
       powers: 'powers',
       tools: 'powers',
-      artifacts: 'artifacts',
-      inspirations: 'inspirations',
-      upgrades: 'upgrades',
-      masteries: 'upgrades'
+      artifacts: 'powers',
+      inspirations: 'powers',
+      masteries: 'powers',
+      upgrades: 'upgrades'
     };
     const navId = navMap[tab] || 'powers';
 
@@ -355,14 +318,13 @@ function setupMobileListeners() {
     }
 
     // Track build sub-tab
-    if (tab === 'powers' || tab === 'tools') {
+    if (BUILD_TABS.includes(tab)) {
       buildSubTab = tab;
     }
 
     // Inject sub-toggles after tab module finishes rendering
     setTimeout(() => {
       injectBuildSubToggle();
-      patchHQFilterBar();
     }, 0);
   });
 
