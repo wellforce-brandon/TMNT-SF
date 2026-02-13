@@ -180,13 +180,13 @@ export function getDependentsInBuild(powerName, buildPowerNames) {
       const parts = cleaned.split(' + ').map(s => s.trim());
       // Check if any part directly matches or matches via OR pattern
       for (const part of parts) {
-        if (partMatchesPower(part, powerName, power, buildPowerNames, p.name)) {
+        if (partMatchesPower(part, powerName, power, buildPowerNames)) {
           dependents.push(p.name);
           break;
         }
       }
     } else {
-      if (partMatchesPower(cleaned, powerName, power, buildPowerNames, p.name)) {
+      if (partMatchesPower(cleaned, powerName, power, buildPowerNames)) {
         dependents.push(p.name);
       }
     }
@@ -196,10 +196,8 @@ export function getDependentsInBuild(powerName, buildPowerNames) {
 }
 
 // Check if a prerequisite part matches the given power (by name or category).
-// For category deps, only matches if this is the LAST power of that type in the build.
-// dependentName: the power whose requires we're checking (excluded from remaining count
-// because it can't satisfy its own category prerequisite).
-function partMatchesPower(part, powerName, power, buildPowerNames, dependentName) {
+// For category deps, simulates removal and re-checks with isPartMet.
+function partMatchesPower(part, powerName, power, buildPowerNames) {
   // Direct name match
   if (part === powerName) return true;
 
@@ -209,17 +207,13 @@ function partMatchesPower(part, powerName, power, buildPowerNames, dependentName
     if (alts.includes(powerName)) return true;
   }
 
-  // Category matches: block removal only if this is the last power of the required type
+  // Category matches: simulate removal and check if prereq would break
   const partLower = part.toLowerCase();
   const categoryType = CATEGORY_TYPE_MAP[partLower];
   if (categoryType && power.type === categoryType) {
-    const remaining = buildPowerNames.filter(n => {
-      if (n === powerName) return false;      // exclude the power being removed
-      if (n === dependentName) return false;   // exclude the dependent itself
-      const p = powersByName.get(n);
-      return p && p.type === categoryType;
-    });
-    return remaining.length === 0;
+    const afterRemoval = buildPowerNames.filter(n => n !== powerName);
+    const afterSet = new Set(afterRemoval);
+    return !isPartMet(part, afterRemoval, afterSet);
   }
 
   return false;
