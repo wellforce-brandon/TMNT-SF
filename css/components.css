@@ -858,13 +858,54 @@
   min-width: 0;
 }
 
-/* Upgrade card: disable hover lift since it's not clickable to add */
+/* Upgrade card: disable hover lift, add padding for edge zones */
 .upgrade-card {
   cursor: default;
+  padding-left: calc(10% + var(--sp-2));
+  padding-right: calc(10% + var(--sp-2));
 }
 
 .upgrade-card:hover {
   transform: none;
+}
+
+/* ---- Card Edge Tap Zones (+/- on left/right) ---- */
+.card-edge-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  cursor: pointer;
+  z-index: 1;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  user-select: none;
+}
+
+.card-edge-dec {
+  left: 0;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.card-edge-inc {
+  right: 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.card-edge-zone:hover {
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
+  color: var(--primary);
+}
+
+.card-edge-zone:active {
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 /* ---- Damage Display ---- */

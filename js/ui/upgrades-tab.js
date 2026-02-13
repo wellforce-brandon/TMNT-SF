@@ -14,6 +14,7 @@ import {
 } from '../state.js';
 
 let activeSection = 'dragon';
+let _suppressRender = false;
 
 const SECTIONS = [
   { id: 'dragon', label: 'Dragon' },
@@ -33,7 +34,7 @@ export function initUpgradesTab() {
     if (tab === 'upgrades') render();
   });
   on('upgrades-changed', () => {
-    if (state.activeTab === 'upgrades') render();
+    if (state.activeTab === 'upgrades' && !_suppressRender) render();
   });
   on('artifact-upgrades-changed', () => {
     if (state.activeTab === 'upgrades') render();
@@ -108,6 +109,8 @@ function renderDragonDreamer(container, currency) {
 
     html += `
       <div class="card upgrade-card">
+        <div class="card-edge-zone card-edge-dec" data-upg="${upg.name}" data-action="dec">&minus;</div>
+        <div class="card-edge-zone card-edge-inc" data-upg="${upg.name}" data-action="inc">+</div>
         <div class="card-header">
           <span class="card-name">${upg.displayName}</span>
           <span class="badge badge-slot">${level}/${upg.maxLevel}</span>
@@ -115,11 +118,9 @@ function renderDragonDreamer(container, currency) {
         <div class="card-effect">${upg.description}${effect ? ` (${effect})` : ''}</div>
         <div class="card-meta">
           <div class="upgrade-controls">
-            <button class="level-btn" data-upg="${upg.name}" data-action="dec">-</button>
             <input type="range" class="upgrade-slider"
                    min="0" max="${upg.maxLevel}" value="${level}"
                    data-upgrade="${upg.name}">
-            <button class="level-btn" data-upg="${upg.name}" data-action="inc">+</button>
           </div>
         </div>
       </div>
@@ -128,22 +129,40 @@ function renderDragonDreamer(container, currency) {
 
   container.innerHTML = html;
 
-  // Bind sliders
+  // Bind sliders — update in-place to avoid destroying the element mid-drag
   container.querySelectorAll('.upgrade-slider').forEach(slider => {
     slider.addEventListener('input', () => {
-      setUpgradeLevel(slider.dataset.upgrade, parseInt(slider.value));
+      const name = slider.dataset.upgrade;
+      const level = parseInt(slider.value);
+      const upg = upgrades.find(u => u.name === name);
+
+      _suppressRender = true;
+      setUpgradeLevel(name, level);
+      _suppressRender = false;
+
+      // Update badge and effect text in-place
+      const card = slider.closest('.upgrade-card');
+      if (card && upg) {
+        const badge = card.querySelector('.badge');
+        if (badge) badge.textContent = `${level}/${upg.maxLevel}`;
+        const effect = card.querySelector('.card-effect');
+        if (effect) {
+          const effectStr = upg.perLevel ? ` (+${Math.round(upg.perLevel * level)}%)` : '';
+          effect.textContent = `${upg.description}${effectStr}`;
+        }
+      }
     });
   });
 
-  // Bind +/- buttons
-  container.querySelectorAll('.level-btn[data-upg]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const upg = upgrades.find(u => u.name === btn.dataset.upg);
+  // Bind edge tap zones for +/-
+  container.querySelectorAll('.card-edge-zone[data-upg]').forEach(zone => {
+    zone.addEventListener('click', () => {
+      const upg = upgrades.find(u => u.name === zone.dataset.upg);
       if (!upg) return;
       const current = upgradeState[upg.name] || 0;
-      if (btn.dataset.action === 'inc' && current < upg.maxLevel) {
+      if (zone.dataset.action === 'inc' && current < upg.maxLevel) {
         setUpgradeLevel(upg.name, current + 1);
-      } else if (btn.dataset.action === 'dec' && current > 0) {
+      } else if (zone.dataset.action === 'dec' && current > 0) {
         setUpgradeLevel(upg.name, current - 1);
       }
     });
