@@ -1,4 +1,4 @@
-// TMNT: Splintered Fate - Run Builder
+// TMNT: Splintered Fate - Run Companion
 // Entry point: imports, init, event wiring
 
 import { loadPersistedState, state, on } from './state.js';
