@@ -415,6 +415,37 @@ function saveInspirationUpgrades() {
   }
 }
 
+// ---- Cloud State Merge ----
+// Called by supabase.js when cloud data is loaded after login
+
+export function applyCloudState(cloudUpgrades, cloudArtifacts, cloudInspirations) {
+  // Replace upgradeState contents
+  for (const key of Object.keys(upgradeState)) delete upgradeState[key];
+  Object.assign(upgradeState, cloudUpgrades);
+
+  // Replace artifactUpgrades contents
+  for (const key of Object.keys(artifactUpgrades)) delete artifactUpgrades[key];
+  Object.assign(artifactUpgrades, cloudArtifacts);
+
+  // Replace inspirationUpgrades contents
+  for (const key of Object.keys(inspirationUpgrades)) delete inspirationUpgrades[key];
+  Object.assign(inspirationUpgrades, cloudInspirations);
+
+  // Persist merged state to localStorage (so offline has latest)
+  saveUpgrades();
+  saveArtifactUpgrades();
+  saveInspirationUpgrades();
+
+  // Re-apply starting inspiration minimums
+  applyStartingInspirations(state.character);
+
+  // Notify all UI
+  emit('upgrades-changed', upgradeState);
+  emit('artifact-upgrades-changed', artifactUpgrades);
+  emit('inspiration-upgrades-changed', inspirationUpgrades);
+  emit('build-changed', state);
+}
+
 export function loadPersistedState() {
   try {
     // Load upgrades

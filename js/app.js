@@ -11,9 +11,10 @@ import { initMasteriesTab } from './ui/masteries-tab.js';
 import { initInspirationsTab } from './ui/inspirations-tab.js';
 import { initSidebar } from './ui/sidebar.js';
 import { initUpgradesTab } from './ui/upgrades-tab.js';
+import { initSupabase } from './supabase.js';
 
-function init() {
-  // Load persisted state from localStorage
+async function init() {
+  // Load persisted state from localStorage (instant, no network)
   loadPersistedState();
 
   // Initialize all UI modules
@@ -26,6 +27,9 @@ function init() {
   initInspirationsTab();
   initSidebar();
   initUpgradesTab();
+
+  // Initialize Supabase (checks existing session, merges cloud data if logged in)
+  await initSupabase();
 
   // Apply initial theme
   applyTheme();
