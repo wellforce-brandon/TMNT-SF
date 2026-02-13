@@ -28,6 +28,10 @@ export function initUpgradesTab() {
   });
 }
 
+export function setSection(sectionId) {
+  activeSection = sectionId;
+}
+
 export function render() {
   renderFilters();
   renderGrid();

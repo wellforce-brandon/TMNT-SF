@@ -3,6 +3,7 @@
 
 import { characters, characterThemeMap } from '../data/characters.js';
 import { state, settings, selectCharacter, setThemeMode, setActiveTab, on } from '../state.js';
+import { setSection } from './upgrades-tab.js';
 import { isLoggedIn, getUser, loginWithDiscord, logout, onAuthChanged } from '../supabase.js';
 
 export function initTopbar() {
@@ -101,6 +102,7 @@ function initSettingsButton() {
   const btn = document.getElementById('settings-btn');
   if (btn) {
     btn.addEventListener('click', () => {
+      setSection('settings');
       setActiveTab('upgrades');
     });
   }
