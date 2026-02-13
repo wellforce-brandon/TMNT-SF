@@ -7,10 +7,10 @@ import { state, toggleMastery, setMasteryView, on } from '../state.js';
 const TYPE_LABELS = {
   water: 'Water', flame: 'Flame', ooze: 'Ooze', utrom: 'Utrom',
   ninja: 'Ninja', light: 'Light', dark: 'Dark', robotics: 'Robotics',
-  boss: 'Boss', barrier: 'Barrier', crit: 'Crit', dash: 'Dash',
-  special: 'Special', attack: 'Attack', speed: 'Speed', defense: 'Defense',
-  astral: 'Astral', shuriken: 'Shuriken', tool: 'Tool', health: 'Health',
-  general: 'General'
+  elemental: 'Elemental', boss: 'Boss', barrier: 'Barrier', crit: 'Crit',
+  dash: 'Dash', special: 'Special', attack: 'Attack', speed: 'Speed',
+  defense: 'Defense', astral: 'Astral', shuriken: 'Shuriken', tool: 'Tool',
+  health: 'Health', general: 'General'
 };
 
 export function initMasteriesTab() {
@@ -90,9 +90,8 @@ function renderByCharacter(container, charMasteries, activeSet) {
     return `
       <div class="${classes}" ${primaryTag ? `data-type="${primaryTag}"` : ''} data-mastery="${mastery.name}">
         <div class="card-header">
-          <span class="card-name">${mastery.name}</span>
+          <span class="card-name">${mastery.effect}</span>
         </div>
-        <div class="card-effect">${mastery.effect}</div>
         <div class="card-meta">
           ${mastery.tags.map(tag =>
             `<span class="badge badge-type" data-type="${tag}">${TYPE_LABELS[tag] || tag}</span>`
@@ -124,9 +123,8 @@ function renderByElement(container, charMasteries, activeSet) {
       html += `
         <div class="${classes}" data-type="${tag}" data-mastery="${mastery.name}">
           <div class="card-header">
-            <span class="card-name">${mastery.name}</span>
+            <span class="card-name">${mastery.effect}</span>
           </div>
-          <div class="card-effect">${mastery.effect}</div>
           <div class="card-meta">
             ${mastery.tags.map(t =>
               `<span class="badge badge-type" data-type="${t}">${TYPE_LABELS[t] || t}</span>`
