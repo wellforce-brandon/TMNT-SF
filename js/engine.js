@@ -196,7 +196,7 @@ export function getDependentsInBuild(powerName, buildPowerNames) {
 }
 
 // Check if a prerequisite part matches the given power (by name or category).
-// For category deps, simulates removal and re-checks with isPartMet.
+// For category deps, only initial-tier powers can provide category prerequisites.
 function partMatchesPower(part, powerName, power, buildPowerNames) {
   // Direct name match
   if (part === powerName) return true;
@@ -207,13 +207,17 @@ function partMatchesPower(part, powerName, power, buildPowerNames) {
     if (alts.includes(powerName)) return true;
   }
 
-  // Category matches: simulate removal and check if prereq would break
+  // Category matches: only T1 (initial) powers provide category prereqs.
+  // Block removal if no other initial power of that type remains.
   const partLower = part.toLowerCase();
   const categoryType = CATEGORY_TYPE_MAP[partLower];
-  if (categoryType && power.type === categoryType) {
-    const afterRemoval = buildPowerNames.filter(n => n !== powerName);
-    const afterSet = new Set(afterRemoval);
-    return !isPartMet(part, afterRemoval, afterSet);
+  if (categoryType && power.type === categoryType && power.tier === 'initial') {
+    const hasOtherInitial = buildPowerNames.some(n => {
+      if (n === powerName) return false;
+      const p = powersByName.get(n);
+      return p && p.type === categoryType && p.tier === 'initial';
+    });
+    return !hasOtherInitial;
   }
 
   return false;
