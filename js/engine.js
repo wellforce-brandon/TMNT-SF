@@ -250,36 +250,29 @@ export function calcBuildFocus(buildPowerNames) {
   return { level, label, typeCount: count, types: [...types] };
 }
 
-// ---- Damage Estimate ----
+// ---- Damage Bonuses ----
+// Each upgrade category applies to a different damage channel.
+// We report them separately instead of combining into one misleading number.
 
-export function calcDamageEstimate(state, upgradeState) {
-  // Sum all additive % bonuses
-  let totalBonus = 0;
-
-  // Upgrade bonuses
-  for (const upg of upgrades) {
-    if (upg.stat && upg.stat === 'attackDamage' && upgradeState[upg.name]) {
-      totalBonus += upg.perLevel * upgradeState[upg.name];
+export function calcDamageBonuses(state, upgradeState) {
+  const getBonus = (statKey) => {
+    let total = 0;
+    for (const upg of upgrades) {
+      if (upg.stat === statKey && upgradeState[upg.name]) {
+        total += upg.perLevel * upgradeState[upg.name];
+      }
     }
-  }
-
-  // Additional damage bonuses from relevant upgrades
-  for (const upg of upgrades) {
-    const level = upgradeState[upg.name] || 0;
-    if (level === 0) continue;
-
-    if (upg.stat === 'critChance' || upg.stat === 'critDamage' ||
-        upg.stat === 'elementalDamage' || upg.stat === 'toolDamage' ||
-        upg.stat === 'dashAttackDamage') {
-      totalBonus += upg.perLevel * level;
-    }
-  }
-
-  const multiplier = 1 + totalBonus / 100;
+    return Math.round(total);
+  };
 
   return {
-    totalBonusPercent: Math.round(totalBonus),
-    multiplier: Math.round(multiplier * 100) / 100
+    attackDamage: getBonus('attackDamage'),
+    specialAttack: getBonus('specialAttack'),
+    dashAttackDamage: getBonus('dashAttackDamage'),
+    toolDamage: getBonus('toolDamage'),
+    elementalDamage: getBonus('elementalDamage'),
+    critChance: getBonus('critChance'),
+    critDamage: getBonus('critDamage')
   };
 }
 
@@ -340,7 +333,7 @@ export function runFullAnalysis(state, upgradeState) {
     masteries: state.masteries
   });
   const focus = calcBuildFocus(state.powers);
-  const damage = calcDamageEstimate(state, upgradeState);
+  const damage = calcDamageBonuses(state, upgradeState);
 
   return {
     prerequisites,

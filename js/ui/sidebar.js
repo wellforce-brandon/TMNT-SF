@@ -309,16 +309,28 @@ function renderDamageSection(damage) {
   const container = document.getElementById('sidebar-damage');
   if (!container) return;
 
-  if (damage.totalBonusPercent === 0) {
+  // Build list of active bonuses
+  const bonuses = [];
+  if (damage.attackDamage) bonuses.push({ label: 'Attack', value: damage.attackDamage });
+  if (damage.specialAttack) bonuses.push({ label: 'Special', value: damage.specialAttack });
+  if (damage.dashAttackDamage) bonuses.push({ label: 'Dash Attack', value: damage.dashAttackDamage });
+  if (damage.toolDamage) bonuses.push({ label: 'Tool', value: damage.toolDamage });
+  if (damage.elementalDamage) bonuses.push({ label: 'Elemental', value: damage.elementalDamage });
+  if (damage.critChance) bonuses.push({ label: 'Crit Chance', value: damage.critChance });
+  if (damage.critDamage) bonuses.push({ label: 'Crit Damage', value: damage.critDamage });
+
+  if (bonuses.length === 0) {
     container.innerHTML = '';
     return;
   }
 
   container.innerHTML = `
-    <div class="sidebar-section-title">Damage Estimate</div>
-    <div class="damage-display">
-      <div class="damage-multiplier">${damage.multiplier}x</div>
-      <div class="damage-label">Total damage multiplier (+${damage.totalBonusPercent}% from upgrades)</div>
+    <div class="sidebar-section-title">Upgrade Bonuses</div>
+    <div class="stat-grid">
+      ${bonuses.map(b => `
+        <div><span class="stat-label">${b.label}</span></div>
+        <div><span class="stat-value">+${b.value}%</span></div>
+      `).join('')}
     </div>
   `;
 }
