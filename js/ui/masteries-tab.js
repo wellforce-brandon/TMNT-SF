@@ -111,7 +111,7 @@ function renderAllByCharacter(container, activeSet) {
     `;
 
     for (const mastery of charMasteries) {
-      html += renderMasteryCard(mastery, activeSet, mastery.tags[0] || '');
+      html += renderMasteryCard(mastery, activeSet, mastery.tags[0] || '', color);
     }
   }
 
@@ -122,8 +122,9 @@ function renderAllByCharacter(container, activeSet) {
 // ---- Single character flat list ----
 
 function renderCharMasteries(container, charMasteries, activeSet) {
+  const color = CHAR_COLORS[state.character] || '';
   container.innerHTML = charMasteries.map(mastery => {
-    return renderMasteryCard(mastery, activeSet, mastery.tags[0] || '');
+    return renderMasteryCard(mastery, activeSet, mastery.tags[0] || '', color);
   }).join('');
 
   bindMasteryClicks(container);
@@ -143,7 +144,8 @@ function renderByTag(container, list, activeSet) {
   for (const [tag, group] of groups) {
     html += `<div style="grid-column: 1 / -1"><div class="sidebar-section-title" data-type="${tag}">${TYPE_LABELS[tag] || tag}</div></div>`;
     for (const mastery of group) {
-      html += renderMasteryCard(mastery, activeSet, tag);
+      const color = CHAR_COLORS[mastery.character] || '';
+      html += renderMasteryCard(mastery, activeSet, tag, color);
     }
   }
 
@@ -153,12 +155,13 @@ function renderByTag(container, list, activeSet) {
 
 // ---- Shared card renderer ----
 
-function renderMasteryCard(mastery, activeSet, primaryTag) {
+function renderMasteryCard(mastery, activeSet, primaryTag, charColor) {
   const isActive = activeSet.has(mastery.name);
   const classes = `card ${isActive ? 'in-build' : ''}`;
+  const borderStyle = charColor ? `style="border-left: 3px solid ${charColor}"` : '';
 
   return `
-    <div class="${classes}" ${primaryTag ? `data-type="${primaryTag}"` : ''} data-mastery="${mastery.name}">
+    <div class="${classes}" ${primaryTag ? `data-type="${primaryTag}"` : ''} ${borderStyle} data-mastery="${mastery.name}">
       <div class="card-header">
         <span class="card-name">${mastery.effect}</span>
       </div>
