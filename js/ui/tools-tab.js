@@ -42,7 +42,6 @@ function renderGrid() {
       <div class="${classes}" ${typeAttr ? `data-type="${typeAttr}"` : ''} data-tool="${tool.name}">
         <div class="card-header">
           <span class="card-name">${tool.name}</span>
-          ${isActive ? '' : '<span class="card-type-dot"></span>'}
         </div>
         <div class="card-effect">${tool.effect}</div>
         <div class="card-meta">

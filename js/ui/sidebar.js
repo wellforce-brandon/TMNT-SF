@@ -191,7 +191,7 @@ function renderPowersSection() {
       html += `
         <div class="sidebar-item" data-type="${type}" data-sidebar-power="${name}">
           <span class="sidebar-item-dot"></span>
-          <span>${name}</span>
+          <span>${name} (Lv${state.powerLevels[name] || 1})</span>
           <span class="sidebar-item-remove">x</span>
         </div>
       `;

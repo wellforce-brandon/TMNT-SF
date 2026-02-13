@@ -31,6 +31,7 @@ export const state = {
   artifactLevel: 1,
   tool: null,
   powers: [],
+  powerLevels: {},     // { powerName: level (1-3) }
   masteries: [],
   inspirations: {},    // { inspirationName: level }
   activeTab: 'powers',
@@ -104,6 +105,7 @@ export function selectCharacter(charId) {
 export function addPower(powerName) {
   if (!state.powers.includes(powerName)) {
     state.powers.push(powerName);
+    state.powerLevels[powerName] = 1;
     emit('build-changed', state);
     saveBuild();
   }
@@ -113,6 +115,7 @@ export function removePower(powerName) {
   const idx = state.powers.indexOf(powerName);
   if (idx !== -1) {
     state.powers.splice(idx, 1);
+    delete state.powerLevels[powerName];
     emit('build-changed', state);
     saveBuild();
   }
@@ -124,6 +127,20 @@ export function togglePower(powerName) {
   } else {
     addPower(powerName);
   }
+}
+
+export function setPowerLevel(powerName, level) {
+  if (level <= 0) {
+    removePower(powerName);
+    return;
+  }
+  if (level > 3) level = 3;
+  if (!state.powers.includes(powerName)) {
+    state.powers.push(powerName);
+  }
+  state.powerLevels[powerName] = level;
+  emit('build-changed', state);
+  saveBuild();
 }
 
 export function setTool(toolName) {
@@ -218,6 +235,7 @@ export function setMasteryView(view) {
 
 export function clearBuild() {
   state.powers = [];
+  state.powerLevels = {};
   state.masteries = [];
   state.inspirations = {};
   state.artifact = null;
@@ -352,6 +370,7 @@ function saveBuild() {
     const data = {
       character: state.character,
       powers: state.powers,
+      powerLevels: state.powerLevels,
       tool: state.tool,
       artifact: state.artifact,
       artifactLevel: state.artifactLevel,
@@ -428,6 +447,7 @@ export function loadPersistedState() {
       const data = JSON.parse(buildStr);
       if (data.character) state.character = data.character;
       if (data.powers) state.powers = data.powers;
+      if (data.powerLevels) state.powerLevels = data.powerLevels;
       if (data.tool) state.tool = data.tool;
       if (data.artifact) state.artifact = data.artifact;
       if (data.artifactLevel) state.artifactLevel = data.artifactLevel;

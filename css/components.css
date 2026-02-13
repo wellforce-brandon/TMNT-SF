@@ -236,7 +236,7 @@
   font-size: var(--text-xs);
   font-weight: 600;
   padding: var(--sp-1) var(--sp-3);
-  border-radius: 999px;
+  border-radius: var(--radius);
   border: 1.5px solid var(--border);
   background: transparent;
   color: var(--text-secondary);
@@ -328,13 +328,6 @@
   line-height: 1.2;
 }
 
-.card-type-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--el-color);
-  flex-shrink: 0;
-}
 
 .card-badges {
   display: flex;
@@ -363,7 +356,7 @@
   font-size: var(--text-xs);
   font-weight: 600;
   padding: 1px var(--sp-2);
-  border-radius: 999px;
+  border-radius: var(--radius);
   white-space: nowrap;
   line-height: 1.6;
 }
@@ -389,11 +382,6 @@
   color: var(--info);
 }
 
-.badge-available {
-  background: var(--success-muted);
-  color: var(--success);
-  border: 1px solid var(--success);
-}
 
 .badge-synergy {
   background: var(--warning-muted);
@@ -415,8 +403,17 @@
 
 /* ---- Card States ---- */
 .card.in-build {
-  opacity: 0.55;
-  border-color: var(--primary);
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 0 1px var(--primary), var(--shadow-sm);
+  background: color-mix(in srgb, var(--primary) 5%, var(--card));
+}
+
+.card.in-build .card-name {
+  color: var(--primary);
+}
+
+.card.in-build .card-effect {
+  color: var(--foreground);
 }
 
 .card.in-build::after {
@@ -452,10 +449,6 @@
 
 .card.starting-inspiration {
   border-left: 3px solid var(--primary);
-}
-
-.card.starting-inspiration.in-build {
-  opacity: 0.75;
 }
 
 /* Element-colored left border on cards */

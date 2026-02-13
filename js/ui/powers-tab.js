@@ -2,7 +2,7 @@
 // Type/slot/tier/search filters, card grid, synergy highlights
 
 import { powers } from '../data/powers.js';
-import { state, togglePower, setFilter, toggleTypeFilter, on } from '../state.js';
+import { state, setPowerLevel, setFilter, toggleTypeFilter, on } from '../state.js';
 import { checkPrerequisites } from '../engine.js';
 
 const TYPE_ORDER = ['water', 'flame', 'ooze', 'utrom', 'ninja', 'light', 'dark', 'robotics', 'legendary'];
@@ -18,6 +18,21 @@ const SLOT_LABELS = {
 const comboLookup = new Map();
 for (const p of powers) {
   if (p.combo) comboLookup.set(p.name, p.combo);
+}
+
+// Resolve effect text for a specific level.
+// Replaces "20% / 30% / 40%" patterns with the single value for the given level.
+function resolveEffectForLevel(text, level) {
+  if (!level || level < 1) return text;
+  return text.replace(
+    /([+-]?\d+(?:\.\d+)?[%s]?)\s*\/\s*([+-]?\d+(?:\.\d+)?[%s]?)(?:\s*\/\s*([+-]?\d+(?:\.\d+)?[%s]?))?/g,
+    (match, v1, v2, v3) => {
+      const vals = [v1, v2];
+      if (v3) vals.push(v3);
+      const idx = Math.min(level - 1, vals.length - 1);
+      return vals[idx];
+    }
+  );
 }
 
 export function initPowersTab() {
@@ -163,11 +178,27 @@ function renderGrid() {
     const isInBuild = inBuild.has(power.name);
     const isAvailable = availableNames.has(power.name);
     const isLocked = power.tier === 'secondary' && !isAvailable && !isInBuild;
+    const level = isInBuild ? (state.powerLevels[power.name] || 1) : 0;
 
     let classes = 'card';
-    if (isInBuild) classes += ' in-build';
+    if (isInBuild) classes += ' in-build upgrade-card';
     if (isAvailable && !isInBuild) classes += ' available-highlight';
     if (isLocked) classes += ' locked';
+
+    // Edge zones only when in build (matching artifact pattern)
+    const edgeZones = isInBuild ? `
+      <div class="card-edge-zone card-edge-dec" data-power-dec="${power.name}">&minus;</div>
+      <div class="card-edge-zone card-edge-inc" data-power-inc="${power.name}">+</div>
+    ` : '';
+
+    // Level buttons (only when in build) — same numbered buttons as artifacts
+    const levelButtons = isInBuild ? `
+      <div class="level-selector" data-power-level="${power.name}">
+        <button class="level-btn ${level === 1 ? 'active' : ''}" data-level="1">1</button>
+        <button class="level-btn ${level === 2 ? 'active' : ''}" data-level="2">2</button>
+        <button class="level-btn ${level === 3 ? 'active' : ''}" data-level="3">3</button>
+      </div>
+    ` : '';
 
     let badges = '';
     if (power.type === 'legendary' && power.combo) {
@@ -188,36 +219,65 @@ function renderGrid() {
       prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">Requires: ${power.requiredPowers.join(' + ')}</div>`;
     }
 
-    let availBadge = '';
-    if (isAvailable && !isInBuild) {
-      availBadge = '<span class="badge badge-available">Available</span>';
-    }
-
     return `
       <div class="${classes}" data-type="${power.type}" data-power="${power.name}">
+        ${edgeZones}
         <div class="card-header">
           <span class="card-name">${power.name}</span>
-          <span class="card-type-dot"></span>
         </div>
-        <div class="card-effect">${power.effect}</div>
+        <div class="card-effect">${isInBuild ? resolveEffectForLevel(power.effect, level) : power.effect}</div>
         ${prereqHtml}
         <div class="card-meta">
           <span class="badge badge-type" data-type="${power.type}">${TYPE_LABELS[power.type]}</span>
           <span class="badge badge-slot">${power.slot}</span>
           <span class="badge ${power.tier === 'secondary' ? 'badge-tier-secondary' : 'badge-tier'}">${power.tier}</span>
-          ${availBadge}
           ${badges}
         </div>
+        ${levelButtons}
       </div>
     `;
   }).join('');
 
-  // Bind click events
+  // Edge zone decrease (left side)
+  container.querySelectorAll('.card-edge-zone[data-power-dec]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = zone.dataset.powerDec;
+      const current = state.powerLevels[name] || 0;
+      setPowerLevel(name, current - 1);
+    });
+  });
+
+  // Edge zone increase (right side)
+  container.querySelectorAll('.card-edge-zone[data-power-inc]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = zone.dataset.powerInc;
+      const current = state.powerLevels[name] || 0;
+      setPowerLevel(name, current + 1);
+    });
+  });
+
+  // Level buttons
+  container.querySelectorAll('.level-selector[data-power-level] .level-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = btn.closest('.level-selector').dataset.powerLevel;
+      setPowerLevel(name, parseInt(btn.dataset.level));
+    });
+  });
+
+  // Card body click: toggle add/remove
   container.querySelectorAll('.card[data-power]').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.card-edge-zone') || e.target.closest('.level-selector')) return;
       const powerName = card.dataset.power;
-      if (!card.classList.contains('locked')) {
-        togglePower(powerName);
+      if (card.classList.contains('locked')) return;
+      const current = state.powerLevels[powerName] || 0;
+      if (current > 0) {
+        setPowerLevel(powerName, 0);
+      } else {
+        setPowerLevel(powerName, 1);
       }
     });
   });

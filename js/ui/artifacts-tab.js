@@ -43,7 +43,6 @@ function renderGrid() {
         ` : ''}
         <div class="card-header">
           <span class="card-name">${artifact.name}</span>
-          ${isActive ? `<span class="badge badge-slot">Lv${currentLevel}/${artifact.levels.length}</span>` : ''}
         </div>
         <div class="card-effect">${levelData ? levelData.effect : artifact.effect}</div>
         <div class="card-meta">

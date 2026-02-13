@@ -82,20 +82,27 @@ const SHURIKEN_TOOLS = ['Shuriken', 'Shuriken Storm', 'Ooze Shuriken', 'Utrom Sh
 const FLAME_TOOLS = ['Fireball', 'Meteor Storm'];
 const OOZE_TOOLS = ['Ooze Shuriken', 'Unstable Canister'];
 const UTROM_TOOLS = ['Utrom Drone', 'Utrom Rod', 'Utrom Shuriken'];
+const WATER_TOOLS = ['Ride the Wave', 'Water Sweep'];
 
 // ---------------------
 // Synergy rules
 // ---------------------
+// Categories:
+//   combo          — power+power mechanical interactions
+//   tool-combo     — tool+power synergies
+//   legendary-path — close to unlocking a legendary, suggests what to pick next
+//   artifact-combo — artifact+power real interactions
 
 export const synergyRules = [
+
   // =====================
-  // CRIT SYNERGIES
+  // COMBO — Power+Power Synergies
   // =====================
   {
     id: 'crit-engine',
     name: 'Crit Engine',
-    description: 'Crit engine: 20% crit chance, crits deal 60-180% bonus + 50-100 Flame damage.',
-    category: 'crit',
+    description: 'Furious Attacks gives crit chance, Precision boosts crit damage, Incendiary Strikes adds Flame damage on crit. Full crit loop online.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Furious Attacks', 'Precision', 'Incendiary Strikes');
     }
@@ -103,8 +110,8 @@ export const synergyRules = [
   {
     id: 'crit-dodge-loop',
     name: 'Crit Dodge Loop',
-    description: 'Dodge for global crit, attacks have base crit. Dodge feeds damage, damage feeds kills.',
-    category: 'crit',
+    description: 'Ninjutsu Tactics grants crit after dodge. Furious Attacks adds base crit chance. Dodge-attack-dodge rhythm maximizes damage.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Furious Attacks', 'Ninjutsu Tactics');
     }
@@ -112,21 +119,17 @@ export const synergyRules = [
   {
     id: 'burn-crit',
     name: 'Burn Crit',
-    description: 'Crits against burning enemies. Preheated applies burn, Inferno converts burn into crit triggers.',
-    category: 'crit',
+    description: 'Preheated applies burn on hit, Inferno converts burn stacks into crit triggers. Burning enemies take crits automatically.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Preheated', 'Inferno');
     }
   },
-
-  // =====================
-  // WATER SYNERGIES
-  // =====================
   {
     id: 'empowered-final-strike',
     name: 'Empowered Final Strike',
-    description: 'Empowered Final Strikes with bonus Water damage + speed. Still Waters buffs finishers, High Tide adds Water scaling.',
-    category: 'water',
+    description: 'Still Waters buffs Final Strike damage, High Tide adds Water scaling. Massive burst on every combo finisher.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Still Waters', 'High Tide');
     }
@@ -134,8 +137,8 @@ export const synergyRules = [
   {
     id: 'freeze-engine',
     name: 'Freeze Engine',
-    description: 'Freeze engine: auto-apply Frost, stun on application. Frost + Flash Freeze + Freeze chains freezing across groups.',
-    category: 'water',
+    description: 'Frost slows enemies, Flash Freeze stuns frozen targets, Freeze chains the effect to nearby enemies. Full crowd-control loop.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Frost', 'Flash Freeze', 'Freeze');
     }
@@ -143,21 +146,17 @@ export const synergyRules = [
   {
     id: 'torrent-stack',
     name: 'Torrent Stack',
-    description: 'Torrent stacking from multiple sources. Torrential Strike, When It Rains, and Torrential Rain all feed Torrent buildup.',
-    category: 'water',
+    description: 'Three sources of Torrent buildup. Torrential Strike, When It Rains, and Torrential Rain stack Multi-Hit chance rapidly.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Torrential Strike', 'When It Rains', 'Torrential Rain');
     }
   },
-
-  // =====================
-  // OOZE SYNERGIES
-  // =====================
   {
     id: 'heavy-ooze',
     name: 'Heavy Ooze',
-    description: 'Heavy Ooze: more stacks, higher cap, more damage. Potency + Chunky Mixture + Goo maximizes Ooze stack output.',
-    category: 'ooze',
+    description: 'Potency raises stack cap, Chunky Mixture adds stacks per application, Goo increases stack damage. Maximum Ooze output.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Potency', 'Chunky Mixture', 'Goo');
     }
@@ -165,8 +164,8 @@ export const synergyRules = [
   {
     id: 'chain-ooze',
     name: 'Chain Ooze',
-    description: "Chain Ooze: explosions on death, spreads to new targets. Goo'dbye detonates, Living Ingredients reapplies to nearby enemies.",
-    category: 'ooze',
+    description: "Goo'dbye detonates Ooze on death, Living Ingredients reapplies stacks to nearby enemies. Explosions chain through groups.",
+    category: 'combo',
     check(build) {
       return hasAll(build, "Goo'dbye", 'Living Ingredients');
     }
@@ -174,43 +173,44 @@ export const synergyRules = [
   {
     id: 'ooze-stun-dash',
     name: 'Ooze Stun Dash',
-    description: 'Ooze application stuns + Dash Attack scales with stacks. Unfortunate Odor stuns on apply, Catalytic Consequence rewards high stacks.',
-    category: 'ooze',
+    description: 'Unfortunate Odor stuns on Ooze application, Catalytic Consequence makes Dash Attack scale with Ooze stacks. Stun-dash loop.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Unfortunate Odor', 'Catalytic Consequence');
     }
   },
-
-  // =====================
-  // UTROM SYNERGIES
-  // =====================
   {
     id: 'electrified-debuff',
     name: 'Electrified Debuff',
-    description: 'Electrified deals damage AND increases damage received. Dual offensive + defensive debuff on enemies.',
-    category: 'utrom',
+    description: 'Electrifying applies Electrified (DoT), Alternating Current makes Electrified enemies take more damage. Offensive + defensive debuff.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Electrifying', 'Alternating Current');
     }
   },
   {
+    id: 'electrified-chain',
+    name: 'Electrified Chain',
+    description: 'Chain Lightning spreads between enemies, Electrifying applies the debuff, Alternating Current amps damage on all targets. AoE Utrom devastation.',
+    category: 'combo',
+    check(build) {
+      return hasAll(build, 'Electrifying', 'Chain Lightning', 'Alternating Current');
+    }
+  },
+  {
     id: 'passive-utrom-aoe',
     name: 'Passive Utrom AoE',
-    description: 'Passive AoE Utrom damage output. Chain Lightning arcs between enemies, Stormy Weather adds ambient Utrom ticks.',
-    category: 'utrom',
+    description: 'Chain Lightning arcs between enemies, Stormy Weather adds ambient Utrom ticks. Passive AoE damage without attacking.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Chain Lightning', 'Stormy Weather');
     }
   },
-
-  // =====================
-  // NINJA SYNERGIES
-  // =====================
   {
     id: 'bouncing-guard-shuriken',
     name: 'Bouncing Guard Break Shuriken',
-    description: 'Bouncing Guard Break shuriken. Shuriken Attacks as base, Ricochet adds bounces, Shuriken Breaker adds guard-breaking.',
-    category: 'ninja',
+    description: 'Shuriken Attacks as base, Ricochet adds bounces, Shuriken Breaker adds guard-breaking. Shuriken clear rooms and break shields.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Shuriken Attacks', 'Throwing Arts: Ricochet', 'Shuriken Breaker');
     }
@@ -218,8 +218,8 @@ export const synergyRules = [
   {
     id: 'full-adrenaline-engine',
     name: 'Full Adrenaline Engine',
-    description: 'Full Adrenaline engine: physical + elemental damage. Adrenaline stacks, Art of Darkness converts stacks, Heightened Senses extends duration.',
-    category: 'ninja',
+    description: 'Adrenaline stacks on kill, Art of Darkness converts stacks to elemental damage, Heightened Senses extends duration. Full Adrenaline loop.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Adrenaline', 'Art of Darkness', 'Heightened Senses');
     }
@@ -227,21 +227,17 @@ export const synergyRules = [
   {
     id: 'dash-focused',
     name: 'Dash Focused',
-    description: 'Dash-focused: extra dashes, post-dash damage, shuriken on dash. Quick Feet + First Strike + Extended Assault for dash-centric playstyle.',
-    category: 'ninja',
+    description: 'Quick Feet adds dashes, First Strike boosts post-dash damage, Extended Assault fires shuriken on dash. Dash-centric playstyle.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Quick Feet', 'First Strike', 'Extended Assault');
     }
   },
-
-  // =====================
-  // ASTRAL SYNERGIES
-  // =====================
   {
     id: 'light-shell-uptime',
     name: 'Light Shell Uptime',
-    description: 'Light Shell uptime: reflects projectiles, damage boost while shielded. Shimmering Shield + Illumination + Astral Insight for permanent shield cycling.',
-    category: 'astral',
+    description: 'Shimmering Shield blocks and reflects, Illumination boosts damage while shielded, Astral Insight speeds shield regeneration. Permanent shell cycling.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Shimmering Shield', 'Illumination', 'Astral Insight');
     }
@@ -249,8 +245,8 @@ export const synergyRules = [
   {
     id: 'darkness-engine',
     name: 'Darkness Engine',
-    description: 'Darkness engine: apply on Final Strike, DoT, extended duration. Nightfall applies, Lingering Darkness ticks, Eternal Darkness extends.',
-    category: 'astral',
+    description: 'Nightfall applies Darkness on Final Strike, Lingering Darkness adds DoT ticks, Eternal Darkness extends duration. Darkness stays active permanently.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Nightfall', 'Lingering Darkness', 'Eternal Darkness');
     }
@@ -258,21 +254,26 @@ export const synergyRules = [
   {
     id: 'dark-star-revival',
     name: 'Dark Star Revival',
-    description: 'Risk/reward: sacrifice revives for massive damage. Dark Star converts revive charges into permanent damage boosts, Revival provides the charges to spend.',
-    category: 'astral',
+    description: 'Dark Star converts revive charges into permanent damage. Revival provides extra charges to fuel it. High-risk, high-reward.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Dark Star', 'Revival');
     }
   },
-
-  // =====================
-  // ROBOTICS SYNERGIES
-  // =====================
+  {
+    id: 'darkness-kill-chain',
+    name: 'Darkness Kill Chain',
+    description: 'Call of the Void pulls enemies on Darkness kill, Core Collapse stuns nearby on Darkness kill. Chain-reaction through mob packs.',
+    category: 'combo',
+    check(build) {
+      return hasAll(build, 'Call of the Void', 'Core Collapse');
+    }
+  },
   {
     id: 'charge-engine',
     name: 'Charge Engine',
-    description: 'Charge engine: faster charge, faster charge per activation. Any Charge power + Quick Study + System Calibration accelerates the loop.',
-    category: 'robotics',
+    description: 'Charge power builds meter, Quick Study speeds charge rate, System Calibration boosts effects. Self-reinforcing Charge loop.',
+    category: 'combo',
     check(build) {
       return hasAny(build, ...CHARGE_POWERS) &&
         hasAll(build, 'Quick Study', 'System Calibration');
@@ -281,8 +282,8 @@ export const synergyRules = [
   {
     id: 'power-surge-loop',
     name: 'Power Surge Loop',
-    description: 'Tool/Special use feeds Charge, Charge boosts elemental damage. Power Surge + Empowerment creates a self-reinforcing elemental loop.',
-    category: 'robotics',
+    description: 'Power Surge generates Charge from Tool/Special use, Empowerment converts Charge into elemental damage boost. Self-feeding damage loop.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Power Surge', 'Empowerment');
     }
@@ -290,21 +291,17 @@ export const synergyRules = [
   {
     id: 'synthetic-adrenaline',
     name: 'Synthetic Adrenaline',
-    description: 'Charge activations feed Adrenaline stacks. Synthetic Rush bridges Robotics and Ninja, doubling stack generation.',
-    category: 'robotics',
+    description: 'Synthetic Rush grants Adrenaline stacks on Charge activation. Bridges Robotics and Ninja for double stack generation.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Synthetic Rush', 'Adrenaline');
     }
   },
-
-  // =====================
-  // CROSS-ELEMENT SYNERGIES
-  // =====================
   {
     id: 'frostfire-prep',
     name: 'Frostfire Prep',
-    description: 'Frostfire prep: apply both elements for opposite-element bonus. Frost + Inferno creates multiplicative damage when both debuffs land.',
-    category: 'cross-element',
+    description: 'Frost applies slow/freeze, Inferno applies burn. Both active together enables Frostfire legendary for opposite-element bonus damage.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Frost', 'Inferno');
     }
@@ -312,8 +309,8 @@ export const synergyRules = [
   {
     id: 'crit-shuriken-foundation',
     name: 'Crit Shuriken Foundation',
-    description: 'Crit shuriken foundation. Furious Attacks gives crit chance, Shuriken Attacks gives shuriken on hit, resulting in critting shuriken.',
-    category: 'cross-element',
+    description: 'Furious Attacks gives crit chance to all attacks, Shuriken Attacks fires shuriken on hit. Your shuriken inherit the crit chance.',
+    category: 'combo',
     check(build) {
       return hasAll(build, 'Furious Attacks', 'Shuriken Attacks');
     }
@@ -321,8 +318,8 @@ export const synergyRules = [
   {
     id: 'slippery-prep',
     name: 'Slippery Prep',
-    description: 'Slippery prep: max Adrenaline for speed + cooldown reduction. Adrenaline stacks from Ooze application powers, fueling evasion and mobility.',
-    category: 'cross-element',
+    description: 'Adrenaline stacks from Ooze application powers. Builds toward the Slippery legendary (max Adrenaline = speed + charge boost).',
+    category: 'combo',
     check(build) {
       return build.powers.includes('Adrenaline') &&
         OOZE_APPLICATORS.some(p => build.powers.includes(p));
@@ -330,23 +327,33 @@ export const synergyRules = [
   },
 
   // =====================
-  // TOOL SYNERGIES
+  // TOOL-COMBO — Tool+Power Synergies
   // =====================
   {
     id: 'shuriken-tool-ninja',
-    name: 'Shuriken Tool + Ninja Powers',
-    description: 'Shuriken tools benefit from Ninja shuriken upgrades. Tool shuriken inherit Shuriken Attacks bonuses like crit and bounce.',
-    category: 'tool',
+    name: 'Shuriken Tool + Shuriken Powers',
+    description: 'Tool shuriken inherit Shuriken Attacks bonuses. Look for Throwing Mastery and Ricochet to supercharge tool damage.',
+    category: 'tool-combo',
     check(build) {
       return SHURIKEN_TOOLS.includes(build.tool) &&
         build.powers.includes('Shuriken Attacks');
     }
   },
   {
+    id: 'shuriken-tool-mastery',
+    name: 'Shuriken Tool + Throwing Mastery',
+    description: 'Throwing Mastery boosts all shuriken damage by up to 90%. Your shuriken tool benefits from this directly.',
+    category: 'tool-combo',
+    check(build) {
+      return SHURIKEN_TOOLS.includes(build.tool) &&
+        build.powers.includes('Throwing Mastery');
+    }
+  },
+  {
     id: 'flame-tool-synergy',
-    name: 'Flame Tool Synergy',
-    description: 'Tool triggers Flame damage effects. Fireball/Meteor Storm activates burn, Inferno, and Flame power bonuses.',
-    category: 'tool',
+    name: 'Flame Tool + Flame Powers',
+    description: 'Fireball/Meteor Storm deals Flame damage, triggering burn effects from Preheated, Inferno, and other Flame bonuses.',
+    category: 'tool-combo',
     check(build) {
       return FLAME_TOOLS.includes(build.tool) &&
         FLAME_POWERS.some(p => build.powers.includes(p));
@@ -354,79 +361,330 @@ export const synergyRules = [
   },
   {
     id: 'ooze-tool-synergy',
-    name: 'Ooze Tool Synergy',
-    description: 'Tool applies Ooze stacks. Ooze Shuriken/Unstable Canister feeds Ooze stack-based powers like Potency and Catalytic Consequence.',
-    category: 'tool',
+    name: 'Ooze Tool + Ooze Powers',
+    description: 'Ooze Shuriken/Unstable Canister applies Ooze stacks, feeding Potency, Catalytic Consequence, and other stack-based powers.',
+    category: 'tool-combo',
     check(build) {
       return OOZE_TOOLS.includes(build.tool) &&
         OOZE_POWERS.some(p => build.powers.includes(p));
     }
   },
   {
+    id: 'ooze-shuriken-double',
+    name: 'Ooze Shuriken + Shuriken Attacks',
+    description: 'Attack shuriken and tool shuriken both apply Ooze stacks. Double the Ooze application sources.',
+    category: 'tool-combo',
+    check(build) {
+      return build.tool === 'Ooze Shuriken' &&
+        build.powers.includes('Shuriken Attacks');
+    }
+  },
+  {
     id: 'utrom-tool-synergy',
-    name: 'Utrom Tool Synergy',
-    description: 'Tool triggers Utrom damage effects. Utrom Drone/Rod/Shuriken activates Electrified, Chain Lightning, and Utrom power bonuses.',
-    category: 'tool',
+    name: 'Utrom Tool + Utrom Powers',
+    description: 'Utrom Drone/Rod/Shuriken deals Utrom damage, activating Electrified, Chain Lightning, and Utrom power bonuses.',
+    category: 'tool-combo',
     check(build) {
       return UTROM_TOOLS.includes(build.tool) &&
         UTROM_POWERS.some(p => build.powers.includes(p));
     }
   },
+  {
+    id: 'water-tool-frost',
+    name: 'Water Tool + Frost',
+    description: 'Ride the Wave/Water Sweep deals Water damage, Frost converts that into slows. Tool hits slow entire groups.',
+    category: 'tool-combo',
+    check(build) {
+      return WATER_TOOLS.includes(build.tool) &&
+        build.powers.includes('Frost');
+    }
+  },
 
   // =====================
-  // ARTIFACT SYNERGIES
+  // LEGENDARY-PATH — Near a legendary unlock
   // =====================
+
+  // Frostfire: Frost + any Flame power
   {
-    id: 'water-artifact-stack',
-    name: 'Water Artifact Stack',
-    description: 'Water artifact maximizes Water power acquisition. Manhole Cover boosts Water offering rate, pairing with 3+ Water powers snowballs the element.',
-    category: 'artifact',
+    id: 'path-frostfire-need-flame',
+    name: 'Path to Frostfire',
+    description: 'You have Frost. Pick up any Flame damage power to unlock Frostfire (deal 30% opposite-element damage with Flame/Water).',
+    category: 'legendary-path',
     check(build) {
-      return build.artifact === 'Manhole Cover' &&
-        WATER_POWERS.filter(p => build.powers.includes(p)).length >= 3;
+      if (build.powers.includes('Frostfire')) return false;
+      return build.powers.includes('Frost') && !FLAME_POWERS.some(p => build.powers.includes(p));
     }
   },
   {
-    id: 'robotics-artifact-charge',
-    name: 'Robotics Artifact Charge',
-    description: 'Robotics artifact feeds Charge-based secondary unlocks. Positronic Motherboard + 3+ Robotics powers ensures consistent Charge uptime.',
-    category: 'artifact',
+    id: 'path-frostfire-need-frost',
+    name: 'Path to Frostfire',
+    description: 'You have Flame powers. Pick up Frost to unlock Frostfire (deal 30% opposite-element damage with Flame/Water).',
+    category: 'legendary-path',
     check(build) {
-      return build.artifact === 'Positronic Motherboard' &&
-        ROBOTICS_POWERS.filter(p => build.powers.includes(p)).length >= 3;
+      if (build.powers.includes('Frostfire')) return false;
+      return !build.powers.includes('Frost') && FLAME_POWERS.some(p => build.powers.includes(p)) &&
+        WATER_POWERS.some(p => build.powers.includes(p));
     }
   },
+
+  // Tempered Shuriken: Shuriken Attacks + Furious Attacks
+  {
+    id: 'path-tempered-need-crit',
+    name: 'Path to Tempered Shuriken',
+    description: 'You have Shuriken Attacks. Pick up Furious Attacks to unlock Tempered Shuriken (+40% crit chance with shuriken).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Tempered Shuriken')) return false;
+      return build.powers.includes('Shuriken Attacks') && !build.powers.includes('Furious Attacks');
+    }
+  },
+  {
+    id: 'path-tempered-need-shuriken',
+    name: 'Path to Tempered Shuriken',
+    description: 'You have Furious Attacks. Pick up Shuriken Attacks to unlock Tempered Shuriken (+40% crit chance with shuriken).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Tempered Shuriken')) return false;
+      return build.powers.includes('Furious Attacks') && !build.powers.includes('Shuriken Attacks');
+    }
+  },
+
+  // Shatter: Frost + any Utrom damage power
+  {
+    id: 'path-shatter-need-utrom',
+    name: 'Path to Shatter',
+    description: 'You have Frost. Pick up any Utrom damage power to unlock Shatter (200 Water+Utrom damage when applying Stun).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Shatter')) return false;
+      return build.powers.includes('Frost') && !UTROM_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-shatter-need-frost',
+    name: 'Path to Shatter',
+    description: 'You have Utrom powers. Pick up Frost to unlock Shatter (200 Water+Utrom damage when applying Stun).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Shatter')) return false;
+      return !build.powers.includes('Frost') && UTROM_POWERS.some(p => build.powers.includes(p)) &&
+        WATER_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Dark Flame: Darkness power + Flame power
+  {
+    id: 'path-darkflame-need-flame',
+    name: 'Path to Dark Flame',
+    description: 'You have Darkness powers. Pick up a Flame power to unlock Dark Flame (+40% Flame damage vs Darkened targets).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Dark Flame')) return false;
+      return DARK_POWERS.some(p => build.powers.includes(p)) && !FLAME_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-darkflame-need-dark',
+    name: 'Path to Dark Flame',
+    description: 'You have Flame powers. Pick up a Darkness power to unlock Dark Flame (+40% Flame damage vs Darkened targets).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Dark Flame')) return false;
+      return FLAME_POWERS.some(p => build.powers.includes(p)) && !DARK_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Finisher: Darkness power + any Ninja power
+  {
+    id: 'path-finisher-need-ninja',
+    name: 'Path to Finisher',
+    description: 'You have Darkness powers. Pick up any Ninja power to unlock Finisher (instantly defeat enemies below 15% health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Finisher')) return false;
+      return DARK_POWERS.some(p => build.powers.includes(p)) && !NINJA_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-finisher-need-dark',
+    name: 'Path to Finisher',
+    description: 'You have Ninja powers. Pick up a Darkness power to unlock Finisher (instantly defeat enemies below 15% health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Finisher')) return false;
+      return NINJA_POWERS.some(p => build.powers.includes(p)) && !DARK_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Slippery: Adrenaline + any Ooze applicator
+  {
+    id: 'path-slippery-need-ooze',
+    name: 'Path to Slippery',
+    description: 'You have Adrenaline. Pick up an Ooze applicator to unlock Slippery (+20% move speed, 100% faster charge at max Adrenaline).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Slippery')) return false;
+      return build.powers.includes('Adrenaline') && !OOZE_APPLICATORS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-slippery-need-adrenaline',
+    name: 'Path to Slippery',
+    description: 'You have Ooze applicators. Pick up Adrenaline to unlock Slippery (+20% move speed, 100% faster charge at max Adrenaline).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Slippery')) return false;
+      return OOZE_APPLICATORS.some(p => build.powers.includes(p)) && !build.powers.includes('Adrenaline');
+    }
+  },
+
+  // Revolution: Quick Feet + any Utrom power
+  {
+    id: 'path-revolution-need-utrom',
+    name: 'Path to Revolution',
+    description: "You have Quick Feet. Pick up a Utrom power to unlock Revolution (Dash Attack deals 1% of enemies' Max Health).",
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Revolution')) return false;
+      return build.powers.includes('Quick Feet') && !UTROM_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-revolution-need-quickfeet',
+    name: 'Path to Revolution',
+    description: "You have Utrom powers. Pick up Quick Feet to unlock Revolution (Dash Attack deals 1% of enemies' Max Health).",
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Revolution')) return false;
+      return UTROM_POWERS.some(p => build.powers.includes(p)) && !build.powers.includes('Quick Feet');
+    }
+  },
+
+  // Shocking: Charge power + Utrom power
+  {
+    id: 'path-shocking-need-utrom',
+    name: 'Path to Shocking',
+    description: 'You have a Charge power. Pick up a Utrom power to unlock Shocking (full charge deals 20 Utrom damage + stuns nearby).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Shocking')) return false;
+      return CHARGE_POWERS.some(p => build.powers.includes(p)) && !UTROM_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+  {
+    id: 'path-shocking-need-charge',
+    name: 'Path to Shocking',
+    description: 'You have Utrom powers. Pick up a Charge power (Blade Matrix, Laser Strike, Overdrive, Photon Lance) to unlock Shocking.',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Shocking')) return false;
+      return UTROM_POWERS.some(p => build.powers.includes(p)) && !CHARGE_POWERS.some(p => build.powers.includes(p)) &&
+        ROBOTICS_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Bright Spring: Light Attacks + Water power
+  {
+    id: 'path-brightspring-need-water',
+    name: 'Path to Bright Spring',
+    description: 'You have Light Attacks. Pick up a Water power to unlock Bright Spring (attacks restore 2 health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Bright Spring')) return false;
+      return build.powers.includes('Light Attacks') && !WATER_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Light Hammer: Light Attacks + Utrom power
+  {
+    id: 'path-lighthammer-need-utrom',
+    name: 'Path to Light Hammer',
+    description: 'You have Light Attacks. Pick up a Utrom power to unlock Light Hammer (Utrom damage increased by 10% of Max Health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Light Hammer')) return false;
+      return build.powers.includes('Light Attacks') && !UTROM_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Secret of the Ooze: Ooze applicator + Utrom power
+  {
+    id: 'path-secretooze-need-utrom',
+    name: 'Path to Secret of the Ooze',
+    description: 'You have Ooze applicators. Pick up a Utrom power to unlock Secret of the Ooze (reduce damage received by 30%).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Secret of the Ooze')) return false;
+      return OOZE_APPLICATORS.some(p => build.powers.includes(p)) && !UTROM_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Solution to Pollution: Potency + Water power
+  {
+    id: 'path-solution-need-water',
+    name: 'Path to Solution to Pollution',
+    description: 'You have Potency. Pick up a Water power to unlock Solution to Pollution (+3s Ooze duration, enemies gain stacks over time).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Solution to Pollution')) return false;
+      return build.powers.includes('Potency') && !WATER_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Spontaneous Combustion: Ooze applicator + Flame power
+  {
+    id: 'path-combustion-need-flame',
+    name: 'Path to Spontaneous Combustion',
+    description: 'You have Ooze applicators. Pick up a Flame power to unlock Spontaneous Combustion (30% chance for 100 Flame damage on Ooze apply).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Spontaneous Combustion')) return false;
+      return OOZE_APPLICATORS.some(p => build.powers.includes(p)) && !FLAME_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Cascade Drive: Charge power + Water power
+  {
+    id: 'path-cascade-need-water',
+    name: 'Path to Cascade Drive',
+    description: 'You have a Charge power. Pick up a Water power to unlock Cascade Drive (Charge activation grants 3% Multi-Hit Chance this room).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Cascade Drive')) return false;
+      return CHARGE_POWERS.some(p => build.powers.includes(p)) && !WATER_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Critical Flow: Charge power + Flame power
+  {
+    id: 'path-critflow-need-flame',
+    name: 'Path to Critical Flow',
+    description: 'You have a Charge power. Pick up a Flame power to unlock Critical Flow (Charge activation grants 3% Crit Chance this room).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Critical Flow')) return false;
+      return CHARGE_POWERS.some(p => build.powers.includes(p)) && !FLAME_POWERS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // =====================
+  // ARTIFACT-COMBO — Artifact+Power Real Interactions
+  // =====================
   {
     id: 'pizza-box-boost-stack',
     name: 'Pizza Box Boost Stack',
-    description: 'Extended Boost duration stacking. Insulated Pizza Box + Shelf Life or Special Spice compounds boost uptime for permanent buff windows.',
-    category: 'artifact',
+    description: 'Insulated Pizza Box extends Boost duration. Shelf Life/Special Spice compound it further. Near-permanent buff windows.',
+    category: 'artifact-combo',
     check(build) {
       return build.artifact === 'Insulated Pizza Box' &&
         hasAny(build, 'Shelf Life', 'Special Spice');
     }
   },
   {
-    id: 'war-staff-damage',
-    name: 'War Staff Damage',
-    description: 'Risk/reward: +100% damage taken but massive currency gains. War Staff paired with 5+ damage powers turns glass-cannon into a farming machine.',
-    category: 'artifact',
-    check(build) {
-      const damagePowers = build.powers.filter(p =>
-        FLAME_POWERS.includes(p) ||
-        OOZE_POWERS.includes(p) ||
-        UTROM_POWERS.includes(p) ||
-        NINJA_POWERS.includes(p) ||
-        ROBOTICS_POWERS.includes(p)
-      );
-      return build.artifact === 'War Staff' && damagePowers.length >= 5;
-    }
-  },
-  {
     id: 'revive-stack',
     name: 'Revive Stack',
-    description: 'Revive stacking for survivability. Clan Hamato Seal gives extra revive charges, Revival or Spare Bot adds even more.',
-    category: 'artifact',
+    description: 'Clan Hamato Seal gives extra revive charges. Revival or Spare Bot adds even more. Pairs with Dark Star for damage conversion.',
+    category: 'artifact-combo',
     check(build) {
       return build.artifact === 'Clan Hamato Seal' &&
         hasAny(build, 'Revival', 'Spare Bot');
@@ -435,8 +693,8 @@ export const synergyRules = [
   {
     id: 'dodge-defense',
     name: 'Dodge Defense',
-    description: 'Dodge-focused defensive build. Heart of Tengu dodge bonus + Shinobi Supremacy or Ninjutsu Tactics dodge-on-kill for evasion tanking.',
-    category: 'artifact',
+    description: 'Heart of Tengu dodge bonus + Shinobi Supremacy/Ninjutsu Tactics dodge-on-kill. Evasion tanking build.',
+    category: 'artifact-combo',
     check(build) {
       return build.artifact === 'Heart of Tengu' &&
         hasAny(build, 'Shinobi Supremacy', 'Ninjutsu Tactics');
