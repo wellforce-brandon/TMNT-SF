@@ -3,7 +3,7 @@
 
 import { powers } from '../data/powers.js';
 import { state, setPowerLevel, setFilter, toggleTypeFilter, on } from '../state.js';
-import { checkPrerequisites, getDependentsInBuild } from '../engine.js';
+import { checkPrerequisites, getDependentsInBuild, CATEGORY_REQUIRES_LABELS } from '../engine.js';
 
 const TYPE_ORDER = ['water', 'flame', 'ooze', 'utrom', 'ninja', 'light', 'dark', 'robotics', 'legendary'];
 const TYPE_LABELS = {
@@ -261,7 +261,8 @@ function renderGrid() {
     let prereqHtml = '';
     if (power.requires) {
       const met = isAvailable || isInBuild;
-      prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">${power.requires}</div>`;
+      const displayRequires = CATEGORY_REQUIRES_LABELS[power.requires] || power.requires;
+      prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">${displayRequires}</div>`;
     }
     if (power.requiredPowers) {
       const met = isAvailable || isInBuild;

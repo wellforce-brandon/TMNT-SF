@@ -20,6 +20,29 @@ function ensureLookups() {
   }
 }
 
+// ---- Category → Element Type Map ----
+// Shared by isPartMet (forward check) and partMatchesPower (reverse check)
+const CATEGORY_TYPE_MAP = {
+  'dealing water damage': 'water',
+  'dealing flame damage': 'flame',
+  'dealing utrom damage': 'utrom',
+  'applying ooze': 'ooze',
+  'charge': 'robotics',
+  'darkness': 'dark',
+  'light': 'light'
+};
+
+// Friendly display labels for category-based requires strings
+export const CATEGORY_REQUIRES_LABELS = {
+  'After Dealing Water Damage': 'Obtain a Water Attack Power',
+  'After Dealing Flame Damage': 'Obtain a Flame Attack Power',
+  'After Dealing Utrom Damage': 'Obtain a Utrom Attack Power',
+  'After Applying Ooze': 'Obtain an Ooze Power',
+  'After Light': 'Obtain a Light Power',
+  'After Darkness': 'Obtain a Dark Power',
+  'After Charge': 'Obtain a Robotics Power'
+};
+
 // ---- Prerequisite Checking ----
 
 // Parse a requires string to determine if it's met by the current build
@@ -52,51 +75,17 @@ function isPartMet(part, buildPowerNames, buildPowerSet) {
     return alternatives.some(alt => buildPowerSet.has(alt));
   }
 
-  // Category matches
+  // Category matches via shared map
   const partLower = part.toLowerCase();
+  const categoryType = CATEGORY_TYPE_MAP[partLower];
+  if (categoryType) {
+    return buildPowerNames.some(n => {
+      const p = powersByName.get(n);
+      return p && p.type === categoryType;
+    });
+  }
 
-  if (partLower === 'dealing water damage') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'water';
-    });
-  }
-  if (partLower === 'dealing flame damage') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'flame';
-    });
-  }
-  if (partLower === 'dealing utrom damage') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'utrom';
-    });
-  }
-  if (partLower === 'applying ooze') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'ooze';
-    });
-  }
-  if (partLower === 'charge') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'robotics';
-    });
-  }
-  if (partLower === 'darkness') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'dark';
-    });
-  }
-  if (partLower === 'light') {
-    return buildPowerNames.some(n => {
-      const p = powersByName.get(n);
-      return p && p.type === 'light';
-    });
-  }
+  // Specific power name matches (case-insensitive fallbacks)
   if (partLower === 'frost') {
     return buildPowerSet.has('Frost');
   }
@@ -191,13 +180,13 @@ export function getDependentsInBuild(powerName, buildPowerNames) {
       const parts = cleaned.split(' + ').map(s => s.trim());
       // Check if any part directly matches or matches via OR pattern
       for (const part of parts) {
-        if (partMatchesPower(part, powerName, power)) {
+        if (partMatchesPower(part, powerName, power, buildPowerNames)) {
           dependents.push(p.name);
           break;
         }
       }
     } else {
-      if (partMatchesPower(cleaned, powerName, power)) {
+      if (partMatchesPower(cleaned, powerName, power, buildPowerNames)) {
         dependents.push(p.name);
       }
     }
@@ -206,8 +195,9 @@ export function getDependentsInBuild(powerName, buildPowerNames) {
   return dependents;
 }
 
-// Check if a prerequisite part matches the given power (by name or category)
-function partMatchesPower(part, powerName, power) {
+// Check if a prerequisite part matches the given power (by name or category).
+// For category deps, only matches if this is the LAST power of that type in the build.
+function partMatchesPower(part, powerName, power, buildPowerNames) {
   // Direct name match
   if (part === powerName) return true;
 
@@ -217,9 +207,18 @@ function partMatchesPower(part, powerName, power) {
     if (alts.includes(powerName)) return true;
   }
 
-  // Category matches — check if this power satisfies the category
-  // and is the ONLY power of that type in the build.
-  // (We don't block here; category deps are too broad to enforce per-power.)
+  // Category matches: block removal only if this is the last power of the required type
+  const partLower = part.toLowerCase();
+  const categoryType = CATEGORY_TYPE_MAP[partLower];
+  if (categoryType && power.type === categoryType) {
+    const remaining = buildPowerNames.filter(n => {
+      if (n === powerName) return false;
+      const p = powersByName.get(n);
+      return p && p.type === categoryType;
+    });
+    return remaining.length === 0;
+  }
+
   return false;
 }
 
