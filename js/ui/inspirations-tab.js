@@ -81,6 +81,26 @@ function renderGrid() {
       setInspirationLevel(btn.dataset.insp, parseInt(btn.dataset.level));
     });
   });
+
+  // Bind edge zone +/- for inspirations
+  container.querySelectorAll('.card-edge-zone[data-insp-dec]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = zone.dataset.inspDec;
+      const min = parseInt(zone.dataset.min);
+      const current = state.inspirations[name] || 0;
+      if (current > min) setInspirationLevel(name, current - 1);
+    });
+  });
+  container.querySelectorAll('.card-edge-zone[data-insp-inc]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const name = zone.dataset.inspInc;
+      const max = parseInt(zone.dataset.max);
+      const current = state.inspirations[name] || 0;
+      if (current < max) setInspirationLevel(name, current + 1);
+    });
+  });
 }
 
 function getGroupedInspirations() {
@@ -108,32 +128,34 @@ function renderInspirationCard(insp) {
   const activeLevel = insp.levels.find(l => l.level === currentLevel);
   const isActive = currentLevel > 0;
   const isStarter = isStartingInspiration(insp.name);
+  const maxLevel = insp.levels.length;
+  const minLevel = isStarter ? 1 : 0;
 
-  let classes = 'card';
+  let classes = 'card upgrade-card';
   if (isActive) classes += ' in-build';
   if (isStarter) classes += ' starting-inspiration';
 
   let levelButtons = '';
   if (isStarter) {
-    // No Off button for starters, just Lv1/Lv2/Lv3
     levelButtons = insp.levels.map(l =>
       `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
     ).join('');
   } else {
-    // Normal: Off + Lv1/Lv2/Lv3
     levelButtons = `<button class="level-btn ${currentLevel === 0 ? 'active' : ''}" data-insp="${insp.name}" data-level="0">Off</button>`;
     levelButtons += insp.levels.map(l =>
       `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
     ).join('');
   }
 
-  const ownerName = charNameMap.get(insp.character) || insp.character;
+  const levelLabel = currentLevel === 0 ? 'Off' : `Lv${currentLevel}/${maxLevel}`;
 
   return `
     <div class="${classes}" data-inspiration="${insp.name}">
+      <div class="card-edge-zone card-edge-dec" data-insp-dec="${insp.name}" data-min="${minLevel}">&minus;</div>
+      <div class="card-edge-zone card-edge-inc" data-insp-inc="${insp.name}" data-max="${maxLevel}">+</div>
       <div class="card-header">
         <span class="card-name">${insp.name}</span>
-        ${isStarter ? '<span class="badge badge-starting">Starting</span>' : ''}
+        ${isStarter ? '<span class="badge badge-starting">Starting</span>' : `<span class="badge badge-slot">${levelLabel}</span>`}
       </div>
       <div class="card-effect">${activeLevel ? activeLevel.effect : insp.levels[0].effect}</div>
       <div class="card-meta">

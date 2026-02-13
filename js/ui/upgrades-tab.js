@@ -202,6 +202,8 @@ function renderArtifactUpgrades(container) {
 
       html += `
         <div class="card upgrade-card">
+          <div class="card-edge-zone card-edge-dec" data-art-upg-dec="${artifact.name}">&minus;</div>
+          <div class="card-edge-zone card-edge-inc" data-art-upg-inc="${artifact.name}" data-max="${maxLevel}">+</div>
           <div class="card-header">
             <span class="card-name">${artifact.name}</span>
             <span class="badge badge-slot">Lv${level}/${maxLevel}</span>
@@ -232,6 +234,23 @@ function renderArtifactUpgrades(container) {
       setArtifactUpgradeLevel(btn.dataset.artUpg, parseInt(btn.dataset.level));
     });
   });
+
+  // Bind edge zone +/- for artifact upgrades
+  container.querySelectorAll('.card-edge-zone[data-art-upg-dec]').forEach(zone => {
+    zone.addEventListener('click', () => {
+      const name = zone.dataset.artUpgDec;
+      const current = getArtifactUpgradeLevel(name);
+      if (current > 0) setArtifactUpgradeLevel(name, current - 1);
+    });
+  });
+  container.querySelectorAll('.card-edge-zone[data-art-upg-inc]').forEach(zone => {
+    zone.addEventListener('click', () => {
+      const name = zone.dataset.artUpgInc;
+      const max = parseInt(zone.dataset.max);
+      const current = getArtifactUpgradeLevel(name);
+      if (current < max) setArtifactUpgradeLevel(name, current + 1);
+    });
+  });
 }
 
 function renderInspirationUpgrades(container) {
@@ -255,6 +274,8 @@ function renderInspirationUpgrades(container) {
 
       html += `
         <div class="card upgrade-card">
+          <div class="card-edge-zone card-edge-dec" data-insp-upg-dec="${insp.name}">&minus;</div>
+          <div class="card-edge-zone card-edge-inc" data-insp-upg-inc="${insp.name}" data-max="${maxLevel}">+</div>
           <div class="card-header">
             <span class="card-name">${insp.name}</span>
             <span class="badge badge-slot">Lv${level}/${maxLevel}</span>
@@ -283,6 +304,23 @@ function renderInspirationUpgrades(container) {
   container.querySelectorAll('.level-btn[data-insp-upg]').forEach(btn => {
     btn.addEventListener('click', () => {
       setInspirationUpgradeLevel(btn.dataset.inspUpg, parseInt(btn.dataset.level));
+    });
+  });
+
+  // Bind edge zone +/- for inspiration upgrades
+  container.querySelectorAll('.card-edge-zone[data-insp-upg-dec]').forEach(zone => {
+    zone.addEventListener('click', () => {
+      const name = zone.dataset.inspUpgDec;
+      const current = getInspirationUpgradeLevel(name);
+      if (current > 0) setInspirationUpgradeLevel(name, current - 1);
+    });
+  });
+  container.querySelectorAll('.card-edge-zone[data-insp-upg-inc]').forEach(zone => {
+    zone.addEventListener('click', () => {
+      const name = zone.dataset.inspUpgInc;
+      const max = parseInt(zone.dataset.max);
+      const current = getInspirationUpgradeLevel(name);
+      if (current < max) setInspirationUpgradeLevel(name, current + 1);
     });
   });
 }

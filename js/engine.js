@@ -46,6 +46,12 @@ function isPartMet(part, buildPowerNames, buildPowerSet) {
   // Direct power name match
   if (buildPowerSet.has(part)) return true;
 
+  // Handle OR patterns: "Quick Feet/First Strike"
+  if (part.includes('/')) {
+    const alternatives = part.split('/').map(s => s.trim());
+    return alternatives.some(alt => buildPowerSet.has(alt));
+  }
+
   // Category matches
   const partLower = part.toLowerCase();
 

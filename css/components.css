@@ -815,7 +815,7 @@
 .level-btn {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-tertiary);

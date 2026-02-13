@@ -16,22 +16,22 @@ function hasAny(build, ...names) {
 }
 
 const FLAME_POWERS = [
-  'Incendiary Strikes', 'Preheated', 'Inferno', 'Flame Strike',
-  'Flame Dash', 'Flame Abilities', 'Flame Attack', 'Burn',
-  'Flame Torrent', 'Heat Wave'
+  'Flame Abilities', 'Flame Dash', 'Flame Strike', 'Furious Attacks',
+  'Rage', 'Rapid Fire', 'Focus Fire', 'Inferno', 'Precision',
+  'Incendiary Strikes', 'Blazing Inferno', 'Preheated', 'Trailblazer'
 ];
 
 const WATER_POWERS = [
-  'Still Waters', 'High Tide', 'Frost', 'Flash Freeze', 'Freeze',
-  'Torrential Strike', 'When It Rains', 'Torrential Rain',
-  'Water Strike', 'Water Dash', 'Water Abilities', 'Water Attack',
-  'Tidal Force', 'Undertow'
+  'Dilution', 'Still Waters', 'Torrential Strike', 'Water Abilities',
+  'Water Attacks', 'Water Dash', 'Frost', 'Heavy Rain', 'Splash Damage',
+  'Pressure Nozzle', 'High Tide', 'Torrential Rain', 'When It Rains',
+  'Flash Freeze', 'Freeze'
 ];
 
 const OOZE_POWERS = [
-  'Potency', 'Chunky Mixture', 'Goo', "Goo'dbye", 'Living Ingredients',
-  'Unfortunate Odor', 'Catalytic Consequence', 'Ooze Strike', 'Ooze Dash',
-  'Ooze Abilities', 'Ooze Attack', 'Toxic Cloud', 'Ooze Burst'
+  'Ooze Abilities', 'Ooze Attack', 'Ooze Dash', 'Ooze Strike',
+  'Shelf Life', 'Special Spice', 'Catalytic Consequence', 'Chunky Mixture',
+  'Goo', "Goo'dbye", 'Living Ingredients', 'Potency', 'Unfortunate Odor'
 ];
 
 const OOZE_APPLICATORS = [
@@ -39,32 +39,43 @@ const OOZE_APPLICATORS = [
 ];
 
 const UTROM_POWERS = [
-  'Electrifying', 'Alternating Current', 'Chain Lightning', 'Stormy Weather',
-  'Utrom Strike', 'Utrom Dash', 'Utrom Abilities', 'Utrom Attack',
-  'Voltage Spike', 'Arc Discharge'
+  'Utrom Abilities', 'Utrom Attacks', 'Utrom Battery', 'Utrom Dash',
+  'Utrom Strike', 'Chain Lightning', 'Charged Up', 'Electrifying',
+  'Utrom Relay', 'Stormy Weather', 'Techno-Organic Interface', 'Alternating Current'
 ];
 
 const NINJA_POWERS = [
-  'Shuriken Attacks', 'Throwing Arts: Ricochet', 'Shuriken Breaker',
-  'Adrenaline', 'Art of Darkness', 'Heightened Senses', 'Quick Feet',
-  'First Strike', 'Extended Assault', 'Ninjutsu Tactics',
-  'Shadow Step', 'Shinobi Supremacy'
+  'Adrenaline', 'First Strike', 'Quick Feet', 'Shinobi Supremacy',
+  'Shuriken Attacks', 'Art of Darkness', 'Heightened Senses', 'Quick Hands',
+  'Shuriken Breaker', 'Shuriken Engineer', 'Throwing Mastery',
+  'Throwing Arts: Chakram', 'Throwing Arts: Ricochet', 'Ninjutsu Tactics',
+  'Extended Assault'
 ];
 
-const ASTRAL_POWERS = [
-  'Shimmering Shield', 'Illumination', 'Astral Insight',
-  'Nightfall', 'Lingering Darkness', 'Eternal Darkness',
-  'Dark Star', 'Revival', 'Astral Strike', 'Astral Dash'
+const LIGHT_POWERS = [
+  'Light Attacks', 'Shimmering Shield', 'Ancestral Guardian', 'Daybreak',
+  'Eternal Light', 'Light Embrace', 'Radiant Warrior', 'Revival',
+  'Astral Insight', 'Illumination', 'Revved Up'
 ];
+
+const DARK_POWERS = [
+  'Cloak of Shadow', 'Nightfall', 'Call of the Void', 'Core Collapse',
+  'Dark Attacks', 'Dark Embrace', 'Dark Star', "Dragon's Claw",
+  'Eternal Darkness', 'Gift of the Dragon', 'Lingering Darkness', 'Shifting Shadow'
+];
+
+const ASTRAL_POWERS = [...LIGHT_POWERS, ...DARK_POWERS];
 
 const ROBOTICS_POWERS = [
-  'Quick Study', 'System Calibration', 'Power Surge', 'Empowerment',
-  'Synthetic Rush', 'Spare Bot', 'Charge Strike', 'Charge Dash',
-  'Charge Abilities', 'Charge Attack', 'Overclock', 'Circuit Breaker'
+  'Aggressive Savings', 'Ascendancy', 'Blade Matrix', 'Challenge Seeker',
+  'Compound Interest', 'Laser Strike', 'Last Stand Protocol', 'Overdrive',
+  'Regular Customer', 'Spare Bot', 'Survival Matrix', 'Wireless Charging',
+  'Biomechanical Speed', 'Charge Attacks', 'Empowerment', 'Photon Lance',
+  'Power Surge', 'Synthetic Rush', 'System Calibration', 'Thunderheart', 'Quick Study'
 ];
 
 const CHARGE_POWERS = [
-  'Charge Strike', 'Charge Dash', 'Charge Abilities', 'Charge Attack'
+  'Blade Matrix', 'Laser Strike', 'Overdrive', 'Photon Lance'
 ];
 
 const SHURIKEN_TOOLS = ['Shuriken', 'Shuriken Storm', 'Ooze Shuriken', 'Utrom Shuriken'];

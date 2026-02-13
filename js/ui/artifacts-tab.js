@@ -36,9 +36,14 @@ function renderGrid() {
     const primaryTag = artifact.tags[0] || '';
 
     return `
-      <div class="${classes}" ${primaryTag ? `data-type="${primaryTag}"` : ''} data-artifact="${artifact.name}">
+      <div class="${classes} ${isActive ? 'upgrade-card' : ''}" ${primaryTag ? `data-type="${primaryTag}"` : ''} data-artifact="${artifact.name}">
+        ${isActive ? `
+          <div class="card-edge-zone card-edge-dec" data-art-dec="${artifact.name}">&minus;</div>
+          <div class="card-edge-zone card-edge-inc" data-art-inc="${artifact.name}">+</div>
+        ` : ''}
         <div class="card-header">
           <span class="card-name">${artifact.name}</span>
+          ${isActive ? `<span class="badge badge-slot">Lv${currentLevel}/${artifact.levels.length}</span>` : ''}
         </div>
         <div class="card-effect">${levelData ? levelData.effect : artifact.effect}</div>
         <div class="card-meta">
@@ -61,8 +66,8 @@ function renderGrid() {
   // Artifact click to select
   container.querySelectorAll('.card[data-artifact]').forEach(card => {
     card.addEventListener('click', (e) => {
-      // Don't toggle when clicking level buttons
-      if (e.target.closest('.level-selector')) return;
+      // Don't toggle when clicking level buttons or edge zones
+      if (e.target.closest('.level-selector') || e.target.closest('.card-edge-zone')) return;
       setArtifact(card.dataset.artifact);
     });
   });
@@ -72,6 +77,26 @@ function renderGrid() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       setArtifactLevel(parseInt(btn.dataset.level));
+    });
+  });
+
+  // Edge zone +/- for artifact levels
+  container.querySelectorAll('.card-edge-zone[data-art-dec]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const art = artifacts.find(a => a.name === zone.dataset.artDec);
+      if (art && state.artifactLevel > 1) {
+        setArtifactLevel(state.artifactLevel - 1);
+      }
+    });
+  });
+  container.querySelectorAll('.card-edge-zone[data-art-inc]').forEach(zone => {
+    zone.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const art = artifacts.find(a => a.name === zone.dataset.artInc);
+      if (art && state.artifactLevel < art.levels.length) {
+        setArtifactLevel(state.artifactLevel + 1);
+      }
     });
   });
 }
