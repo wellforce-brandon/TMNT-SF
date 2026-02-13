@@ -244,12 +244,8 @@ export async function initSupabase() {
   // Listen for auth state changes
   supabaseClient.auth.onAuthStateChange(handleAuthChange);
 
-  // Check for existing session (returns immediately from localStorage cache)
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) {
-    // onAuthStateChange will fire INITIAL_SESSION, which handles the merge
-    currentSession = session;
-  }
-
-  emitAuthChanged();
+  // onAuthStateChange fires INITIAL_SESSION on init (even if logged out),
+  // which sets currentSession and emits auth change after cloud sync.
+  // No need to call getSession() or emitAuthChanged() here — the callback
+  // is the single source of truth to avoid timing races.
 }

@@ -3,6 +3,7 @@
 
 import { characters } from '../data/characters.js';
 import { state, selectCharacter, setActiveTab, on } from '../state.js';
+import { renderSidebar } from './sidebar.js';
 
 const MOBILE_BREAKPOINT = 600;
 let isMobile = false;
@@ -210,6 +211,8 @@ function navigateTo(navId) {
     browsePanel.classList.add('mobile-panel-hidden');
     sidebar.classList.add('mobile-panel-active');
     sidebar.classList.remove('open');
+    // Force re-render so stats reflect current upgrade state
+    renderSidebar();
   } else {
     // Show browse panel
     browsePanel.classList.remove('mobile-panel-hidden');

@@ -1033,3 +1033,40 @@
   height: 16px;
   flex-shrink: 0;
 }
+
+/* ---- Mastery Character Group Header ---- */
+.mastery-char-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 4px solid var(--primary);
+  background: var(--muted);
+  border-radius: var(--radius);
+  margin-top: var(--sp-2);
+}
+
+.mastery-char-header:first-child {
+  margin-top: 0;
+}
+
+.mastery-char-header img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mastery-char-header span {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.mastery-char-count {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-tertiary);
+}

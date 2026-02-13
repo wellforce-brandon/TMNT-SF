@@ -38,8 +38,31 @@
     display: none;
   }
 
-  body.mobile-app #auth-container {
+  /* ---- Compact Auth (topbar) ---- */
+
+  body.mobile-app .auth-user {
+    gap: 0;
+  }
+
+  body.mobile-app .auth-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+  }
+
+  body.mobile-app #auth-container #logout-btn {
     display: none;
+  }
+
+  body.mobile-app #auth-container .btn-discord {
+    padding: var(--sp-1) var(--sp-2);
+    font-size: 0;
+    gap: 0;
+  }
+
+  body.mobile-app #auth-container .btn-discord .icon {
+    width: 20px;
+    height: 20px;
   }
 
   /* ---- Character Indicator (topbar) ---- */

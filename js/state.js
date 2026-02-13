@@ -40,8 +40,7 @@ export const state = {
     slot: 'all',
     tier: 'all',
     search: ''
-  },
-  masteryView: 'character'  // 'character' | 'element'
+  }
 };
 
 // ---- Settings State ----
@@ -226,11 +225,6 @@ export function toggleTypeFilter(type) {
     state.filters.types.add(type);
   }
   emit('filter-changed', state.filters);
-}
-
-export function setMasteryView(view) {
-  state.masteryView = view;
-  emit('mastery-view-changed', view);
 }
 
 export function clearBuild() {
