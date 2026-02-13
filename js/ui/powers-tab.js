@@ -25,7 +25,10 @@ export function initPowersTab() {
     if (tab === 'powers') render();
   });
   on('filter-changed', () => {
-    if (state.activeTab === 'powers') renderGrid();
+    if (state.activeTab === 'powers') {
+      updateFilterPills();
+      renderGrid();
+    }
   });
   on('build-changed', () => {
     if (state.activeTab === 'powers') renderGrid();
@@ -109,6 +112,32 @@ function renderFilters() {
       setFilter('search', e.target.value);
     });
   }
+}
+
+function updateFilterPills() {
+  const container = document.getElementById('filter-bar');
+  if (!container) return;
+
+  const activeTypes = state.filters.types;
+  const allSelected = activeTypes.size === 0;
+
+  // Update type pills
+  container.querySelectorAll('[data-filter="all"]').forEach(btn => {
+    btn.classList.toggle('active', allSelected);
+  });
+  container.querySelectorAll('[data-filter="type"]').forEach(btn => {
+    btn.classList.toggle('active', activeTypes.has(btn.dataset.type));
+  });
+
+  // Update slot pills
+  container.querySelectorAll('[data-filter="slot"]').forEach(btn => {
+    btn.classList.toggle('active', state.filters.slot === btn.dataset.slot);
+  });
+
+  // Update tier pills
+  container.querySelectorAll('[data-filter="tier"]').forEach(btn => {
+    btn.classList.toggle('active', state.filters.tier === btn.dataset.tier);
+  });
 }
 
 function renderGrid() {
