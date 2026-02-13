@@ -20,6 +20,38 @@ for (const p of powers) {
   if (p.combo) comboLookup.set(p.name, p.combo);
 }
 
+// ---- Tier Depth (pizza slices) ----
+// Compute tier depth from prerequisite chains:
+//   Tier 1: initial powers
+//   Tier 2: secondary powers whose prerequisite is initial or a generic condition
+//   Tier 3: secondary powers whose prerequisite is itself secondary
+const powerTierLookup = new Map();
+for (const p of powers) powerTierLookup.set(p.name, p.tier);
+
+function getTierDepth(power) {
+  if (power.tier === 'initial') return 1;
+  if (!power.requires) return 2; // secondary with no requires → tier 2
+
+  // Extract power name from "After [PowerName]" pattern
+  const reqName = power.requires.replace(/^After\s+/, '');
+  const reqTier = powerTierLookup.get(reqName);
+
+  // If the prerequisite is a known secondary power → tier 3
+  if (reqTier === 'secondary') return 3;
+
+  // Otherwise (initial power or generic condition like "Dealing Water Damage") → tier 2
+  return 2;
+}
+
+const PIZZA_SLICE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L22 20 Q17 22 12 22 Q7 22 2 20 Z"/><circle cx="10" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="14" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="11" cy="8" r="1" fill="currentColor" stroke="none"/></svg>`;
+
+function tierBadge(power) {
+  const depth = getTierDepth(power);
+  const cls = depth === 3 ? 'badge-tier-3' : depth === 2 ? 'badge-tier-2' : 'badge-tier-1';
+  const slices = PIZZA_SLICE.repeat(depth);
+  return `<span class="badge ${cls}" title="Tier ${depth}">${slices}</span>`;
+}
+
 // Resolve effect text for a specific level.
 // Replaces "20% / 30% / 40%" patterns with the single value for the given level.
 function resolveEffectForLevel(text, level) {
@@ -230,7 +262,7 @@ function renderGrid() {
         <div class="card-meta">
           <span class="badge badge-type" data-type="${power.type}">${TYPE_LABELS[power.type]}</span>
           <span class="badge badge-slot">${power.slot}</span>
-          <span class="badge ${power.tier === 'secondary' ? 'badge-tier-secondary' : 'badge-tier'}">${power.tier}</span>
+          ${tierBadge(power)}
           ${badges}
         </div>
         ${levelButtons}

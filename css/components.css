@@ -377,14 +377,34 @@
   color: var(--muted-foreground);
 }
 
-.badge-tier {
+.badge-tier-1,
+.badge-tier-2,
+.badge-tier-3 {
+  gap: 2px;
+  padding: 2px var(--sp-1);
+}
+
+.badge-tier-1 {
   background: var(--muted);
   color: var(--text-tertiary);
 }
 
-.badge-tier-secondary {
+.badge-tier-2 {
   background: var(--info-muted);
   color: var(--info);
+}
+
+.badge-tier-3 {
+  background: var(--warning-muted);
+  color: var(--warning);
+}
+
+.badge-tier-1 svg,
+.badge-tier-2 svg,
+.badge-tier-3 svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 
