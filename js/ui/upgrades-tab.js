@@ -1,16 +1,11 @@
-// TMNT: Splintered Fate - Upgrades Tab
-// Unified panel for Dragon/Dreamer upgrades, artifact upgrades, inspiration upgrades
+// TMNT: Splintered Fate - HQ Upgrades Tab
+// Dragon/Dreamer upgrades, settings (artifacts & inspirations redirect to their own tabs)
 
 import { upgrades } from '../data/upgrades.js';
-import { artifacts } from '../data/artifacts.js';
-import { inspirations } from '../data/inspirations.js';
-import { characters } from '../data/characters.js';
 import {
-  state, settings, upgradeState, artifactUpgrades, inspirationUpgrades,
+  state, settings, upgradeState,
   setUpgradeLevel, maxAllUpgrades, resetAllUpgrades,
-  setArtifactUpgradeLevel, setInspirationUpgradeLevel,
-  getArtifactUpgradeLevel, getInspirationUpgradeLevel,
-  setAutoTheme, on
+  setActiveTab, setAutoTheme, on
 } from '../state.js';
 
 let activeSection = 'dragon';
@@ -19,15 +14,10 @@ let _suppressRender = false;
 const SECTIONS = [
   { id: 'dragon', label: 'Dragon' },
   { id: 'dreamer', label: 'Dreamer' },
-  { id: 'artifacts', label: 'Artifacts' },
-  { id: 'inspirations', label: 'Inspirations' },
+  { id: 'artifacts', label: 'Artifacts →', redirect: 'artifacts' },
+  { id: 'inspirations', label: 'Inspirations →', redirect: 'inspirations' },
   { id: 'settings', label: 'Settings' }
 ];
-
-const charNameMap = new Map();
-for (const c of characters) {
-  charNameMap.set(c.id, c.name);
-}
 
 export function initUpgradesTab() {
   on('tab-changed', (tab) => {
@@ -35,12 +25,6 @@ export function initUpgradesTab() {
   });
   on('upgrades-changed', () => {
     if (state.activeTab === 'upgrades' && !_suppressRender) render();
-  });
-  on('artifact-upgrades-changed', () => {
-    if (state.activeTab === 'upgrades') render();
-  });
-  on('inspiration-upgrades-changed', () => {
-    if (state.activeTab === 'upgrades') render();
   });
 }
 
@@ -63,6 +47,11 @@ function renderFilters() {
 
   container.querySelectorAll('.filter-pill[data-section]').forEach(btn => {
     btn.addEventListener('click', () => {
+      const section = SECTIONS.find(s => s.id === btn.dataset.section);
+      if (section && section.redirect) {
+        setActiveTab(section.redirect);
+        return;
+      }
       activeSection = btn.dataset.section;
       render();
     });
@@ -79,12 +68,6 @@ function renderGrid() {
       break;
     case 'dreamer':
       renderDragonDreamer(container, 'dreamer');
-      break;
-    case 'artifacts':
-      renderArtifactUpgrades(container);
-      break;
-    case 'inspirations':
-      renderInspirationUpgrades(container);
       break;
     case 'settings':
       renderSettings(container);
@@ -181,148 +164,6 @@ function renderDragonDreamer(container, currency) {
       }
     });
   }
-}
-
-function renderArtifactUpgrades(container) {
-  let html = '';
-
-  // Group by category
-  const categories = [...new Set(artifacts.map(a => a.category))];
-
-  for (const cat of categories) {
-    const catArtifacts = artifacts.filter(a => a.category === cat);
-    html += `<div class="inspiration-group-header" style="grid-column: 1 / -1">
-      <span class="filter-group-label">${cat}</span>
-    </div>`;
-
-    for (const artifact of catArtifacts) {
-      const level = getArtifactUpgradeLevel(artifact.name);
-      const maxLevel = artifact.levels.length;
-      const levelData = artifact.levels.find(l => l.level === level) || artifact.levels[0];
-
-      html += `
-        <div class="card upgrade-card">
-          <div class="card-edge-zone card-edge-dec" data-art-upg-dec="${artifact.name}">&minus;</div>
-          <div class="card-edge-zone card-edge-inc" data-art-upg-inc="${artifact.name}" data-max="${maxLevel}">+</div>
-          <div class="card-header">
-            <span class="card-name">${artifact.name}</span>
-            <span class="badge badge-slot">Lv${level}/${maxLevel}</span>
-          </div>
-          <div class="card-effect">${levelData.effect}</div>
-          <div class="card-meta">
-            <div class="level-selector">
-              ${artifact.levels.map(l =>
-                `<button class="level-btn ${level === l.level ? 'active' : ''}" data-art-upg="${artifact.name}" data-level="${l.level}">${l.level}</button>`
-              ).join('')}
-            </div>
-          </div>
-          <div style="margin-top: var(--sp-2)">
-            ${artifact.levels.map(l =>
-              `<div class="card-prereq ${level >= l.level ? 'card-prereq-met' : ''}">Lv${l.level}: ${l.effect}</div>`
-            ).join('')}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  container.innerHTML = html;
-
-  // Bind level buttons
-  container.querySelectorAll('.level-btn[data-art-upg]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setArtifactUpgradeLevel(btn.dataset.artUpg, parseInt(btn.dataset.level));
-    });
-  });
-
-  // Bind edge zone +/- for artifact upgrades
-  container.querySelectorAll('.card-edge-zone[data-art-upg-dec]').forEach(zone => {
-    zone.addEventListener('click', () => {
-      const name = zone.dataset.artUpgDec;
-      const current = getArtifactUpgradeLevel(name);
-      if (current > 0) setArtifactUpgradeLevel(name, current - 1);
-    });
-  });
-  container.querySelectorAll('.card-edge-zone[data-art-upg-inc]').forEach(zone => {
-    zone.addEventListener('click', () => {
-      const name = zone.dataset.artUpgInc;
-      const max = parseInt(zone.dataset.max);
-      const current = getArtifactUpgradeLevel(name);
-      if (current < max) setArtifactUpgradeLevel(name, current + 1);
-    });
-  });
-}
-
-function renderInspirationUpgrades(container) {
-  const CHAR_ORDER = ['michelangelo', 'leonardo', 'raphael', 'donatello', 'casey', 'metalhead'];
-
-  let html = '';
-
-  for (const charId of CHAR_ORDER) {
-    const charInsps = inspirations.filter(i => i.character === charId);
-    if (charInsps.length === 0) continue;
-
-    const charName = charNameMap.get(charId) || charId;
-    html += `<div class="inspiration-group-header" style="grid-column: 1 / -1">
-      <span class="filter-group-label">${charName}</span>
-    </div>`;
-
-    for (const insp of charInsps) {
-      const level = getInspirationUpgradeLevel(insp.name);
-      const maxLevel = insp.levels.length;
-      const levelData = insp.levels.find(l => l.level === level) || insp.levels[0];
-
-      html += `
-        <div class="card upgrade-card">
-          <div class="card-edge-zone card-edge-dec" data-insp-upg-dec="${insp.name}">&minus;</div>
-          <div class="card-edge-zone card-edge-inc" data-insp-upg-inc="${insp.name}" data-max="${maxLevel}">+</div>
-          <div class="card-header">
-            <span class="card-name">${insp.name}</span>
-            <span class="badge badge-slot">Lv${level}/${maxLevel}</span>
-          </div>
-          <div class="card-effect">${levelData.effect}</div>
-          <div class="card-meta">
-            <div class="level-selector">
-              ${insp.levels.map(l =>
-                `<button class="level-btn ${level === l.level ? 'active' : ''}" data-insp-upg="${insp.name}" data-level="${l.level}">${l.level}</button>`
-              ).join('')}
-            </div>
-          </div>
-          <div style="margin-top: var(--sp-2)">
-            ${insp.levels.map(l =>
-              `<div class="card-prereq ${level >= l.level ? 'card-prereq-met' : ''}">Lv${l.level}: ${l.effect}</div>`
-            ).join('')}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  container.innerHTML = html;
-
-  // Bind level buttons
-  container.querySelectorAll('.level-btn[data-insp-upg]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setInspirationUpgradeLevel(btn.dataset.inspUpg, parseInt(btn.dataset.level));
-    });
-  });
-
-  // Bind edge zone +/- for inspiration upgrades
-  container.querySelectorAll('.card-edge-zone[data-insp-upg-dec]').forEach(zone => {
-    zone.addEventListener('click', () => {
-      const name = zone.dataset.inspUpgDec;
-      const current = getInspirationUpgradeLevel(name);
-      if (current > 0) setInspirationUpgradeLevel(name, current - 1);
-    });
-  });
-  container.querySelectorAll('.card-edge-zone[data-insp-upg-inc]').forEach(zone => {
-    zone.addEventListener('click', () => {
-      const name = zone.dataset.inspUpgInc;
-      const max = parseInt(zone.dataset.max);
-      const current = getInspirationUpgradeLevel(name);
-      if (current < max) setInspirationUpgradeLevel(name, current + 1);
-    });
-  });
 }
 
 function renderSettings(container) {

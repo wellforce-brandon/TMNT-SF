@@ -1,9 +1,9 @@
 // TMNT: Splintered Fate - Inspirations Tab
-// All 12 inspirations grouped by character, starting inspirations locked
+// All 12 inspirations grouped by character — controls permanent HQ upgrade levels
 
 import { inspirations } from '../data/inspirations.js';
 import { characters } from '../data/characters.js';
-import { state, setInspirationLevel, isStartingInspiration, on } from '../state.js';
+import { state, setInspirationUpgradeLevel, getInspirationUpgradeLevel, isStartingInspiration, on } from '../state.js';
 
 // Build a character name lookup
 const charNameMap = new Map();
@@ -18,7 +18,7 @@ export function initInspirationsTab() {
   on('tab-changed', (tab) => {
     if (tab === 'inspirations') render();
   });
-  on('build-changed', () => {
+  on('inspiration-upgrades-changed', () => {
     if (state.activeTab === 'inspirations') render();
   });
   on('character-changed', () => {
@@ -36,10 +36,10 @@ function renderFilters() {
   if (!container) return;
 
   if (!state.character) {
-    container.innerHTML = '<span class="filter-group-label">Select a character to see starting inspirations</span>';
+    container.innerHTML = '<span class="filter-group-label">Set your permanent inspiration levels. Select a character to see starting inspirations.</span>';
   } else {
     const charName = charNameMap.get(state.character) || state.character;
-    container.innerHTML = `<span class="filter-group-label">${charName}'s starting inspirations are locked in. Pick up others during your run.</span>`;
+    container.innerHTML = `<span class="filter-group-label">Set permanent inspiration levels. ${charName}'s starting inspirations are highlighted.</span>`;
   }
 }
 
@@ -47,22 +47,12 @@ function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
 
-  if (!state.character) {
-    container.innerHTML = `
-      <div class="empty-state" style="grid-column: 1 / -1">
-        <div class="empty-state-title">No Character Selected</div>
-        <div class="empty-state-desc">Pick a character from the top bar to see inspirations</div>
-      </div>
-    `;
-    return;
-  }
-
-  // Group inspirations by character, selected character first
+  // Group inspirations by character, selected character first (if any)
   const grouped = getGroupedInspirations();
 
   let html = '';
   for (const group of grouped) {
-    const isSelectedChar = group.charId === state.character;
+    const isSelectedChar = state.character && group.charId === state.character;
     html += `<div class="inspiration-group-header" style="grid-column: 1 / -1">
       <span class="filter-group-label">${group.charName}${isSelectedChar ? ' (Starting)' : ''}</span>
     </div>`;
@@ -78,7 +68,7 @@ function renderGrid() {
   container.querySelectorAll('.level-btn[data-insp]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      setInspirationLevel(btn.dataset.insp, parseInt(btn.dataset.level));
+      setInspirationUpgradeLevel(btn.dataset.insp, parseInt(btn.dataset.level));
     });
   });
 
@@ -87,9 +77,8 @@ function renderGrid() {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
       const name = zone.dataset.inspDec;
-      const min = parseInt(zone.dataset.min);
-      const current = state.inspirations[name] || 0;
-      if (current > min) setInspirationLevel(name, current - 1);
+      const current = getInspirationUpgradeLevel(name);
+      if (current > 1) setInspirationUpgradeLevel(name, current - 1);
     });
   });
   container.querySelectorAll('.card-edge-zone[data-insp-inc]').forEach(zone => {
@@ -97,8 +86,8 @@ function renderGrid() {
       e.stopPropagation();
       const name = zone.dataset.inspInc;
       const max = parseInt(zone.dataset.max);
-      const current = state.inspirations[name] || 0;
-      if (current < max) setInspirationLevel(name, current + 1);
+      const current = getInspirationUpgradeLevel(name);
+      if (current < max) setInspirationUpgradeLevel(name, current + 1);
     });
   });
 }
@@ -106,10 +95,12 @@ function renderGrid() {
 function getGroupedInspirations() {
   const groups = [];
 
-  // Selected character first
-  const selectedFirst = [state.character, ...CHAR_ORDER.filter(id => id !== state.character)];
+  // Selected character first (if any), then the rest
+  const order = state.character
+    ? [state.character, ...CHAR_ORDER.filter(id => id !== state.character)]
+    : CHAR_ORDER;
 
-  for (const charId of selectedFirst) {
+  for (const charId of order) {
     const charInsps = inspirations.filter(i => i.character === charId);
     if (charInsps.length > 0) {
       groups.push({
@@ -124,40 +115,28 @@ function getGroupedInspirations() {
 }
 
 function renderInspirationCard(insp) {
-  const currentLevel = state.inspirations[insp.name] || 0;
-  const activeLevel = insp.levels.find(l => l.level === currentLevel);
-  const isActive = currentLevel > 0;
+  const currentLevel = getInspirationUpgradeLevel(insp.name);
+  const activeLevel = insp.levels.find(l => l.level === currentLevel) || insp.levels[0];
   const isStarter = isStartingInspiration(insp.name);
   const maxLevel = insp.levels.length;
-  const minLevel = isStarter ? 1 : 0;
 
   let classes = 'card upgrade-card';
-  if (isActive) classes += ' in-build';
-  if (isStarter) classes += ' starting-inspiration';
+  if (isStarter) classes += ' in-build starting-inspiration';
 
-  let levelButtons = '';
-  if (isStarter) {
-    levelButtons = insp.levels.map(l =>
-      `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
-    ).join('');
-  } else {
-    levelButtons = `<button class="level-btn ${currentLevel === 0 ? 'active' : ''}" data-insp="${insp.name}" data-level="0">Off</button>`;
-    levelButtons += insp.levels.map(l =>
-      `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
-    ).join('');
-  }
-
-  const levelLabel = currentLevel === 0 ? 'Off' : `Lv${currentLevel}/${maxLevel}`;
+  const levelButtons = insp.levels.map(l =>
+    `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
+  ).join('');
 
   return `
     <div class="${classes}" data-inspiration="${insp.name}">
-      <div class="card-edge-zone card-edge-dec" data-insp-dec="${insp.name}" data-min="${minLevel}">&minus;</div>
+      <div class="card-edge-zone card-edge-dec" data-insp-dec="${insp.name}">&minus;</div>
       <div class="card-edge-zone card-edge-inc" data-insp-inc="${insp.name}" data-max="${maxLevel}">+</div>
       <div class="card-header">
         <span class="card-name">${insp.name}</span>
-        ${isStarter ? '<span class="badge badge-starting">Starting</span>' : `<span class="badge badge-slot">${levelLabel}</span>`}
+        ${isStarter ? '<span class="badge badge-starting">Starting</span>' : ''}
+        <span class="badge badge-slot">Lv${currentLevel}/${maxLevel}</span>
       </div>
-      <div class="card-effect">${activeLevel ? activeLevel.effect : insp.levels[0].effect}</div>
+      <div class="card-effect">${activeLevel.effect}</div>
       <div class="card-meta">
         <div class="level-selector">
           ${levelButtons}
