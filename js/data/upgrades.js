@@ -1,10 +1,23 @@
 // TMNT: Splintered Fate - Upgrades Data
-// 52 upgrades split between Dragon (30) and Dreamer (22) currencies
+// Source of truth: https://tmntsplinteredfate.pages.dev/upgrades
+// Dragon (23 upgrades) — Combat and utility
+// Dreamer (17 upgrades) — Meta progression and economy
 
 export const upgrades = [
   // =====================
-  // DRAGON UPGRADES (30) - Combat and utility
+  // DRAGON UPGRADES (23)
   // =====================
+  {
+    name: 'astralRejuvenation',
+    displayName: 'Astral Rejuvenation',
+    currency: 'dragon',
+    maxLevel: 3,
+    stat: null,
+    perLevel: 10,
+    maxEffect: 30,
+    description: "Splinter's Revive restores additional Health.",
+    category: 'combat'
+  },
   {
     name: 'attackDamage',
     displayName: 'Attack Damage',
@@ -17,26 +30,16 @@ export const upgrades = [
     category: 'combat'
   },
   {
-    name: 'health',
-    displayName: 'Health',
+    name: 'confidence',
+    displayName: 'Confidence',
     currency: 'dragon',
-    maxLevel: 25,
-    stat: 'maxHealth',
-    perLevel: 10,
-    maxEffect: 250,
-    description: 'Increases maximum health.',
-    category: 'combat'
-  },
-  {
-    name: 'specialDamage',
-    displayName: 'Special Damage',
-    currency: 'dragon',
-    maxLevel: 17,
-    stat: 'specialAttack',
-    perLevel: 10,
-    maxEffect: 170,
-    description: 'Increases special attack damage.',
-    category: 'combat'
+    maxLevel: 3,
+    stat: null,
+    perLevel: 1,
+    maxEffect: 3,
+    description: 'Special damage bonus per flawless room.',
+    category: 'combat',
+    suffix: '%/room'
   },
   {
     name: 'critChance',
@@ -46,7 +49,7 @@ export const upgrades = [
     stat: 'critChance',
     perLevel: 2,
     maxEffect: 20,
-    description: 'Increases critical hit chance.',
+    description: 'Increases Attack Critical Hit chance.',
     category: 'combat'
   },
   {
@@ -57,18 +60,30 @@ export const upgrades = [
     stat: 'critDamage',
     perLevel: 5,
     maxEffect: 50,
-    description: 'Increases critical hit damage multiplier.',
+    description: 'Increases Critical Damage.',
     category: 'combat'
   },
   {
-    name: 'focusedForces',
-    displayName: 'Focused Forces',
+    name: 'dashCharge',
+    displayName: 'Dash Charge',
     currency: 'dragon',
-    maxLevel: 10,
-    stat: 'elementalDamage',
-    perLevel: 7.5,
-    maxEffect: 75,
-    description: 'Increases all elemental damage.',
+    maxLevel: 3,
+    stat: 'dashCharges',
+    perLevel: null,
+    maxEffect: 3,
+    description: 'Adds additional Dash Charges.',
+    category: 'combat',
+    levelValues: [1, 2, 3]
+  },
+  {
+    name: 'enduringEffect',
+    displayName: 'Enduring Effect',
+    currency: 'dragon',
+    maxLevel: 5,
+    stat: 'negativeEffectDuration',
+    perLevel: 10,
+    maxEffect: 50,
+    description: 'Increases duration of Negative Effects.',
     category: 'combat'
   },
   {
@@ -79,7 +94,7 @@ export const upgrades = [
     stat: 'specialChargeRate',
     perLevel: 5,
     maxEffect: 50,
-    description: 'Increases special ability charge rate.',
+    description: 'Special charges faster.',
     category: 'combat'
   },
   {
@@ -90,139 +105,18 @@ export const upgrades = [
     stat: 'dashAttackDamage',
     perLevel: 10,
     maxEffect: 100,
-    description: 'Increases dash attack damage.',
+    description: 'Increases Dash Attack damage.',
     category: 'combat'
   },
   {
-    name: 'multiHit',
-    displayName: 'Multi-Hit',
+    name: 'focusedForces',
+    displayName: 'Focused Forces',
     currency: 'dragon',
     maxLevel: 10,
-    stat: 'multiHitChance',
-    perLevel: 2,
-    maxEffect: 20,
-    description: 'Chance for attacks to strike an additional time.',
-    category: 'combat'
-  },
-  {
-    name: 'toolDamage',
-    displayName: 'Tool Damage',
-    currency: 'dragon',
-    maxLevel: 10,
-    stat: 'toolDamage',
-    perLevel: 15,
-    maxEffect: 150,
-    description: 'Increases tool damage output.',
-    category: 'combat'
-  },
-  {
-    name: 'swiftness',
-    displayName: 'Swiftness',
-    currency: 'dragon',
-    maxLevel: 10,
-    stat: 'moveSpeed',
-    perLevel: 5,
-    maxEffect: 50,
-    description: 'Increases movement speed.',
-    category: 'combat'
-  },
-  {
-    name: 'mechanicalGenius',
-    displayName: 'Mechanical Genius',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'toolChargeRate',
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases tool charge rate.',
-    category: 'combat'
-  },
-  {
-    name: 'dashCharge',
-    displayName: 'Dash Charge',
-    currency: 'dragon',
-    maxLevel: 3,
-    stat: 'dashCharges',
-    perLevel: 1,
-    maxEffect: 3,
-    description: 'Adds additional dash charges.',
-    category: 'combat'
-  },
-  {
-    name: 'splintersRevive',
-    displayName: "Splinter's Revive",
-    currency: 'dragon',
-    maxLevel: 3,
-    stat: 'revives',
-    perLevel: 1,
-    maxEffect: 3,
-    description: 'Adds additional revive charges per run.',
-    category: 'combat'
-  },
-  {
-    name: 'savorTheFlavor',
-    displayName: 'Savor the Flavor',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'healEffectiveness',
-    perLevel: 20,
-    maxEffect: 100,
-    description: 'Increases healing effectiveness from all sources.',
-    category: 'combat'
-  },
-  {
-    name: 'sliceOfLife',
-    displayName: 'Slice of Life',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases pizza (health pickup) spawn rate.',
-    category: 'meta'
-  },
-  {
-    name: 'pizzaEntree',
-    displayName: 'Pizza Entree',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases healing from shop pizza purchases.',
-    category: 'meta'
-  },
-  {
-    name: 'confidence',
-    displayName: 'Confidence',
-    currency: 'dragon',
-    maxLevel: 3,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Increased damage at full health.',
-    category: 'combat'
-  },
-  {
-    name: 'enduringEffect',
-    displayName: 'Enduring Effect',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'negativeEffectDuration',
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Reduces duration of negative status effects on you.',
-    category: 'combat'
-  },
-  {
-    name: 'strongerStuff',
-    displayName: 'Stronger Stuff',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'negativeEffectDamage',
-    perLevel: 5,
-    maxEffect: 25,
-    description: 'Reduces damage from negative status effects.',
+    stat: 'elementalDamage',
+    perLevel: 7.5,
+    maxEffect: 75,
+    description: 'Increases Elemental damage.',
     category: 'combat'
   },
   {
@@ -233,7 +127,51 @@ export const upgrades = [
     stat: 'dodgeChance',
     perLevel: 4,
     maxEffect: 20,
-    description: 'Increases dodge chance.',
+    description: 'Increases Dodge chance.',
+    category: 'combat'
+  },
+  {
+    name: 'health',
+    displayName: 'Health',
+    currency: 'dragon',
+    maxLevel: 25,
+    stat: 'maxHealth',
+    perLevel: 10,
+    maxEffect: 250,
+    description: 'Increases maximum Health.',
+    category: 'combat'
+  },
+  {
+    name: 'mechanicalGenius',
+    displayName: 'Mechanical Genius',
+    currency: 'dragon',
+    maxLevel: 5,
+    stat: 'toolChargeRate',
+    perLevel: 10,
+    maxEffect: 50,
+    description: 'Tool charges faster.',
+    category: 'combat'
+  },
+  {
+    name: 'multiHit',
+    displayName: 'Multi-Hit',
+    currency: 'dragon',
+    maxLevel: 10,
+    stat: 'multiHitChance',
+    perLevel: 2,
+    maxEffect: 20,
+    description: 'Increases Multi-Hit chance.',
+    category: 'combat'
+  },
+  {
+    name: 'pizzaEntree',
+    displayName: 'Pizza Entree',
+    currency: 'dragon',
+    maxLevel: 5,
+    stat: null,
+    perLevel: 3,
+    maxEffect: 15,
+    description: 'Health restored upon Shop entry.',
     category: 'combat'
   },
   {
@@ -242,113 +180,135 @@ export const upgrades = [
     currency: 'dragon',
     maxLevel: 5,
     stat: null,
-    perLevel: 5,
-    maxEffect: 25,
-    description: 'Increases summon and ally damage.',
+    perLevel: null,
+    maxEffect: null,
+    description: 'Support units gain Max Health and doubled spawn rate.',
     category: 'combat'
   },
   {
-    name: 'astralRejuvenation',
-    displayName: 'Astral Rejuvenation',
+    name: 'savorTheFlavor',
+    displayName: 'Savor the Flavor',
+    currency: 'dragon',
+    maxLevel: 5,
+    stat: 'healEffectiveness',
+    perLevel: 20,
+    maxEffect: 100,
+    description: 'Health recovery more effective.',
+    category: 'combat'
+  },
+  {
+    name: 'sliceOfLife',
+    displayName: 'Slice of Life',
+    currency: 'dragon',
+    maxLevel: 5,
+    stat: null,
+    perLevel: 4,
+    maxEffect: 20,
+    description: 'Chance Pizza Slice spawns from Foot Clan defeats.',
+    category: 'combat'
+  },
+  {
+    name: 'specialDamage',
+    displayName: 'Special Damage',
+    currency: 'dragon',
+    maxLevel: 17,
+    stat: 'specialAttack',
+    perLevel: 10,
+    maxEffect: 170,
+    description: 'Increases Special damage.',
+    category: 'combat'
+  },
+  {
+    name: 'splintersRevive',
+    displayName: "Splinter's Revive",
     currency: 'dragon',
     maxLevel: 3,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 30,
-    description: 'Increases healing from Astral effects.',
-    category: 'combat'
+    stat: 'revives',
+    perLevel: null,
+    maxEffect: 3,
+    description: 'Start with revives, each restores 25% Max Health.',
+    category: 'combat',
+    levelValues: [1, 2, 3]
   },
-  // Additional dragon upgrades (7 more to reach 30)
   {
-    name: 'elementalMastery',
-    displayName: 'Elemental Mastery',
+    name: 'strongerStuff',
+    displayName: 'Stronger Stuff',
     currency: 'dragon',
     maxLevel: 5,
-    stat: 'elementalEffectDuration',
-    perLevel: 10,
+    stat: 'negativeEffectDamage',
+    perLevel: 5,
+    maxEffect: 25,
+    description: 'Increases Negative Effect damage.',
+    category: 'combat'
+  },
+  {
+    name: 'swiftness',
+    displayName: 'Swiftness',
+    currency: 'dragon',
+    maxLevel: 10,
+    stat: 'moveSpeed',
+    perLevel: 5,
     maxEffect: 50,
-    description: 'Increases duration of elemental status effects applied to enemies.',
+    description: 'Increases Move Speed.',
     category: 'combat'
   },
   {
-    name: 'armorPiercing',
-    displayName: 'Armor Piercing',
+    name: 'toolDamage',
+    displayName: 'Tool Damage',
     currency: 'dragon',
-    maxLevel: 5,
-    stat: 'armorPenetration',
-    perLevel: 6,
-    maxEffect: 30,
-    description: 'Attacks ignore a percentage of enemy defense.',
-    category: 'combat'
-  },
-  {
-    name: 'quickRecovery',
-    displayName: 'Quick Recovery',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'dashCooldown',
-    perLevel: 6,
-    maxEffect: 30,
-    description: 'Reduces dash cooldown time.',
-    category: 'combat'
-  },
-  {
-    name: 'comboFinisher',
-    displayName: 'Combo Finisher',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'finalStrikeDamage',
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases damage of combo finisher (final strike) attacks.',
-    category: 'combat'
-  },
-  {
-    name: 'bossBreaker',
-    displayName: 'Boss Breaker',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'bossDamage',
-    perLevel: 8,
-    maxEffect: 40,
-    description: 'Increases damage dealt to bosses.',
-    category: 'combat'
-  },
-  {
-    name: 'guardBreak',
-    displayName: 'Guard Break',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'guardBreakDamage',
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases damage dealt to enemy barriers and shields.',
-    category: 'combat'
-  },
-  {
-    name: 'secondWind',
-    displayName: 'Second Wind',
-    currency: 'dragon',
-    maxLevel: 5,
-    stat: 'reviveHealth',
-    perLevel: 6,
-    maxEffect: 30,
-    description: 'Increases health restored on revive.',
+    maxLevel: 10,
+    stat: 'toolDamage',
+    perLevel: 15,
+    maxEffect: 150,
+    description: 'Increases Tool Damage.',
     category: 'combat'
   },
 
   // =====================
-  // DREAMER UPGRADES (22) - Meta progression and economy
+  // DREAMER UPGRADES (17)
   // =====================
+  {
+    name: 'arcadeFixer',
+    displayName: 'Arcade Fixer',
+    currency: 'dreamer',
+    maxLevel: 2,
+    stat: null,
+    perLevel: 25,
+    maxEffect: 50,
+    description: 'Chance Bonus Currency applies to all Room Rewards.',
+    category: 'meta'
+  },
+  {
+    name: 'bustedCoinSlot',
+    displayName: 'Busted Coin Slot',
+    currency: 'dreamer',
+    maxLevel: 1,
+    stat: null,
+    perLevel: null,
+    maxEffect: null,
+    description: 'Dragon Coins always granted as Bonus Currency.',
+    category: 'meta'
+  },
+  {
+    name: 'dojo',
+    displayName: 'Dojo',
+    currency: 'dreamer',
+    maxLevel: 4,
+    stat: null,
+    perLevel: 25,
+    maxEffect: 100,
+    description: 'Chance to upgrade Turtle Power to Mastery in Rooftops entry.',
+    category: 'meta'
+  },
   {
     name: 'doubleTrouble',
     displayName: 'Double Trouble',
     currency: 'dreamer',
     maxLevel: 5,
     stat: null,
-    perLevel: 5,
-    maxEffect: 25,
-    description: 'Chance to receive two powers from a single offering.',
+    perLevel: 3,
+    maxEffect: 15,
+    description: 'Double Select chance during Turtle Power selection.',
     category: 'meta'
   },
   {
@@ -357,42 +317,9 @@ export const upgrades = [
     currency: 'dreamer',
     maxLevel: 3,
     stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Increases Double Trouble trigger rate further.',
-    category: 'meta'
-  },
-  {
-    name: 'perchance',
-    displayName: 'Perchance',
-    currency: 'dreamer',
-    maxLevel: 10,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 50,
-    description: 'Increases Tier Power (TP) draw rate from offerings.',
-    category: 'meta'
-  },
-  {
-    name: 'polish',
-    displayName: 'Polish',
-    currency: 'dreamer',
-    maxLevel: 10,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 50,
-    description: 'Increases rate of Level 2 powers appearing in offerings.',
-    category: 'meta'
-  },
-  {
-    name: 'recycling',
-    displayName: 'Recycling',
-    currency: 'dreamer',
-    maxLevel: 5,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 25,
-    description: 'Bonus currency gained when selling or recycling powers.',
+    perLevel: 10,
+    maxEffect: 30,
+    description: 'Chance Double Select offers level 2 Turtle Powers.',
     category: 'meta'
   },
   {
@@ -401,65 +328,11 @@ export const upgrades = [
     currency: 'dreamer',
     maxLevel: 3,
     stat: null,
-    perLevel: 1,
+    perLevel: null,
     maxEffect: 3,
-    description: 'Grants lucky dice that let you reroll power offerings.',
-    category: 'meta'
-  },
-  {
-    name: 'runningStart',
-    displayName: 'Running Start',
-    currency: 'dreamer',
-    maxLevel: 10,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 100,
-    description: 'Grants bonus starting Scrap at the beginning of each run.',
-    category: 'meta'
-  },
-  {
-    name: 'scavenger',
-    displayName: 'Scavenger',
-    currency: 'dreamer',
-    maxLevel: 3,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 30,
-    description: 'Increases Scrap gained from breakable crates.',
-    category: 'meta'
-  },
-  {
-    name: 'scrappyBosses',
-    displayName: 'Scrappy Bosses',
-    currency: 'dreamer',
-    maxLevel: 5,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 50,
-    description: 'Increases Scrap dropped by bosses.',
-    category: 'meta'
-  },
-  {
-    name: 'scrapKing',
-    displayName: 'Scrap King',
-    currency: 'dreamer',
-    maxLevel: 5,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 25,
-    description: 'Increases all Scrap gained from every source.',
-    category: 'meta'
-  },
-  {
-    name: 'mouseScrap',
-    displayName: 'Mouse Scrap',
-    currency: 'dreamer',
-    maxLevel: 3,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Small bonus to Scrap from minor enemies.',
-    category: 'meta'
+    description: 'Start with Lucky Dice for rerolls.',
+    category: 'meta',
+    levelValues: [1, 2, 3]
   },
   {
     name: 'fortuneFavors',
@@ -467,9 +340,33 @@ export const upgrades = [
     currency: 'dreamer',
     maxLevel: 3,
     stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Bonus currency from elite and miniboss enemies.',
+    perLevel: null,
+    maxEffect: null,
+    description: 'Dragon and Dreamer Coins from Veteran/Champion defeats.',
+    category: 'meta',
+    levelValues: [1, 2, 3]
+  },
+  {
+    name: 'luckySpoils',
+    displayName: 'Lucky Spoils',
+    currency: 'dreamer',
+    maxLevel: 3,
+    stat: null,
+    perLevel: null,
+    maxEffect: null,
+    description: 'Chance to gain Lucky Dice from Bosses.',
+    category: 'meta',
+    levelValues: [1, 2, 4]
+  },
+  {
+    name: 'mouseScrap',
+    displayName: 'Mouse Scrap',
+    currency: 'dreamer',
+    maxLevel: 3,
+    stat: null,
+    perLevel: 15,
+    maxEffect: 45,
+    description: 'Chance MOUSER drops triple Scrap.',
     category: 'meta'
   },
   {
@@ -480,107 +377,84 @@ export const upgrades = [
     stat: null,
     perLevel: 10,
     maxEffect: 50,
-    description: 'Increases Dragon/Dreamer coin gain from all sources.',
+    description: 'Increases Dragon and Dreamer Coins from Room Rewards.',
     category: 'meta'
   },
   {
-    name: 'luckySpoils',
-    displayName: 'Lucky Spoils',
+    name: 'perchance',
+    displayName: 'Perchance',
     currency: 'dreamer',
-    maxLevel: 3,
+    maxLevel: 10,
     stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Increased chance for bonus reward chests after clearing rooms.',
-    category: 'meta'
-  },
-  {
-    name: 'arcadeFixer',
-    displayName: 'Arcade Fixer',
-    currency: 'dreamer',
-    maxLevel: 2,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 10,
-    description: 'Reduces shop prices slightly.',
-    category: 'meta'
-  },
-  {
-    name: 'bustedCoinSlot',
-    displayName: 'Busted Coin Slot',
-    currency: 'dreamer',
-    maxLevel: 1,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 5,
-    description: 'Chance for free items from shops.',
-    category: 'meta'
-  },
-  {
-    name: 'dojo',
-    displayName: 'Dojo',
-    currency: 'dreamer',
-    maxLevel: 4,
-    stat: null,
-    perLevel: 5,
+    perLevel: 2,
     maxEffect: 20,
-    description: 'Increases mastery effectiveness for all characters.',
+    description: 'Chance to draw Turtle Powers in Room Rewards.',
     category: 'meta'
   },
-  // Additional dreamer upgrades (5 more to reach 22)
   {
-    name: 'treasureHunter',
-    displayName: 'Treasure Hunter',
+    name: 'polish',
+    displayName: 'Polish',
     currency: 'dreamer',
-    maxLevel: 3,
+    maxLevel: 10,
     stat: null,
-    perLevel: 10,
-    maxEffect: 30,
-    description: 'Increases chance to find secret rooms with bonus rewards.',
+    perLevel: 2,
+    maxEffect: 20,
+    description: 'Chance Turtle Powers offered at level 2.',
     category: 'meta'
   },
   {
-    name: 'powerMemory',
-    displayName: 'Power Memory',
-    currency: 'dreamer',
-    maxLevel: 3,
-    stat: null,
-    perLevel: 5,
-    maxEffect: 15,
-    description: 'Chance to be offered powers from your previous run.',
-    category: 'meta'
-  },
-  {
-    name: 'artifactPolish',
-    displayName: 'Artifact Polish',
-    currency: 'dreamer',
-    maxLevel: 3,
-    stat: null,
-    perLevel: 10,
-    maxEffect: 30,
-    description: 'Increases chance to find higher-level artifacts.',
-    category: 'meta'
-  },
-  {
-    name: 'extraCredit',
-    displayName: 'Extra Credit',
+    name: 'recycling',
+    displayName: 'Recycling',
     currency: 'dreamer',
     maxLevel: 5,
     stat: null,
-    perLevel: 4,
-    maxEffect: 20,
-    description: 'Bonus experience gained toward mastery unlocks.',
+    perLevel: 5,
+    maxEffect: 25,
+    description: 'Chance for Bonus Currency Room Rewards.',
     category: 'meta'
   },
   {
-    name: 'wellStocked',
-    displayName: 'Well Stocked',
+    name: 'runningStart',
+    displayName: 'Running Start',
+    currency: 'dreamer',
+    maxLevel: 10,
+    stat: null,
+    perLevel: 25,
+    maxEffect: 250,
+    description: 'Scrap upon run start.',
+    category: 'meta'
+  },
+  {
+    name: 'scavenger',
+    displayName: 'Scavenger',
     currency: 'dreamer',
     maxLevel: 3,
     stat: null,
-    perLevel: 1,
-    maxEffect: 3,
-    description: 'Adds additional items to each shop inventory.',
+    perLevel: 100,
+    maxEffect: 300,
+    description: 'Increases Scrap from destroying crates.',
+    category: 'meta'
+  },
+  {
+    name: 'scrappyBosses',
+    displayName: 'Scrappy Bosses',
+    currency: 'dreamer',
+    maxLevel: 5,
+    stat: null,
+    perLevel: 20,
+    maxEffect: 100,
+    description: 'Increases Scrap granted by Bosses.',
+    category: 'meta'
+  },
+  {
+    name: 'scrapKing',
+    displayName: 'Scrap King',
+    currency: 'dreamer',
+    maxLevel: 5,
+    stat: null,
+    perLevel: 10,
+    maxEffect: 50,
+    description: 'Increases Scrap from Room Rewards.',
     category: 'meta'
   }
 ];
