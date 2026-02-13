@@ -1,5 +1,5 @@
 // TMNT: Splintered Fate - Run Sidebar
-// Build summary, synergy display, focus meter, damage estimate
+// Build summary, grouped stats, synergy display, focus meter
 
 import { characters } from '../data/characters.js';
 import { powers } from '../data/powers.js';
@@ -59,7 +59,6 @@ export function renderSidebar() {
   const analysis = runFullAnalysis(state, upgradeState);
   renderFocusSection(analysis.focus);
   renderSynergiesSection(analysis.synergies);
-  renderDamageSection(analysis.damage);
 }
 
 function renderCharacterSection() {
@@ -92,27 +91,95 @@ function renderStatsSection() {
   const char = characters.find(c => c.id === state.character);
   const computed = computeCharacterStats(char, upgradeState);
 
-  container.innerHTML = `
-    <div class="sidebar-section-title">Stats</div>
-    <div class="stat-grid">
-      <div><span class="stat-label">HP</span></div>
-      <div><span class="stat-value">${computed.health}</span> <span class="stat-base">(base ${char.health}, max ${char.maxHealth})</span></div>
-      <div><span class="stat-label">Attack</span></div>
-      <div><span class="stat-value">${computed.attackDamage}</span> <span class="stat-base">(base ${char.attackDamage})</span></div>
-      <div><span class="stat-label">Dash Atk</span></div>
-      <div><span class="stat-value">${computed.dashAttack}</span> <span class="stat-base">(base ${char.dashAttack})</span></div>
-      <div><span class="stat-label">Special</span></div>
-      <div><span class="stat-value">${computed.specialAttack}</span> <span class="stat-base">(base ${char.specialAttack})</span></div>
-      ${computed.critChance > 0 ? `
-        <div><span class="stat-label">Crit %</span></div>
-        <div><span class="stat-value">+${computed.critChance}%</span></div>
-      ` : ''}
-      ${computed.dodgeChance > 0 ? `
-        <div><span class="stat-label">Dodge %</span></div>
-        <div><span class="stat-value">+${computed.dodgeChance}%</span></div>
-      ` : ''}
+  // Helper: render a bonus sub-row (only if value > 0)
+  const bonus = (label, value, suffix = '%') =>
+    value ? `<div class="stat-sub"><span class="stat-sub-label">${label}</span><span class="stat-sub-value">+${value}${suffix}</span></div>` : '';
+
+  let html = `<div class="sidebar-section-title">Stats</div>`;
+
+  // ── Attack ──
+  html += `
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-label">Attack</span>
+        <span class="stat-value">${computed.attackDamage}</span>
+        <span class="stat-base">(base ${char.attackDamage})</span>
+      </div>
+      ${bonus('Crit Chance', computed.critChance)}
+      ${bonus('Crit Damage', computed.critDamage)}
+      ${bonus('Multi-Hit', computed.multiHitChance)}
     </div>
   `;
+
+  // ── Dash ──
+  html += `
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-label">Dash Attack</span>
+        <span class="stat-value">${computed.dashAttack}</span>
+        <span class="stat-base">(base ${char.dashAttack})</span>
+      </div>
+      ${computed.dashCharges > 1 ? `<div class="stat-sub"><span class="stat-sub-label">Dash Charges</span><span class="stat-sub-value">${computed.dashCharges}</span></div>` : ''}
+    </div>
+  `;
+
+  // ── Special ──
+  html += `
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-label">Special</span>
+        <span class="stat-value">${computed.specialAttack}</span>
+        <span class="stat-base">(base ${char.specialAttack})</span>
+      </div>
+      ${bonus('Charge Rate', computed.specialChargeRate)}
+    </div>
+  `;
+
+  // ── Tool (only show if any bonus) ──
+  if (computed.toolDamage || computed.toolChargeRate) {
+    html += `
+      <div class="stat-group">
+        <div class="stat-group-header">
+          <span class="stat-label">Tool</span>
+        </div>
+        ${bonus('Tool Damage', computed.toolDamage)}
+        ${bonus('Charge Rate', computed.toolChargeRate)}
+      </div>
+    `;
+  }
+
+  // ── Elemental (only show if any bonus) ──
+  if (computed.elementalDamage || computed.negativeEffectDuration || computed.negativeEffectDamage) {
+    html += `
+      <div class="stat-group">
+        <div class="stat-group-header">
+          <span class="stat-label">Elemental</span>
+        </div>
+        ${bonus('Elemental Dmg', computed.elementalDamage)}
+        ${bonus('Effect Duration', computed.negativeEffectDuration)}
+        ${bonus('Effect Damage', computed.negativeEffectDamage)}
+      </div>
+    `;
+  }
+
+  // ── Defense / Utility ──
+  const defenseRows =
+    `<div class="stat-sub"><span class="stat-sub-label">HP</span><span class="stat-sub-value">${computed.health} <span class="stat-base">(base ${char.health}, max ${char.maxHealth})</span></span></div>`
+    + bonus('Dodge', computed.dodgeChance)
+    + bonus('Move Speed', computed.moveSpeed)
+    + bonus('Heal Effect.', computed.healEffectiveness)
+    + (computed.revives > 0 ? `<div class="stat-sub"><span class="stat-sub-label">Revives</span><span class="stat-sub-value">${computed.revives}</span></div>` : '');
+
+  html += `
+    <div class="stat-group">
+      <div class="stat-group-header">
+        <span class="stat-label">Defense / Utility</span>
+      </div>
+      ${defenseRows}
+    </div>
+  `;
+
+  container.innerHTML = html;
 }
 
 function renderToolSection() {
@@ -305,32 +372,3 @@ function renderSynergiesSection(synergies) {
   container.innerHTML = html;
 }
 
-function renderDamageSection(damage) {
-  const container = document.getElementById('sidebar-damage');
-  if (!container) return;
-
-  // Build list of active bonuses
-  const bonuses = [];
-  if (damage.attackDamage) bonuses.push({ label: 'Attack', value: damage.attackDamage });
-  if (damage.specialAttack) bonuses.push({ label: 'Special', value: damage.specialAttack });
-  if (damage.dashAttackDamage) bonuses.push({ label: 'Dash Attack', value: damage.dashAttackDamage });
-  if (damage.toolDamage) bonuses.push({ label: 'Tool', value: damage.toolDamage });
-  if (damage.elementalDamage) bonuses.push({ label: 'Elemental', value: damage.elementalDamage });
-  if (damage.critChance) bonuses.push({ label: 'Crit Chance', value: damage.critChance });
-  if (damage.critDamage) bonuses.push({ label: 'Crit Damage', value: damage.critDamage });
-
-  if (bonuses.length === 0) {
-    container.innerHTML = '';
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="sidebar-section-title">Upgrade Bonuses</div>
-    <div class="stat-grid">
-      ${bonuses.map(b => `
-        <div><span class="stat-label">${b.label}</span></div>
-        <div><span class="stat-value">+${b.value}%</span></div>
-      `).join('')}
-    </div>
-  `;
-}

@@ -1,5 +1,5 @@
 // TMNT: Splintered Fate - Synergy Engine
-// Prerequisite checks, element combos, mechanical synergies, damage calc
+// Prerequisite checks, element combos, mechanical synergies, stat computation
 
 import { powers } from './data/powers.js';
 import { synergyRules } from './data/synergy-rules.js';
@@ -250,32 +250,6 @@ export function calcBuildFocus(buildPowerNames) {
   return { level, label, typeCount: count, types: [...types] };
 }
 
-// ---- Damage Bonuses ----
-// Each upgrade category applies to a different damage channel.
-// We report them separately instead of combining into one misleading number.
-
-export function calcDamageBonuses(state, upgradeState) {
-  const getBonus = (statKey) => {
-    let total = 0;
-    for (const upg of upgrades) {
-      if (upg.stat === statKey && upgradeState[upg.name]) {
-        total += upg.perLevel * upgradeState[upg.name];
-      }
-    }
-    return Math.round(total);
-  };
-
-  return {
-    attackDamage: getBonus('attackDamage'),
-    specialAttack: getBonus('specialAttack'),
-    dashAttackDamage: getBonus('dashAttackDamage'),
-    toolDamage: getBonus('toolDamage'),
-    elementalDamage: getBonus('elementalDamage'),
-    critChance: getBonus('critChance'),
-    critDamage: getBonus('critDamage')
-  };
-}
-
 // ---- Computed Stats with Upgrades ----
 
 export function computeCharacterStats(baseChar, upgradeState) {
@@ -300,23 +274,36 @@ export function computeCharacterStats(baseChar, upgradeState) {
     let flat = 0;
     for (const upg of upgrades) {
       if (upg.stat === statKey && upgradeState[upg.name]) {
-        flat += upgradeState[upg.name]; // 1 per level for flat bonuses
+        flat += upgradeState[upg.name];
       }
     }
     return base + flat;
   };
 
   return {
+    // Attack group
     health: Math.min(applyPercent(baseChar.health, 'maxHealth'), baseChar.maxHealth),
     attackDamage: applyPercent(baseChar.attackDamage, 'attackDamage'),
-    dashAttack: applyPercent(baseChar.dashAttack, 'dashAttackDamage'),
-    specialAttack: applyPercent(baseChar.specialAttack, 'specialAttack'),
-    specialChargeRate: applyPercent(baseChar.specialChargeRate * 100, 'specialChargeRate') / 100,
     critChance: getBonus('critChance'),
     critDamage: getBonus('critDamage'),
+    multiHitChance: getBonus('multiHitChance'),
+    // Dash group
+    dashAttack: applyPercent(baseChar.dashAttack, 'dashAttackDamage'),
+    dashCharges: applyFlat(1, 'dashCharges'),
+    // Special group
+    specialAttack: applyPercent(baseChar.specialAttack, 'specialAttack'),
+    specialChargeRate: getBonus('specialChargeRate'),
+    // Tool group
+    toolDamage: getBonus('toolDamage'),
+    toolChargeRate: getBonus('toolChargeRate'),
+    // Elemental group
+    elementalDamage: getBonus('elementalDamage'),
+    negativeEffectDuration: getBonus('negativeEffectDuration'),
+    negativeEffectDamage: getBonus('negativeEffectDamage'),
+    // Defense / Utility
     dodgeChance: getBonus('dodgeChance'),
     moveSpeed: getBonus('moveSpeed'),
-    dashCharges: applyFlat(1, 'dashCharges'),
+    healEffectiveness: getBonus('healEffectiveness'),
     revives: applyFlat(0, 'revives')
   };
 }
@@ -333,14 +320,12 @@ export function runFullAnalysis(state, upgradeState) {
     masteries: state.masteries
   });
   const focus = calcBuildFocus(state.powers);
-  const damage = calcDamageBonuses(state, upgradeState);
 
   return {
     prerequisites,
     combos,
     synergies,
     focus,
-    damage,
     powerCount: state.powers.length,
     elementCounts: combos.elementCounts
   };
