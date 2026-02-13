@@ -265,7 +265,7 @@ body {
   margin-bottom: var(--sp-3);
 }
 
-/* ---- Responsive ---- */
+/* ---- Responsive (mobile app UI takes over at 900px) ---- */
 @media (max-width: 900px) {
   #topbar {
     padding: 0 var(--sp-3);
@@ -285,31 +285,12 @@ body {
     font-size: var(--text-xs);
   }
 
-  #sidebar {
-    position: fixed;
-    top: var(--topbar-height);
-    right: 0;
-    bottom: 0;
-    z-index: var(--z-sidebar);
-    transform: translateX(100%);
-    transition: transform var(--transition-slow);
-    box-shadow: var(--shadow-lg);
-  }
-
-  #sidebar.open {
-    transform: translateX(0);
-  }
-
-  .sidebar-toggle {
-    display: flex;
-  }
-
-  .sidebar-toggle.sidebar-open .icon {
-    transform: rotate(180deg);
+  .topbar-characters {
+    display: none;
   }
 
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: 1fr;
     padding: var(--sp-3);
   }
 
@@ -318,16 +299,6 @@ body {
   }
 
   .upgrades-columns {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .topbar-characters {
-    display: none;
-  }
-
-  .card-grid {
     grid-template-columns: 1fr;
   }
 

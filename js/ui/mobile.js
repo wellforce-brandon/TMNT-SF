@@ -5,7 +5,7 @@ import { characters } from '../data/characters.js';
 import { state, selectCharacter, setActiveTab, on } from '../state.js';
 import { renderSidebar } from './sidebar.js';
 
-const MOBILE_BREAKPOINT = 600;
+const MOBILE_BREAKPOINT = 900;
 let isMobile = false;
 let currentPanel = 'powers';
 let buildSubTab = 'powers'; // track active sub-tab within Build
@@ -38,6 +38,7 @@ const NAV_ITEMS = [
 // ---- Public API ----
 
 export function initMobile() {
+  setupMobileListeners(); // always register resize listener, even on desktop
   isMobile = checkMobile();
   if (!isMobile) return;
 
@@ -45,7 +46,6 @@ export function initMobile() {
   injectCharacterPicker();
   injectBottomNav();
   injectCharIndicator();
-  setupMobileListeners();
 
   // Character-first flow
   if (!state.character) {
@@ -281,7 +281,12 @@ function injectBuildSubToggle() {
 
 // ---- Event Listeners ----
 
+let listenersRegistered = false;
+
 function setupMobileListeners() {
+  if (listenersRegistered) return;
+  listenersRegistered = true;
+
   on('character-changed', () => {
     if (!isMobile) return;
     updateCharIndicator();

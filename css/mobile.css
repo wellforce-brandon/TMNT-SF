@@ -1,8 +1,8 @@
 /* TMNT: Splintered Fate — Mobile App UI
-   All rules scoped to @media (max-width: 600px) with body.mobile-app
+   All rules scoped to @media (max-width: 900px) with body.mobile-app
    Desktop is completely unaffected. */
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
 
   /* ---- App Shell ---- */
   body.mobile-app {
