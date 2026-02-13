@@ -167,6 +167,62 @@ export function checkPrerequisites(buildPowerNames) {
   return { available, locked };
 }
 
+// ---- Reverse Dependency Check ----
+
+// Find all powers in the current build that depend on the given power.
+// Used to prevent deselecting a prerequisite while dependents are selected.
+export function getDependentsInBuild(powerName, buildPowerNames) {
+  ensureLookups();
+  const buildSet = new Set(buildPowerNames);
+  const power = powersByName.get(powerName);
+  if (!power) return [];
+
+  const dependents = [];
+
+  for (const p of powers) {
+    if (!buildSet.has(p.name)) continue; // only check powers in the build
+    if (!p.requires) continue;
+
+    // Check if this power's requires references our powerName
+    const cleaned = p.requires.replace(/^After /i, '');
+
+    // Handle "X + Y" dual prerequisites
+    if (cleaned.includes(' + ')) {
+      const parts = cleaned.split(' + ').map(s => s.trim());
+      // Check if any part directly matches or matches via OR pattern
+      for (const part of parts) {
+        if (partMatchesPower(part, powerName, power)) {
+          dependents.push(p.name);
+          break;
+        }
+      }
+    } else {
+      if (partMatchesPower(cleaned, powerName, power)) {
+        dependents.push(p.name);
+      }
+    }
+  }
+
+  return dependents;
+}
+
+// Check if a prerequisite part matches the given power (by name or category)
+function partMatchesPower(part, powerName, power) {
+  // Direct name match
+  if (part === powerName) return true;
+
+  // OR pattern: "Quick Feet/First Strike"
+  if (part.includes('/')) {
+    const alts = part.split('/').map(s => s.trim());
+    if (alts.includes(powerName)) return true;
+  }
+
+  // Category matches — check if this power satisfies the category
+  // and is the ONLY power of that type in the build.
+  // (We don't block here; category deps are too broad to enforce per-power.)
+  return false;
+}
+
 // ---- Element Combo Tracking ----
 
 export function checkElementCombos(buildPowerNames) {

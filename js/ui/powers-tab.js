@@ -3,7 +3,7 @@
 
 import { powers } from '../data/powers.js';
 import { state, setPowerLevel, setFilter, toggleTypeFilter, on } from '../state.js';
-import { checkPrerequisites } from '../engine.js';
+import { checkPrerequisites, getDependentsInBuild } from '../engine.js';
 
 const TYPE_ORDER = ['water', 'flame', 'ooze', 'utrom', 'ninja', 'light', 'dark', 'robotics', 'legendary'];
 const TYPE_LABELS = {
@@ -187,6 +187,23 @@ function updateFilterPills() {
   });
 }
 
+// Brief shake + tooltip when trying to deselect a prerequisite with active dependents
+function showDependencyWarning(cardEl, dependentNames) {
+  cardEl.classList.add('shake');
+  setTimeout(() => cardEl.classList.remove('shake'), 400);
+
+  // Show tooltip with dependent names
+  let tooltip = cardEl.querySelector('.dep-tooltip');
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.className = 'dep-tooltip';
+    cardEl.appendChild(tooltip);
+  }
+  tooltip.textContent = `Required by: ${dependentNames.join(', ')}`;
+  tooltip.classList.add('visible');
+  setTimeout(() => tooltip.classList.remove('visible'), 2500);
+}
+
 function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
@@ -276,6 +293,14 @@ function renderGrid() {
       e.stopPropagation();
       const name = zone.dataset.powerDec;
       const current = state.powerLevels[name] || 0;
+      if (current - 1 <= 0) {
+        const deps = getDependentsInBuild(name, state.powers);
+        if (deps.length > 0) {
+          const card = zone.closest('.card');
+          if (card) showDependencyWarning(card, deps);
+          return;
+        }
+      }
       setPowerLevel(name, current - 1);
     });
   });
@@ -307,6 +332,12 @@ function renderGrid() {
       if (card.classList.contains('locked')) return;
       const current = state.powerLevels[powerName] || 0;
       if (current > 0) {
+        // Check if any selected powers depend on this one
+        const deps = getDependentsInBuild(powerName, state.powers);
+        if (deps.length > 0) {
+          showDependencyWarning(card, deps);
+          return;
+        }
         setPowerLevel(powerName, 0);
       } else {
         setPowerLevel(powerName, 1);

@@ -482,6 +482,42 @@
   border-left: 3px solid var(--primary);
 }
 
+/* Shake animation for blocked deselection */
+.card.shake {
+  animation: card-shake 0.4s ease;
+}
+
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Dependency tooltip */
+.dep-tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--sp-1));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--foreground);
+  color: var(--background);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.dep-tooltip.visible {
+  opacity: 1;
+}
+
 /* Element-colored left border on cards */
 .card[data-type] {
   border-left: 3px solid var(--el-color);
