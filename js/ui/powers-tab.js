@@ -69,28 +69,13 @@ function tierBadge(power) {
   return `<span class="badge ${cls}" title="Tier ${depth}">${slices}</span>`;
 }
 
-// Track discovery state to detect when it toggles (triggers full filter re-render)
-let lastDiscovery = false;
-function discoveryChanged() {
-  if (state.filters.discovery !== lastDiscovery) {
-    lastDiscovery = state.filters.discovery;
-    return true;
-  }
-  return false;
-}
-
 export function initPowersTab() {
   on('tab-changed', (tab) => {
     if (tab === 'powers') render();
   });
   on('filter-changed', () => {
     if (state.activeTab === 'powers') {
-      // Re-render full filters when discovery changes (Tier pills need disabled state update)
-      if (discoveryChanged()) {
-        renderFilters();
-      } else {
-        updateFilterPills();
-      }
+      updateFilterPills();
       renderGrid();
     }
   });
@@ -132,18 +117,9 @@ function renderFilters() {
 
   html += '<div class="filter-sep"></div>';
 
-  html += `<div class="filter-group ${state.filters.discovery ? 'discovery-disabled' : ''}">`;
-  html += '<span class="filter-group-label">Tier</span>';
-  html += `<button class="filter-pill ${state.filters.tier === 'all' ? 'active' : ''}" data-filter="tier" data-tier="all" ${state.filters.discovery ? 'disabled' : ''}>All</button>`;
-  html += `<button class="filter-pill ${state.filters.tier === 'initial' ? 'active' : ''}" data-filter="tier" data-tier="initial" ${state.filters.discovery ? 'disabled' : ''}>Initial</button>`;
-  html += `<button class="filter-pill ${state.filters.tier === 'secondary' ? 'active' : ''}" data-filter="tier" data-tier="secondary" ${state.filters.discovery ? 'disabled' : ''}>Secondary</button>`;
-  html += '</div>';
-
-  html += '<div class="filter-sep"></div>';
-
   html += '<div class="filter-group">';
   html += '<span class="filter-group-label">View</span>';
-  html += `<button class="filter-pill ${state.filters.discovery ? 'active' : ''}" data-filter="discovery">Discovery</button>`;
+  html += `<button class="discovery-toggle ${state.filters.discovery ? 'active' : ''}" data-filter="discovery">Discovery Mode: <span>${state.filters.discovery ? 'ON' : 'OFF'}</span></button>`;
   html += `<button class="filter-pill ${state.filters.grouped ? 'active' : ''}" data-filter="grouped">Grouped</button>`;
   html += '</div>';
 
@@ -165,12 +141,6 @@ function renderFilters() {
   container.querySelectorAll('[data-filter="slot"]').forEach(btn => {
     btn.addEventListener('click', () => {
       setFilter('slot', btn.dataset.slot);
-    });
-  });
-
-  container.querySelectorAll('[data-filter="tier"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setFilter('tier', btn.dataset.tier);
     });
   });
 
@@ -208,14 +178,11 @@ function updateFilterPills() {
     btn.classList.toggle('active', state.filters.slot === btn.dataset.slot);
   });
 
-  // Update tier pills
-  container.querySelectorAll('[data-filter="tier"]').forEach(btn => {
-    btn.classList.toggle('active', state.filters.tier === btn.dataset.tier);
-  });
-
-  // Update discovery pill
+  // Update discovery toggle
   container.querySelectorAll('[data-filter="discovery"]').forEach(btn => {
     btn.classList.toggle('active', state.filters.discovery);
+    const span = btn.querySelector('span');
+    if (span) span.textContent = state.filters.discovery ? 'ON' : 'OFF';
   });
 
   // Update grouped pill
@@ -405,7 +372,7 @@ function renderGrid() {
 }
 
 function getFilteredPowers() {
-  const { types, slot, tier, search, discovery } = state.filters;
+  const { types, slot, search, discovery } = state.filters;
   const allSelected = types.size === 0;
   const searchLower = search.toLowerCase();
 
@@ -426,9 +393,6 @@ function getFilteredPowers() {
 
     // Slot filter
     if (slot !== 'all' && power.slot !== slot) return false;
-
-    // Tier filter (skipped when discovery is active — discovery controls visibility)
-    if (!discovery && tier !== 'all' && power.tier !== tier) return false;
 
     // Type filter
     if (!allSelected) {

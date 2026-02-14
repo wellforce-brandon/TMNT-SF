@@ -574,10 +574,27 @@
   box-shadow: 0 0 8px 2px hsla(120, 60%, 50%, 0.3);
 }
 
-/* Discovery mode: dim Tier filter pills when discovery controls visibility */
-.filter-group.discovery-disabled .filter-pill {
-  opacity: 0.4;
-  pointer-events: none;
+/* Discovery mode toggle button */
+.discovery-toggle {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.discovery-toggle:hover {
+  border-color: var(--border-hover);
+  background: var(--muted);
+}
+.discovery-toggle.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
 .card.starting-inspiration {

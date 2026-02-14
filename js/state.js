@@ -39,7 +39,6 @@ export const state = {
   filters: {
     types: new Set(),
     slot: 'all',
-    tier: 'all',
     search: '',
     discovery: false,  // Progressive discovery view for powers
     grouped: true      // Element group headers in powers grid
