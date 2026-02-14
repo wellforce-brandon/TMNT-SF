@@ -1,7 +1,7 @@
 // TMNT: Splintered Fate - Supabase Auth & Cloud Sync
 // Discord OAuth login, cloud persistence for permanent upgrades
 
-import { on, upgradeState, artifactUpgrades, inspirationUpgrades, applyCloudState } from './state.js';
+import { on, upgradeState, artifactUpgrades, inspirationUpgrades, applyCloudState, clearBuild } from './state.js';
 
 // ---- Configuration ----
 const SUPABASE_URL = 'https://xpohaehzmszydlhxyylt.supabase.co';
@@ -85,8 +85,16 @@ export async function logout() {
   // Always force local cleanup regardless of signOut result
   currentSession = null;
   stopCloudSync();
+
+  // Reset all upgrades and build to defaults (suppress cloud save so we don't
+  // push empty data to the cloud — the user's cloud data stays intact for next login)
+  suppressCloudSave = true;
+  applyCloudState({}, {}, {});  // clears upgradeState, artifactUpgrades, inspirationUpgrades
+  clearBuild();                  // clears powers, masteries, inspirations, artifact, tool
+  suppressCloudSave = false;
+
   emitAuthChanged();
-  console.log('Logout: local cleanup complete');
+  console.log('Logout: local cleanup complete (state reset to defaults)');
 }
 
 // ---- Cloud Save (Debounced) ----
