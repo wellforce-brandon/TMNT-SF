@@ -64,21 +64,29 @@ export async function logout() {
     return;
   }
 
+  // signOut() can hang if session token is expired — race with a timeout
   try {
     console.log('Logout: calling signOut...');
-    const { error } = await supabaseClient.auth.signOut();
+    const signOutPromise = supabaseClient.auth.signOut({ scope: 'local' });
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('signOut timed out after 3s')), 3000)
+    );
+
+    const { error } = await Promise.race([signOutPromise, timeoutPromise]);
     if (error) {
-      console.warn('Logout failed:', error.message);
+      console.warn('Logout: signOut returned error:', error.message);
     } else {
       console.log('Logout: signOut succeeded');
     }
   } catch (err) {
-    console.error('Logout: signOut threw:', err);
-    // Force local cleanup even if Supabase call fails
-    currentSession = null;
-    stopCloudSync();
-    emitAuthChanged();
+    console.warn('Logout: signOut failed/timed out:', err.message);
   }
+
+  // Always force local cleanup regardless of signOut result
+  currentSession = null;
+  stopCloudSync();
+  emitAuthChanged();
+  console.log('Logout: local cleanup complete');
 }
 
 // ---- Cloud Save (Debounced) ----
