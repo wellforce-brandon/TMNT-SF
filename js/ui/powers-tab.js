@@ -320,6 +320,12 @@ function renderGrid() {
       prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">Requires: ${power.requiredPowers.join(' + ')}</div>`;
     }
 
+    // "Unlocks X" note for non-attack powers that have direct children
+    if (power.slot !== 'strike' && power.slot !== 'dash' && directChildren.has(power.name)) {
+      const childNames = directChildren.get(power.name).map(c => c.name);
+      prereqHtml += `<div class="card-unlocks">Unlocks ${childNames.join(', ')}</div>`;
+    }
+
     html += renderUpgradeCard({
       name: power.name,
       effect: power.effect,
