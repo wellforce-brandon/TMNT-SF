@@ -81,7 +81,7 @@ export function renderSidebar() {
   // Run analysis
   const analysis = runFullAnalysis(state, upgradeState);
   renderFocusSection(analysis.focus);
-  renderSynergiesSection(analysis.synergies);
+  renderSynergiesSection(analysis.synergies, analysis.prerequisites);
 }
 
 function renderCharacterSection() {
@@ -403,21 +403,43 @@ function renderFocusSection(focus) {
   `;
 }
 
-function renderSynergiesSection(synergies) {
+function renderSynergiesSection(synergies, prerequisites) {
   const container = document.getElementById('sidebar-synergies');
   if (!container) return;
 
-  if (synergies.length === 0) {
+  // Legendaries with ALL prereqs met, not in build
+  const legendaryReady = (prerequisites?.available || [])
+    .filter(p => p.type === 'legendary' && p.combo);
+
+  // Suppress path tips for legendaries that are already fully available
+  const legendaryPaths = synergies.filter(s =>
+    s.category === 'legendary-path' &&
+    !legendaryReady.some(leg => s.name.includes(leg.name))
+  );
+  const otherSynergies = synergies.filter(s => s.category !== 'legendary-path');
+
+  if (legendaryReady.length === 0 && legendaryPaths.length === 0 && otherSynergies.length === 0) {
     container.innerHTML = '';
     return;
   }
 
-  const legendaryPaths = synergies.filter(s => s.category === 'legendary-path');
-  const otherSynergies = synergies.filter(s => s.category !== 'legendary-path');
-
   let html = '';
 
-  // Legendary paths — golden styling, shown first
+  // 1. Legendary-ready alerts (highest priority)
+  if (legendaryReady.length > 0) {
+    html += `<div class="sidebar-section-title">Legendary Available <span class="sidebar-section-count">${legendaryReady.length}</span></div>`;
+    for (const leg of legendaryReady) {
+      const elements = leg.combo.map(el => TYPE_LABELS[el] || el).join(' or ');
+      html += `
+        <div class="synergy-item synergy-legendary-ready">
+          <div class="synergy-item-title">${leg.name}</div>
+          ${leg.name} is available! Look for it in ${elements} offerings.
+        </div>
+      `;
+    }
+  }
+
+  // 2. Legendary paths — golden styling (partial progress, 1/2 prereqs met)
   if (legendaryPaths.length > 0) {
     html += `<div class="sidebar-section-title">Legendary Paths <span class="sidebar-section-count">${legendaryPaths.length}</span></div>`;
     for (const syn of legendaryPaths) {
@@ -430,7 +452,7 @@ function renderSynergiesSection(synergies) {
     }
   }
 
-  // Regular synergies
+  // 3. Regular synergies
   if (otherSynergies.length > 0) {
     html += `<div class="sidebar-section-title">Active Synergies <span class="sidebar-section-count">${otherSynergies.length}</span></div>`;
     for (const syn of otherSynergies) {

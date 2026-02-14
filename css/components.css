@@ -898,6 +898,24 @@
   color: hsla(45, 80%, 55%, 1);
 }
 
+/* Legendary-ready alert — highest priority, pulsing golden glow */
+.synergy-item.synergy-legendary-ready {
+  background: hsla(45, 90%, 55%, 0.15);
+  border-color: hsla(45, 90%, 55%, 0.6);
+  border-width: 2px;
+  box-shadow: 0 0 8px 1px hsla(45, 80%, 55%, 0.25);
+  animation: legendary-pulse 2s ease-in-out infinite;
+}
+.synergy-item.synergy-legendary-ready .synergy-item-title {
+  color: hsla(45, 90%, 60%, 1);
+  font-size: var(--text-sm);
+}
+
+@keyframes legendary-pulse {
+  0%, 100% { box-shadow: 0 0 8px 1px hsla(45, 80%, 55%, 0.25); }
+  50% { box-shadow: 0 0 12px 3px hsla(45, 80%, 55%, 0.4); }
+}
+
 /* Inline hint on legendary cards — "Add X power" */
 .card-legendary-hint {
   font-size: var(--text-xs);
