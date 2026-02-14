@@ -560,6 +560,26 @@
   opacity: 0.4;
 }
 
+/* Discovery mode: legendary card that doesn't have prereqs met yet */
+.card.discovery-locked-legendary {
+  opacity: 0.45;
+  filter: grayscale(30%);
+}
+.card.discovery-locked-legendary:hover {
+  opacity: 0.65;
+}
+
+/* Discovery mode: legendary card with prereqs met — subtle glow */
+.card.discovery-unlocked {
+  box-shadow: 0 0 8px 2px hsla(120, 60%, 50%, 0.3);
+}
+
+/* Discovery mode: dim Tier filter pills when discovery controls visibility */
+.filter-group.discovery-disabled .filter-pill {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .card.starting-inspiration {
   border-left: 3px solid var(--primary);
 }

@@ -40,7 +40,8 @@ export const state = {
     types: new Set(),
     slot: 'all',
     tier: 'all',
-    search: ''
+    search: '',
+    discovery: false   // Progressive discovery view for powers
   }
 };
 

@@ -53,13 +53,28 @@ function tierBadge(power) {
   return `<span class="badge ${cls}" title="Tier ${depth}">${slices}</span>`;
 }
 
+// Track discovery state to detect when it toggles (triggers full filter re-render)
+let lastDiscovery = false;
+function discoveryChanged() {
+  if (state.filters.discovery !== lastDiscovery) {
+    lastDiscovery = state.filters.discovery;
+    return true;
+  }
+  return false;
+}
+
 export function initPowersTab() {
   on('tab-changed', (tab) => {
     if (tab === 'powers') render();
   });
   on('filter-changed', () => {
     if (state.activeTab === 'powers') {
-      updateFilterPills();
+      // Re-render full filters when discovery changes (Tier pills need disabled state update)
+      if (discoveryChanged()) {
+        renderFilters();
+      } else {
+        updateFilterPills();
+      }
       renderGrid();
     }
   });
@@ -101,11 +116,18 @@ function renderFilters() {
 
   html += '<div class="filter-sep"></div>';
 
-  html += '<div class="filter-group">';
+  html += `<div class="filter-group ${state.filters.discovery ? 'discovery-disabled' : ''}">`;
   html += '<span class="filter-group-label">Tier</span>';
-  html += `<button class="filter-pill ${state.filters.tier === 'all' ? 'active' : ''}" data-filter="tier" data-tier="all">All</button>`;
-  html += `<button class="filter-pill ${state.filters.tier === 'initial' ? 'active' : ''}" data-filter="tier" data-tier="initial">Initial</button>`;
-  html += `<button class="filter-pill ${state.filters.tier === 'secondary' ? 'active' : ''}" data-filter="tier" data-tier="secondary">Secondary</button>`;
+  html += `<button class="filter-pill ${state.filters.tier === 'all' ? 'active' : ''}" data-filter="tier" data-tier="all" ${state.filters.discovery ? 'disabled' : ''}>All</button>`;
+  html += `<button class="filter-pill ${state.filters.tier === 'initial' ? 'active' : ''}" data-filter="tier" data-tier="initial" ${state.filters.discovery ? 'disabled' : ''}>Initial</button>`;
+  html += `<button class="filter-pill ${state.filters.tier === 'secondary' ? 'active' : ''}" data-filter="tier" data-tier="secondary" ${state.filters.discovery ? 'disabled' : ''}>Secondary</button>`;
+  html += '</div>';
+
+  html += '<div class="filter-sep"></div>';
+
+  html += '<div class="filter-group">';
+  html += '<span class="filter-group-label">View</span>';
+  html += `<button class="filter-pill ${state.filters.discovery ? 'active' : ''}" data-filter="discovery">Discovery</button>`;
   html += '</div>';
 
   container.innerHTML = html;
@@ -135,6 +157,12 @@ function renderFilters() {
     });
   });
 
+  container.querySelectorAll('[data-filter="discovery"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setFilter('discovery', !state.filters.discovery);
+    });
+  });
+
 }
 
 function updateFilterPills() {
@@ -160,6 +188,11 @@ function updateFilterPills() {
   // Update tier pills
   container.querySelectorAll('[data-filter="tier"]').forEach(btn => {
     btn.classList.toggle('active', state.filters.tier === btn.dataset.tier);
+  });
+
+  // Update discovery pill
+  container.querySelectorAll('[data-filter="discovery"]').forEach(btn => {
+    btn.classList.toggle('active', state.filters.discovery);
   });
 }
 
@@ -190,10 +223,13 @@ function renderGrid() {
   const inBuild = new Set(state.powers);
 
   if (filtered.length === 0) {
+    const desc = state.filters.discovery
+      ? 'Add initial powers to your build to discover more'
+      : 'Try adjusting your filters';
     container.innerHTML = `
       <div class="empty-state" style="grid-column: 1 / -1">
         <div class="empty-state-title">No Powers Found</div>
-        <div class="empty-state-desc">Try adjusting your filters</div>
+        <div class="empty-state-desc">${desc}</div>
       </div>
     `;
     return;
@@ -209,6 +245,15 @@ function renderGrid() {
     let extra = '';
     if (isAvailable && !isInBuild) extra += 'available-highlight';
     if (isLocked) extra += (extra ? ' ' : '') + 'locked';
+
+    // Discovery mode: visual treatment for legendaries
+    if (state.filters.discovery && power.type === 'legendary' && !isInBuild) {
+      if (isAvailable) {
+        extra += (extra ? ' ' : '') + 'discovery-unlocked';
+      } else {
+        extra += (extra ? ' ' : '') + 'discovery-locked-legendary';
+      }
+    }
 
     // Legendary combo badges
     let comboBadges = '';
@@ -309,9 +354,17 @@ function renderGrid() {
 }
 
 function getFilteredPowers() {
-  const { types, slot, tier, search } = state.filters;
+  const { types, slot, tier, search, discovery } = state.filters;
   const allSelected = types.size === 0;
   const searchLower = search.toLowerCase();
+
+  // Pre-compute discovery visibility if active
+  let discoveryAvailable = null;
+  if (discovery) {
+    const { available } = checkPrerequisites(state.powers);
+    discoveryAvailable = new Set(available.map(p => p.name));
+  }
+  const inBuild = new Set(state.powers);
 
   return powers.filter(power => {
     // Search filter
@@ -323,17 +376,25 @@ function getFilteredPowers() {
     // Slot filter
     if (slot !== 'all' && power.slot !== slot) return false;
 
-    // Tier filter
-    if (tier !== 'all' && power.tier !== tier) return false;
+    // Tier filter (skipped when discovery is active — discovery controls visibility)
+    if (!discovery && tier !== 'all' && power.tier !== tier) return false;
 
     // Type filter
-    if (allSelected) return true;
-
-    if (power.type === 'legendary') {
-      return filterLegendary(power, types);
+    if (!allSelected) {
+      if (power.type === 'legendary') {
+        if (!filterLegendary(power, types)) return false;
+      } else if (!types.has(power.type)) return false;
     }
 
-    return types.has(power.type);
+    // Discovery mode filtering
+    if (discovery && power.tier === 'secondary') {
+      // Legendaries always show in discovery mode
+      if (power.type === 'legendary') return true;
+      // Non-legendary secondaries: only show if available (prereqs met) or already in build
+      return discoveryAvailable.has(power.name) || inBuild.has(power.name);
+    }
+
+    return true;
   });
 }
 
