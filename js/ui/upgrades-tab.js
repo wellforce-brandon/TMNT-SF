@@ -124,18 +124,12 @@ function renderDragonDreamer(container, currency) {
 
   container.innerHTML = html;
 
-  // Bind sliders — update in-place to avoid destroying the element mid-drag
+  // Bind sliders — visual preview on drag, commit only on release
   container.querySelectorAll('.upgrade-slider').forEach(slider => {
+    // Live preview while dragging (no state save)
     slider.addEventListener('input', () => {
-      const name = slider.dataset.upgrade;
       const level = parseInt(slider.value);
-      const upg = upgrades.find(u => u.name === name);
-
-      _suppressRender = true;
-      setUpgradeLevel(name, level);
-      _suppressRender = false;
-
-      // Update badge and effect text in-place
+      const upg = upgrades.find(u => u.name === slider.dataset.upgrade);
       const card = slider.closest('.upgrade-card');
       if (card && upg) {
         const badge = card.querySelector('.badge');
@@ -146,6 +140,15 @@ function renderDragonDreamer(container, currency) {
           effect.textContent = `${upg.description}${effectStr}`;
         }
       }
+    });
+
+    // Commit on release (triggers state save + cloud sync)
+    slider.addEventListener('change', () => {
+      const name = slider.dataset.upgrade;
+      const level = parseInt(slider.value);
+      _suppressRender = true;
+      setUpgradeLevel(name, level);
+      _suppressRender = false;
     });
   });
 
