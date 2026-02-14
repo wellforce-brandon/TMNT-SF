@@ -105,25 +105,53 @@ function onBeforeUnload() {
 async function saveUpgradesToCloud() {
   if (!supabaseClient || !currentSession) return;
 
-  const { error } = await supabaseClient
+  const userId = currentSession.user.id;
+  console.log('Cloud save starting for user:', userId);
+  console.log('Saving upgrade_state:', JSON.stringify(upgradeState));
+
+  const { data, error, status, statusText, count } = await supabaseClient
     .from('user_upgrades')
     .upsert({
-      user_id: currentSession.user.id,
+      user_id: userId,
       upgrade_state: { ...upgradeState },
       artifact_upgrades: { ...artifactUpgrades },
       inspiration_upgrades: { ...inspirationUpgrades }
     }, {
       onConflict: 'user_id'
-    });
+    })
+    .select();
 
-  if (error) throw error;
-  console.log('Cloud save complete');
+  if (error) {
+    console.error('Cloud save error:', { error, status, statusText });
+    throw error;
+  }
+
+  console.log('Cloud save response:', { status, statusText, count, data });
+
+  if (!data || data.length === 0) {
+    console.error('Cloud save SILENTLY BLOCKED — RLS policy likely rejecting write');
+  }
+
+  // Verify: read back to confirm persistence
+  const verify = await supabaseClient
+    .from('user_upgrades')
+    .select('upgrade_state')
+    .eq('user_id', userId)
+    .single();
+
+  if (verify.error) {
+    console.warn('Cloud save verify-read failed:', verify.error);
+  } else {
+    console.log('Cloud save verified in DB:', verify.data?.upgrade_state);
+  }
 }
 
 // ---- Cloud Load ----
 
 async function loadUpgradesFromCloud() {
   if (!supabaseClient || !currentSession) return null;
+
+  console.log('Cloud load starting for user:', currentSession.user.id);
 
   const { data, error } = await supabaseClient
     .from('user_upgrades')
@@ -132,9 +160,13 @@ async function loadUpgradesFromCloud() {
     .single();
 
   // PGRST116 = no rows found (new user)
-  if (error && error.code === 'PGRST116') return null;
+  if (error && error.code === 'PGRST116') {
+    console.log('Cloud load: no data found (new user)');
+    return null;
+  }
   if (error) throw error;
 
+  console.log('Cloud load result:', data);
   return data;
 }
 
