@@ -48,7 +48,7 @@ export const state = {
 export const settings = {
   autoTheme: true,
   themeMode: 'dark',   // 'light' | 'dark' (only used when no character or autoTheme off)
-  colorStats: false    // color-code stat groups in sidebar
+  colorStats: true     // color-code stat groups in sidebar
 };
 
 // ---- Upgrade State ----
