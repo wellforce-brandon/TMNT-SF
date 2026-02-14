@@ -13,7 +13,7 @@ const TYPE_LABELS = {
   elemental: 'Elemental', boss: 'Boss', barrier: 'Barrier', crit: 'Crit',
   dash: 'Dash', special: 'Special', attack: 'Attack', speed: 'Speed',
   defense: 'Defense', astral: 'Astral', shuriken: 'Shuriken', tool: 'Tool',
-  health: 'Health', general: 'General'
+  health: 'Health', general: 'General', 'multi-hit': 'Multi-Hit'
 };
 
 // Character theme primary colors (from themes.css --primary values)

@@ -94,6 +94,42 @@
   --el-astral-bg: rgba(167, 139, 250, 0.12);
   --el-astral-border: rgba(167, 139, 250, 0.35);
 
+  --el-multi-hit: #6366f1;
+  --el-multi-hit-bg: rgba(99, 102, 241, 0.12);
+  --el-multi-hit-border: rgba(99, 102, 241, 0.35);
+
+  --el-economy: #d4a017;
+  --el-economy-bg: rgba(212, 160, 23, 0.12);
+  --el-economy-border: rgba(212, 160, 23, 0.35);
+
+  --el-scrap: #8b7355;
+  --el-scrap-bg: rgba(139, 115, 85, 0.12);
+  --el-scrap-border: rgba(139, 115, 85, 0.35);
+
+  --el-luck: #10b981;
+  --el-luck-bg: rgba(16, 185, 129, 0.12);
+  --el-luck-border: rgba(16, 185, 129, 0.35);
+
+  --el-boost: #f59e0b;
+  --el-boost-bg: rgba(245, 158, 11, 0.12);
+  --el-boost-border: rgba(245, 158, 11, 0.35);
+
+  --el-duration: #8b5cf6;
+  --el-duration-bg: rgba(139, 92, 246, 0.12);
+  --el-duration-border: rgba(139, 92, 246, 0.35);
+
+  --el-risk: #dc2626;
+  --el-risk-bg: rgba(220, 38, 38, 0.12);
+  --el-risk-border: rgba(220, 38, 38, 0.35);
+
+  --el-stun: #eab308;
+  --el-stun-bg: rgba(234, 179, 8, 0.12);
+  --el-stun-border: rgba(234, 179, 8, 0.35);
+
+  --el-physical: #9ca3af;
+  --el-physical-bg: rgba(156, 163, 175, 0.12);
+  --el-physical-border: rgba(156, 163, 175, 0.35);
+
   /* Contextual element color (set via data-type attribute) */
   --el-color: var(--el-water);
   --el-bg: var(--el-water-bg);
@@ -279,4 +315,124 @@
   --el-color: var(--el-astral);
   --el-bg: var(--el-astral-bg);
   --el-border: var(--el-astral-border);
+}
+
+[data-type="multi-hit"] {
+  --el-color: var(--el-multi-hit);
+  --el-bg: var(--el-multi-hit-bg);
+  --el-border: var(--el-multi-hit-border);
+}
+
+[data-type="economy"] {
+  --el-color: var(--el-economy);
+  --el-bg: var(--el-economy-bg);
+  --el-border: var(--el-economy-border);
+}
+
+[data-type="coins"] {
+  --el-color: var(--el-economy);
+  --el-bg: var(--el-economy-bg);
+  --el-border: var(--el-economy-border);
+}
+
+[data-type="currency"] {
+  --el-color: var(--el-economy);
+  --el-bg: var(--el-economy-bg);
+  --el-border: var(--el-economy-border);
+}
+
+[data-type="scrap"] {
+  --el-color: var(--el-scrap);
+  --el-bg: var(--el-scrap-bg);
+  --el-border: var(--el-scrap-border);
+}
+
+[data-type="luck"] {
+  --el-color: var(--el-luck);
+  --el-bg: var(--el-luck-bg);
+  --el-border: var(--el-luck-border);
+}
+
+[data-type="upgrades"] {
+  --el-color: var(--el-boost);
+  --el-bg: var(--el-boost-bg);
+  --el-border: var(--el-boost-border);
+}
+
+[data-type="boost"] {
+  --el-color: var(--el-boost);
+  --el-bg: var(--el-boost-bg);
+  --el-border: var(--el-boost-border);
+}
+
+[data-type="buff"] {
+  --el-color: var(--el-boost);
+  --el-bg: var(--el-boost-bg);
+  --el-border: var(--el-boost-border);
+}
+
+[data-type="duration"] {
+  --el-color: var(--el-duration);
+  --el-bg: var(--el-duration-bg);
+  --el-border: var(--el-duration-border);
+}
+
+[data-type="dodge"] {
+  --el-color: var(--el-dash);
+  --el-bg: var(--el-dash-bg);
+  --el-border: var(--el-dash-border);
+}
+
+[data-type="damage"] {
+  --el-color: var(--el-attack);
+  --el-bg: var(--el-attack-bg);
+  --el-border: var(--el-attack-border);
+}
+
+[data-type="revive"] {
+  --el-color: var(--el-health);
+  --el-bg: var(--el-health-bg);
+  --el-border: var(--el-health-border);
+}
+
+[data-type="healing"] {
+  --el-color: var(--el-health);
+  --el-bg: var(--el-health-bg);
+  --el-border: var(--el-health-border);
+}
+
+[data-type="survivability"] {
+  --el-color: var(--el-defense);
+  --el-bg: var(--el-defense-bg);
+  --el-border: var(--el-defense-border);
+}
+
+[data-type="risk"] {
+  --el-color: var(--el-risk);
+  --el-bg: var(--el-risk-bg);
+  --el-border: var(--el-risk-border);
+}
+
+[data-type="stun"] {
+  --el-color: var(--el-stun);
+  --el-bg: var(--el-stun-bg);
+  --el-border: var(--el-stun-border);
+}
+
+[data-type="control"] {
+  --el-color: var(--el-stun);
+  --el-bg: var(--el-stun-bg);
+  --el-border: var(--el-stun-border);
+}
+
+[data-type="random"] {
+  --el-color: var(--el-astral);
+  --el-bg: var(--el-astral-bg);
+  --el-border: var(--el-astral-border);
+}
+
+[data-type="physical"] {
+  --el-color: var(--el-physical);
+  --el-bg: var(--el-physical-bg);
+  --el-border: var(--el-physical-border);
 }
