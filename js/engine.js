@@ -67,7 +67,7 @@ function isPrerequisiteMet(requiresStr, buildPowerNames, buildPowerSet) {
   return isPartMet(cleaned, buildPowerNames, buildPowerSet);
 }
 
-function isPartMet(part, buildPowerNames, buildPowerSet) {
+export function isPartMet(part, buildPowerNames, buildPowerSet) {
   ensureLookups();
 
   // Direct power name match

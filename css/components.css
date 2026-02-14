@@ -560,18 +560,19 @@
   opacity: 0.4;
 }
 
-/* Discovery mode: legendary card that doesn't have prereqs met yet */
-.card.discovery-locked-legendary {
-  opacity: 0.45;
-  filter: grayscale(30%);
-}
-.card.discovery-locked-legendary:hover {
-  opacity: 0.65;
+/* Legendary prerequisite progress: combo badge highlight when prereq met */
+.badge.combo-met {
+  box-shadow: 0 0 6px 1px currentColor;
 }
 
-/* Discovery mode: legendary card with prereqs met — subtle glow */
-.card.discovery-unlocked {
-  box-shadow: 0 0 8px 2px hsla(120, 60%, 50%, 0.3);
+/* Legendary card: partial progress (some prereqs met) */
+.card.legendary-partial {
+  border-color: var(--border-hover);
+}
+
+/* Legendary card: fully ready (all prereqs met) */
+.card.legendary-ready {
+  box-shadow: 0 0 8px 2px hsla(50, 80%, 55%, 0.35);
 }
 
 /* Discovery mode toggle button */

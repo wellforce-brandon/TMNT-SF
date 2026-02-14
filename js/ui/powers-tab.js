@@ -3,7 +3,7 @@
 
 import { powers } from '../data/powers.js';
 import { state, setPowerLevel, setFilter, toggleTypeFilter, on } from '../state.js';
-import { checkPrerequisites, getDependentsInBuild, CATEGORY_REQUIRES_LABELS } from '../engine.js';
+import { checkPrerequisites, getDependentsInBuild, isPartMet, CATEGORY_REQUIRES_LABELS } from '../engine.js';
 import { renderUpgradeCard } from './format.js';
 
 const TYPE_ORDER = ['water', 'flame', 'ooze', 'utrom', 'ninja', 'light', 'dark', 'robotics', 'legendary'];
@@ -256,22 +256,31 @@ function renderGrid() {
     if (isAvailable && !isInBuild) extra += 'available-highlight';
     if (isLocked) extra += (extra ? ' ' : '') + 'locked';
 
-    // Discovery mode: visual treatment for legendaries
-    if (state.filters.discovery && power.type === 'legendary' && !isInBuild) {
-      if (isAvailable) {
-        extra += (extra ? ' ' : '') + 'discovery-unlocked';
-      } else {
-        extra += (extra ? ' ' : '') + 'discovery-locked-legendary';
+    // Legendary prerequisite progress (always active, not just discovery)
+    let metParts = [];
+    if (power.type === 'legendary' && power.requiredPowers) {
+      const buildSet = new Set(state.powers);
+      metParts = power.requiredPowers.map(req =>
+        isPartMet(req, state.powers, buildSet)
+      );
+      if (!isInBuild) {
+        const metCount = metParts.filter(Boolean).length;
+        if (metCount === metParts.length) {
+          extra += (extra ? ' ' : '') + 'legendary-ready';
+        } else if (metCount > 0) {
+          extra += (extra ? ' ' : '') + 'legendary-partial';
+        }
       }
     }
 
-    // Legendary combo badges
+    // Legendary combo badges (highlight met prerequisites)
     let comboBadges = '';
     if (power.type === 'legendary' && power.combo) {
       comboBadges += `<div class="legendary-combo" data-type="legendary">`;
-      comboBadges += power.combo.map(el =>
-        `<span class="badge badge-type" data-type="${el}">${TYPE_LABELS[el]}</span>`
-      ).join('<span class="legendary-combo-plus">+</span>');
+      comboBadges += power.combo.map((el, i) => {
+        const met = metParts[i] || false;
+        return `<span class="badge badge-type ${met ? 'combo-met' : ''}" data-type="${el}">${TYPE_LABELS[el]}</span>`;
+      }).join('<span class="legendary-combo-plus">+</span>');
       comboBadges += `</div>`;
     }
 
