@@ -5,6 +5,7 @@
 import { masteries } from '../data/masteries.js';
 import { characters } from '../data/characters.js';
 import { state, toggleMastery, on } from '../state.js';
+import { matchesMastery } from './search.js';
 
 const TYPE_LABELS = {
   water: 'Water', flame: 'Flame', ooze: 'Ooze', utrom: 'Utrom',
@@ -36,6 +37,9 @@ export function initMasteriesTab() {
   });
   on('character-changed', () => {
     if (state.activeTab === 'masteries') render();
+  });
+  on('filter-changed', () => {
+    if (state.activeTab === 'masteries') renderGrid();
   });
 }
 
@@ -72,10 +76,14 @@ function renderGrid() {
   if (!container) return;
 
   const activeSet = new Set(state.masteries);
+  const searchLower = state.filters.search.toLowerCase();
+  const filtered = searchLower
+    ? masteries.filter(m => matchesMastery(m, searchLower))
+    : masteries;
 
   if (state.character) {
     // Single character selected — filter
-    const charMasteries = masteries.filter(m => m.character === state.character);
+    const charMasteries = filtered.filter(m => m.character === state.character);
     if (groupByTag) {
       renderByTag(container, charMasteries, activeSet);
     } else {
@@ -84,20 +92,20 @@ function renderGrid() {
   } else {
     // No character — show all
     if (groupByTag) {
-      renderByTag(container, masteries, activeSet);
+      renderByTag(container, filtered, activeSet);
     } else {
-      renderAllByCharacter(container, activeSet);
+      renderAllByCharacter(container, activeSet, filtered);
     }
   }
 }
 
 // ---- All masteries grouped by character ----
 
-function renderAllByCharacter(container, activeSet) {
+function renderAllByCharacter(container, activeSet, list) {
   let html = '';
 
   for (const char of characters) {
-    const charMasteries = masteries.filter(m => m.character === char.id);
+    const charMasteries = list.filter(m => m.character === char.id);
     if (charMasteries.length === 0) continue;
 
     const color = CHAR_COLORS[char.id] || 'var(--primary)';

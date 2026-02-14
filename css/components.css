@@ -204,6 +204,41 @@
   border-bottom-color: var(--primary);
 }
 
+/* ---- Tab Buttons Wrapper (inside tab-bar) ---- */
+.tab-buttons {
+  display: flex;
+  gap: var(--sp-1);
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.tab-search-input {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ---- Tab Match Badge (cross-tab search indicator) ---- */
+.tab-match-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: var(--sp-1);
+  line-height: 1;
+}
+
+.tab-match-badge.hidden {
+  display: none;
+}
+
 /* ---- Filter Pills ---- */
 .filter-group {
   display: flex;

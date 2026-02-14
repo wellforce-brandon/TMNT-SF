@@ -7,6 +7,7 @@ import {
   setUpgradeLevel, maxAllUpgrades, resetAllUpgrades,
   setActiveTab, setAutoTheme, on
 } from '../state.js';
+import { matchesUpgrade } from './search.js';
 
 let activeSection = 'dragon';
 let _suppressRender = false;
@@ -25,6 +26,9 @@ export function initUpgradesTab() {
   });
   on('upgrades-changed', () => {
     if (state.activeTab === 'upgrades' && !_suppressRender) render();
+  });
+  on('filter-changed', () => {
+    if (state.activeTab === 'upgrades') renderGrid();
   });
 }
 
@@ -80,7 +84,11 @@ function renderGrid() {
 }
 
 function renderDragonDreamer(container, currency) {
-  const filtered = upgrades.filter(u => u.currency === currency);
+  let filtered = upgrades.filter(u => u.currency === currency);
+  const searchLower = state.filters.search.toLowerCase();
+  if (searchLower) {
+    filtered = filtered.filter(u => matchesUpgrade(u, searchLower));
+  }
   const label = currency === 'dragon' ? 'Dragon' : 'Dreamer';
 
   let html = `

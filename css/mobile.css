@@ -269,6 +269,22 @@
     margin-right: auto;
   }
 
+  /* ---- Mobile Search Input ---- */
+  body.mobile-app .mobile-search-input {
+    width: 100%;
+    margin-bottom: var(--sp-2);
+  }
+
+  .mobile-match-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: super;
+  }
+
   /* ---- Panel Transition ---- */
   .mobile-panel-enter {
     animation: mobileSlideIn 0.2s ease forwards;

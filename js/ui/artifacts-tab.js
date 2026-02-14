@@ -3,6 +3,7 @@
 
 import { artifacts } from '../data/artifacts.js';
 import { state, setArtifact, setArtifactUpgradeLevel, getArtifactUpgradeLevel, on } from '../state.js';
+import { matchesArtifact } from './search.js';
 
 export function initArtifactsTab() {
   on('tab-changed', (tab) => {
@@ -13,6 +14,9 @@ export function initArtifactsTab() {
   });
   on('artifact-upgrades-changed', () => {
     if (state.activeTab === 'artifacts') render();
+  });
+  on('filter-changed', () => {
+    if (state.activeTab === 'artifacts') renderGrid();
   });
 }
 
@@ -31,12 +35,18 @@ function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
 
+  // Apply search filter
+  const searchLower = state.filters.search.toLowerCase();
+  const searchedArtifacts = searchLower
+    ? artifacts.filter(a => matchesArtifact(a, searchLower))
+    : artifacts;
+
   // Group by category
-  const categories = [...new Set(artifacts.map(a => a.category))];
+  const categories = [...new Set(searchedArtifacts.map(a => a.category))];
 
   let html = '';
   for (const cat of categories) {
-    const catArtifacts = artifacts.filter(a => a.category === cat);
+    const catArtifacts = searchedArtifacts.filter(a => a.category === cat);
     html += `<div class="inspiration-group-header" style="grid-column: 1 / -1">
       <span class="filter-group-label">${cat}</span>
     </div>`;

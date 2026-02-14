@@ -4,6 +4,7 @@
 import { inspirations } from '../data/inspirations.js';
 import { characters } from '../data/characters.js';
 import { state, setInspirationUpgradeLevel, getInspirationUpgradeLevel, isStartingInspiration, on } from '../state.js';
+import { matchesInspiration } from './search.js';
 
 // Build a character name lookup
 const charNameMap = new Map();
@@ -23,6 +24,9 @@ export function initInspirationsTab() {
   });
   on('character-changed', () => {
     if (state.activeTab === 'inspirations') render();
+  });
+  on('filter-changed', () => {
+    if (state.activeTab === 'inspirations') renderGrid();
   });
 }
 
@@ -94,6 +98,7 @@ function renderGrid() {
 
 function getGroupedInspirations() {
   const groups = [];
+  const searchLower = state.filters.search.toLowerCase();
 
   // Selected character first (if any), then the rest
   const order = state.character
@@ -101,7 +106,10 @@ function getGroupedInspirations() {
     : CHAR_ORDER;
 
   for (const charId of order) {
-    const charInsps = inspirations.filter(i => i.character === charId);
+    let charInsps = inspirations.filter(i => i.character === charId);
+    if (searchLower) {
+      charInsps = charInsps.filter(i => matchesInspiration(i, searchLower));
+    }
     if (charInsps.length > 0) {
       groups.push({
         charId,

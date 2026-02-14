@@ -122,10 +122,6 @@ function renderFilters() {
   html += `<button class="filter-pill ${state.filters.tier === 'secondary' ? 'active' : ''}" data-filter="tier" data-tier="secondary">Secondary</button>`;
   html += '</div>';
 
-  html += '<div class="filter-sep"></div>';
-
-  html += `<input type="text" class="search-input" placeholder="Search powers..." value="${state.filters.search}" id="power-search">`;
-
   container.innerHTML = html;
 
   // Bind filter events
@@ -153,12 +149,6 @@ function renderFilters() {
     });
   });
 
-  const searchInput = document.getElementById('power-search');
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      setFilter('search', e.target.value);
-    });
-  }
 }
 
 function updateFilterPills() {

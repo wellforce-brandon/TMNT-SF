@@ -3,6 +3,7 @@
 
 import { tools } from '../data/tools.js';
 import { state, setTool, on } from '../state.js';
+import { matchesTool } from './search.js';
 
 const ELEMENT_LABELS = {
   flame: 'Flame', water: 'Water', ooze: 'Ooze', utrom: 'Utrom',
@@ -15,6 +16,9 @@ export function initToolsTab() {
   });
   on('build-changed', () => {
     if (state.activeTab === 'tools') render();
+  });
+  on('filter-changed', () => {
+    if (state.activeTab === 'tools') renderGrid();
   });
 }
 
@@ -33,7 +37,10 @@ function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
 
-  container.innerHTML = tools.map(tool => {
+  const searchLower = state.filters.search.toLowerCase();
+  const filtered = searchLower ? tools.filter(t => matchesTool(t, searchLower)) : tools;
+
+  container.innerHTML = filtered.map(tool => {
     const isActive = state.tool === tool.name;
     const typeAttr = tool.element || '';
     const classes = `card ${isActive ? 'in-build' : ''}`;

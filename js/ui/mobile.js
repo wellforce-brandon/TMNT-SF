@@ -2,8 +2,9 @@
 // Orchestrates mobile experience: character picker, bottom nav, panel switching
 
 import { characters } from '../data/characters.js';
-import { state, selectCharacter, setActiveTab, on } from '../state.js';
+import { state, selectCharacter, setActiveTab, setFilter, on } from '../state.js';
 import { renderSidebar } from './sidebar.js';
+import { getMatchCounts } from './search.js';
 
 const MOBILE_BREAKPOINT = 900;
 let isMobile = false;
@@ -273,6 +274,50 @@ function injectBuildSubToggle() {
   });
 }
 
+// ---- Mobile Search Input ----
+
+function injectMobileSearch() {
+  if (!isMobile) return;
+  const filterBar = document.getElementById('filter-bar');
+  if (!filterBar) return;
+  if (filterBar.querySelector('.mobile-search-input')) return;
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'search-input mobile-search-input';
+  input.placeholder = 'Search...';
+  input.value = state.filters.search;
+  input.id = 'mobile-global-search';
+
+  input.addEventListener('input', (e) => {
+    setFilter('search', e.target.value);
+  });
+
+  filterBar.prepend(input);
+}
+
+function updateMobileMatchDots() {
+  if (!isMobile) return;
+  const toggle = document.querySelector('.mobile-build-toggle');
+  if (!toggle) return;
+
+  // Remove existing dots
+  toggle.querySelectorAll('.mobile-match-dot').forEach(d => d.remove());
+
+  const search = state.filters.search;
+  if (!search) return;
+
+  const counts = getMatchCounts(search);
+  toggle.querySelectorAll('[data-build-sub]').forEach(btn => {
+    const tabId = btn.dataset.buildSub;
+    if (tabId !== state.activeTab && (counts[tabId] || 0) > 0) {
+      const dot = document.createElement('span');
+      dot.className = 'mobile-match-dot';
+      btn.appendChild(dot);
+    }
+  });
+}
+
 // ---- HQ Filter Bar ----
 // No patching needed — upgrades-tab.js renders the correct pills
 // (Dragon / Dreamer / Artifacts→ / Inspirations→ / Settings).
@@ -327,10 +372,22 @@ function setupMobileListeners() {
       buildSubTab = tab;
     }
 
-    // Inject sub-toggles after tab module finishes rendering
+    // Inject sub-toggles and search after tab module finishes rendering
     setTimeout(() => {
       injectBuildSubToggle();
+      injectMobileSearch();
+      updateMobileMatchDots();
     }, 0);
+  });
+
+  on('filter-changed', () => {
+    if (!isMobile) return;
+    // Sync mobile search input value
+    const mobileInput = document.getElementById('mobile-global-search');
+    if (mobileInput && mobileInput.value !== state.filters.search) {
+      mobileInput.value = state.filters.search;
+    }
+    updateMobileMatchDots();
   });
 
   // Handle resize / orientation change
