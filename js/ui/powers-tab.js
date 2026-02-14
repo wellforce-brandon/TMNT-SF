@@ -29,6 +29,22 @@ for (const p of powers) {
 const powerTierLookup = new Map();
 for (const p of powers) powerTierLookup.set(p.name, p.tier);
 
+// ---- Discovery mode: prerequisite chain map (built once) ----
+// Maps parent power name → array of powers that directly require it
+const directChildren = new Map();
+for (const p of powers) {
+  if (p.tier !== 'secondary' || p.type === 'legendary') continue;
+  if (!p.requires) continue;
+  // Clean "After " prefix and check if it references a specific power name
+  const cleaned = p.requires.replace(/^After\s+/i, '');
+  // If the cleaned name exists as a real power, it's a direct prerequisite
+  // (vs. category-based like "Dealing Water Damage" which won't match)
+  if (powerTierLookup.has(cleaned)) {
+    if (!directChildren.has(cleaned)) directChildren.set(cleaned, []);
+    directChildren.get(cleaned).push(p);
+  }
+}
+
 function getTierDepth(power) {
   if (power.tier === 'initial') return 1;
   if (!power.requires) return 2; // secondary with no requires → tier 2
@@ -217,7 +233,10 @@ function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
 
-  const filtered = getFilteredPowers();
+  let filtered = getFilteredPowers();
+  if (state.filters.discovery) {
+    filtered = sortForDiscovery(filtered);
+  }
   const { available } = checkPrerequisites(state.powers);
   const availableNames = new Set(available.map(p => p.name));
   const inBuild = new Set(state.powers);
@@ -396,6 +415,88 @@ function getFilteredPowers() {
 
     return true;
   });
+}
+
+// ---- Discovery mode: reorder powers into prerequisite chains ----
+// Groups by element, puts attack slots first, chains T2/T3 after their parent
+function sortForDiscovery(filtered) {
+  const legendaries = filtered.filter(p => p.type === 'legendary');
+  const nonLegendary = filtered.filter(p => p.type !== 'legendary');
+
+  // Group by element type
+  const byType = new Map();
+  for (const p of nonLegendary) {
+    if (!byType.has(p.type)) byType.set(p.type, []);
+    byType.get(p.type).push(p);
+  }
+
+  const result = [];
+
+  for (const type of TYPE_ORDER) {
+    if (type === 'legendary') continue;
+    const group = byType.get(type);
+    if (!group) continue;
+
+    const t1 = group.filter(p => p.tier === 'initial');
+    const t2plus = group.filter(p => p.tier === 'secondary');
+    const claimed = new Set(); // T2/T3 names placed in a chain
+
+    const isAttack = p => p.slot === 'strike' || p.slot === 'dash';
+    const hasChain = p => directChildren.has(p.name);
+
+    // Collect chain: parent → direct children → grandchildren
+    function collectChain(parent) {
+      const children = (directChildren.get(parent.name) || [])
+        .filter(c => t2plus.some(p => p.name === c.name));
+      const chain = [];
+      for (const child of children) {
+        claimed.add(child.name);
+        chain.push(child);
+        const grandchildren = (directChildren.get(child.name) || [])
+          .filter(c => t2plus.some(p => p.name === c.name));
+        for (const gc of grandchildren) {
+          claimed.add(gc.name);
+          chain.push(gc);
+        }
+      }
+      return chain;
+    }
+
+    // 1. Attack T1 standalone (no chain)
+    result.push(...t1.filter(p => isAttack(p) && !hasChain(p)));
+    // 2. Attack T1 with chain + their children
+    for (const p of t1.filter(p => isAttack(p) && hasChain(p))) {
+      result.push(p);
+      result.push(...collectChain(p));
+    }
+    // 3. Non-attack T1 standalone
+    result.push(...t1.filter(p => !isAttack(p) && !hasChain(p)));
+    // 4. Non-attack T1 with chain + their children
+    for (const p of t1.filter(p => !isAttack(p) && hasChain(p))) {
+      result.push(p);
+      result.push(...collectChain(p));
+    }
+
+    // 5. Remaining T2+ (category-based, not claimed by any direct chain)
+    const unclaimed = t2plus.filter(p => !claimed.has(p.name));
+    // Category T2s that themselves have T3 children — chain those
+    for (const p of unclaimed) {
+      if (directChildren.has(p.name)) {
+        result.push(p);
+        const children = (directChildren.get(p.name) || [])
+          .filter(c => t2plus.some(x => x.name === c.name) && !claimed.has(c.name));
+        for (const c of children) {
+          claimed.add(c.name);
+          result.push(c);
+        }
+      }
+    }
+    // Category T2s with no children
+    result.push(...unclaimed.filter(p => !directChildren.has(p.name)));
+  }
+
+  result.push(...legendaries);
+  return result;
 }
 
 function filterLegendary(power, activeTypes) {
