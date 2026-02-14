@@ -58,11 +58,26 @@ export async function loginWithDiscord() {
 }
 
 export async function logout() {
-  if (!supabaseClient) return;
+  console.log('Logout: starting...');
+  if (!supabaseClient) {
+    console.warn('Logout: supabaseClient is null, aborting');
+    return;
+  }
 
-  const { error } = await supabaseClient.auth.signOut();
-  if (error) {
-    console.warn('Logout failed:', error.message);
+  try {
+    console.log('Logout: calling signOut...');
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      console.warn('Logout failed:', error.message);
+    } else {
+      console.log('Logout: signOut succeeded');
+    }
+  } catch (err) {
+    console.error('Logout: signOut threw:', err);
+    // Force local cleanup even if Supabase call fails
+    currentSession = null;
+    stopCloudSync();
+    emitAuthChanged();
   }
 }
 
@@ -292,6 +307,7 @@ async function handleAuthChange(event, session) {
 
     startCloudSync();
   } else if (event === 'SIGNED_OUT') {
+    console.log('Auth state: SIGNED_OUT');
     stopCloudSync();
   }
 }
