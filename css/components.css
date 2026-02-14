@@ -1347,6 +1347,28 @@
   flex-shrink: 0;
 }
 
+/* ---- Logout Spinner ---- */
+.btn-signing-out {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--muted-foreground);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ---- Mastery Character Group Header ---- */
 .mastery-char-header {
   grid-column: 1 / -1;

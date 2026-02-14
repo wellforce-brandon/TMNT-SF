@@ -65,7 +65,12 @@ function renderAuthButton() {
 
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => logout());
+      logoutBtn.addEventListener('click', async () => {
+        logoutBtn.disabled = true;
+        logoutBtn.className = 'btn btn-small btn-ghost btn-signing-out';
+        logoutBtn.innerHTML = '<span class="btn-spinner"></span> Signing Out…';
+        await logout();
+      });
     }
   } else {
     container.innerHTML = `
