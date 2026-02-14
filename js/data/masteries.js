@@ -11,7 +11,7 @@ export const masteries = [
     character: 'michelangelo',
     name: '-35% Dash Cooldown',
     effect: '-35% Dash Cooldown',
-    tags: ['dash', 'speed']
+    tags: ['dash']
   },
   {
     character: 'michelangelo',
@@ -165,7 +165,7 @@ export const masteries = [
     character: 'leonardo',
     name: 'Special charges 30% faster',
     effect: 'Special charges 30% faster',
-    tags: ['special', 'speed']
+    tags: ['special']
   },
   {
     character: 'leonardo',
@@ -353,7 +353,7 @@ export const masteries = [
     character: 'donatello',
     name: 'Tool charges 30% faster',
     effect: 'Tool charges 30% faster',
-    tags: ['tool', 'speed']
+    tags: ['tool']
   },
 
   // =====================
@@ -363,7 +363,7 @@ export const masteries = [
     character: 'casey',
     name: '-35% Dash Cooldown',
     effect: '-35% Dash Cooldown',
-    tags: ['dash', 'speed']
+    tags: ['dash']
   },
   {
     character: 'casey',
@@ -429,7 +429,7 @@ export const masteries = [
     character: 'casey',
     name: 'Special charges 30% faster',
     effect: 'Special charges 30% faster',
-    tags: ['special', 'speed']
+    tags: ['special']
   },
   {
     character: 'casey',
@@ -451,7 +451,7 @@ export const masteries = [
     character: 'metalhead',
     name: '-35% Dash cooldown',
     effect: '-35% Dash cooldown',
-    tags: ['dash', 'speed']
+    tags: ['dash']
   },
   {
     character: 'metalhead',
