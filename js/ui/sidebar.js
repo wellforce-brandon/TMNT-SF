@@ -20,7 +20,7 @@ const STAT_LABELS = {
   dashAttackDamage: 'Dash Dmg',
   specialAttack: 'Special Dmg',
   specialChargeRate: 'Spec. Charge',
-  specialCritChance: 'Spec. Crit',
+  specialCritChance: 'Crit Chance',
   toolDamage: 'Tool Dmg',
   toolChargeRate: 'Tool Charge',
   elementalDamage: 'Elemental Dmg',
@@ -158,7 +158,7 @@ function renderStatsSection() {
         <span class="stat-base">(base ${char.specialAttack})</span>
       </div>
       ${bonus('Charge Rate', computed.specialChargeRate)}
-      ${bonus('Spec. Crit', computed.specialCritChance)}
+      ${bonus('Crit Chance', computed.specialCritChance)}
     </div>
   `;
 
