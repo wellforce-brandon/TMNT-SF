@@ -16,7 +16,12 @@ const TABS = [
 export function initTabs() {
   renderTabs();
   on('tab-changed', renderTabs);
-  on('filter-changed', updateMatchBadges);
+  on('filter-changed', () => {
+    updateMatchBadges();
+    // Sync clear button visibility
+    const clearBtn = document.querySelector('#tab-bar .search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', !state.filters.search);
+  });
 }
 
 function renderTabs() {
@@ -44,19 +49,36 @@ function renderTabs() {
     });
   });
 
-  // Create search input once — persists across tab switches
-  if (!container.querySelector('.tab-search-input')) {
+  // Create search wrapper once — persists across tab switches
+  if (!container.querySelector('.search-wrapper')) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'search-wrapper tab-search-input';
+
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
-    searchInput.className = 'search-input tab-search-input';
+    searchInput.className = 'search-input';
     searchInput.placeholder = 'Search...';
     searchInput.id = 'global-search';
     searchInput.value = state.filters.search;
-    container.appendChild(searchInput);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'search-clear hidden';
+    clearBtn.type = 'button';
+    clearBtn.innerHTML = '&times;';
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      setFilter('search', '');
+      searchInput.focus();
+    });
 
     searchInput.addEventListener('input', (e) => {
       setFilter('search', e.target.value);
+      clearBtn.classList.toggle('hidden', !e.target.value);
     });
+
+    wrapper.appendChild(searchInput);
+    wrapper.appendChild(clearBtn);
+    container.appendChild(wrapper);
   }
 
   updateMatchBadges();

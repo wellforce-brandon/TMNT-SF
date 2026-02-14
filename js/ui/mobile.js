@@ -280,7 +280,10 @@ function injectMobileSearch() {
   if (!isMobile) return;
   const filterBar = document.getElementById('filter-bar');
   if (!filterBar) return;
-  if (filterBar.querySelector('.mobile-search-input')) return;
+  if (filterBar.querySelector('.mobile-search-wrapper')) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'search-wrapper mobile-search-wrapper';
 
   const input = document.createElement('input');
   input.type = 'text';
@@ -289,11 +292,24 @@ function injectMobileSearch() {
   input.value = state.filters.search;
   input.id = 'mobile-global-search';
 
-  input.addEventListener('input', (e) => {
-    setFilter('search', e.target.value);
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'search-clear' + (state.filters.search ? '' : ' hidden');
+  clearBtn.type = 'button';
+  clearBtn.innerHTML = '&times;';
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    setFilter('search', '');
+    input.focus();
   });
 
-  filterBar.prepend(input);
+  input.addEventListener('input', (e) => {
+    setFilter('search', e.target.value);
+    clearBtn.classList.toggle('hidden', !e.target.value);
+  });
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(clearBtn);
+  filterBar.prepend(wrapper);
 }
 
 function updateMobileMatchDots() {
@@ -382,11 +398,13 @@ function setupMobileListeners() {
 
   on('filter-changed', () => {
     if (!isMobile) return;
-    // Sync mobile search input value
+    // Sync mobile search input value and clear button
     const mobileInput = document.getElementById('mobile-global-search');
     if (mobileInput && mobileInput.value !== state.filters.search) {
       mobileInput.value = state.filters.search;
     }
+    const clearBtn = document.querySelector('.mobile-search-wrapper .search-clear');
+    if (clearBtn) clearBtn.classList.toggle('hidden', !state.filters.search);
     updateMobileMatchDots();
   });
 

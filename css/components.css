@@ -300,6 +300,44 @@
 }
 
 /* ---- Search Input ---- */
+.search-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-wrapper .search-input {
+  padding-right: var(--sp-6);
+}
+
+.search-clear {
+  position: absolute;
+  right: var(--sp-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--muted);
+  color: var(--text-secondary);
+  font-size: var(--text-md);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.search-clear:hover {
+  background: var(--border-hover);
+  color: var(--foreground);
+}
+
+.search-clear.hidden {
+  display: none;
+}
+
 .search-input {
   font-family: var(--font-body);
   font-size: var(--text-sm);
