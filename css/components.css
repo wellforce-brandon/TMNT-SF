@@ -671,6 +671,12 @@
 }
 
 /* ---- Stats Display ---- */
+#sidebar-stats {
+  background: var(--muted);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3);
+}
+
 .stat-group {
   margin-bottom: var(--sp-2);
 }
