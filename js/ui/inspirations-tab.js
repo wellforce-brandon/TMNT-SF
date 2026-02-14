@@ -3,7 +3,7 @@
 
 import { inspirations } from '../data/inspirations.js';
 import { characters } from '../data/characters.js';
-import { state, setInspirationUpgradeLevel, getInspirationUpgradeLevel, isStartingInspiration, on } from '../state.js';
+import { state, setInspirationLevel, setInspirationUpgradeLevel, getInspirationUpgradeLevel, isStartingInspiration, on } from '../state.js';
 import { matchesInspiration } from './search.js';
 import { renderUpgradeCard } from './format.js';
 
@@ -22,6 +22,9 @@ export function initInspirationsTab() {
   });
   on('inspiration-upgrades-changed', () => {
     if (state.activeTab === 'inspirations') render();
+  });
+  on('build-changed', () => {
+    if (state.activeTab === 'inspirations') renderGrid();
   });
   on('character-changed', () => {
     if (state.activeTab === 'inspirations') render();
@@ -75,13 +78,14 @@ function renderGrid() {
     for (const insp of group.inspirations) {
       const currentLevel = getInspirationUpgradeLevel(insp.name);
       const isStarter = isStartingInspiration(insp.name);
+      const inBuild = !!(state.inspirations[insp.name] && state.inspirations[insp.name] > 0);
 
       html += renderUpgradeCard({
         name: insp.name,
         effect: insp.effect,
         level: currentLevel,
         maxLevel: insp.maxLevel,
-        isInBuild: isStarter,
+        isInBuild: inBuild,
         alwaysShowControls: true,
         extraClasses: isStarter ? 'starting-inspiration' : '',
         dataAttr: `data-inspiration="${insp.name}"`,
@@ -91,6 +95,23 @@ function renderGrid() {
   }
 
   container.innerHTML = html;
+
+  // Card body click — toggle inspiration in/out of run build
+  container.querySelectorAll('.card[data-inspiration]').forEach(card => {
+    card.addEventListener('click', () => {
+      const name = card.dataset.inspiration;
+      const isStarter = isStartingInspiration(name);
+      if (isStarter) return; // Starting inspirations can't be toggled off
+      const active = state.inspirations[name] && state.inspirations[name] > 0;
+      if (active) {
+        setInspirationLevel(name, 0);
+      } else {
+        // Add at permanent upgrade level (minimum 1)
+        const level = getInspirationUpgradeLevel(name);
+        setInspirationLevel(name, Math.max(level, 1));
+      }
+    });
+  });
 
   // Bind level buttons
   container.querySelectorAll('.level-selector[data-level-inspiration] .level-btn').forEach(btn => {
