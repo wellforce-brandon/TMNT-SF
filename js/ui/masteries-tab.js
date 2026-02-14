@@ -53,13 +53,11 @@ function renderFilters() {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="card-header" style="width: 100%; padding: 0;">
-      <span class="filter-group-label">Group by Tag</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="mastery-group-tag" ${groupByTag ? 'checked' : ''}>
-        <span class="toggle-track"></span>
-      </label>
-    </div>
+    <span class="filter-group-label">Group by Tag</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="mastery-group-tag" ${groupByTag ? 'checked' : ''}>
+      <span class="toggle-track"></span>
+    </label>
   `;
 
   const toggle = document.getElementById('mastery-group-tag');
