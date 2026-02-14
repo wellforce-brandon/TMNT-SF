@@ -889,6 +889,22 @@
   margin-bottom: var(--sp-1);
 }
 
+/* Legendary path synergy items — golden accent */
+.synergy-item.synergy-legendary {
+  background: hsla(45, 80%, 55%, 0.08);
+  border-color: hsla(45, 80%, 55%, 0.4);
+}
+.synergy-item.synergy-legendary .synergy-item-title {
+  color: hsla(45, 80%, 55%, 1);
+}
+
+/* Inline hint on legendary cards — "Add X power" */
+.card-legendary-hint {
+  font-size: var(--text-xs);
+  color: hsla(45, 80%, 55%, 0.9);
+  font-style: italic;
+}
+
 /* ---- Focus Meter ---- */
 .focus-meter {
   display: flex;

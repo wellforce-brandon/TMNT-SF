@@ -667,6 +667,92 @@ export const synergyRules = [
     }
   },
 
+  // Bright Spring (reverse): Water power → need Light Attacks
+  {
+    id: 'path-brightspring-need-light',
+    name: 'Path to Bright Spring',
+    description: 'You have Water powers. Pick up Light Attacks to unlock Bright Spring (attacks restore 2 health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Bright Spring')) return false;
+      return WATER_POWERS.some(p => build.powers.includes(p)) && !build.powers.includes('Light Attacks');
+    }
+  },
+
+  // Light Hammer (reverse): Utrom power → need Light Attacks
+  {
+    id: 'path-lighthammer-need-light',
+    name: 'Path to Light Hammer',
+    description: 'You have Utrom powers. Pick up Light Attacks to unlock Light Hammer (Utrom damage increased by 10% of Max Health).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Light Hammer')) return false;
+      return UTROM_POWERS.some(p => build.powers.includes(p)) && !build.powers.includes('Light Attacks');
+    }
+  },
+
+  // Secret of the Ooze (reverse): Utrom power → need Ooze applicator
+  {
+    id: 'path-secretooze-need-ooze',
+    name: 'Path to Secret of the Ooze',
+    description: 'You have Utrom powers. Pick up an Ooze applicator to unlock Secret of the Ooze (reduce damage received by 30%).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Secret of the Ooze')) return false;
+      return UTROM_POWERS.some(p => build.powers.includes(p)) && !OOZE_APPLICATORS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Solution to Pollution (reverse): Water power → need Potency
+  {
+    id: 'path-solution-need-ooze',
+    name: 'Path to Solution to Pollution',
+    description: 'You have Water powers. Pick up Potency to unlock Solution to Pollution (+3s Ooze duration, enemies gain stacks over time).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Solution to Pollution')) return false;
+      return WATER_POWERS.some(p => build.powers.includes(p)) && !build.powers.includes('Potency');
+    }
+  },
+
+  // Spontaneous Combustion (reverse): Flame power → need Ooze applicator
+  {
+    id: 'path-combustion-need-ooze',
+    name: 'Path to Spontaneous Combustion',
+    description: 'You have Flame powers. Pick up an Ooze applicator to unlock Spontaneous Combustion (30% chance for 100 Flame damage on Ooze apply).',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Spontaneous Combustion')) return false;
+      return FLAME_POWERS.some(p => build.powers.includes(p)) && !OOZE_APPLICATORS.some(p => build.powers.includes(p));
+    }
+  },
+
+  // Cascade Drive (reverse): Water power → need Charge power
+  {
+    id: 'path-cascade-need-charge',
+    name: 'Path to Cascade Drive',
+    description: 'You have Water powers. Pick up a Charge power (Blade Matrix, Laser Strike, Overdrive, Photon Lance) to unlock Cascade Drive.',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Cascade Drive')) return false;
+      return WATER_POWERS.some(p => build.powers.includes(p)) && !CHARGE_POWERS.some(p => build.powers.includes(p)) &&
+        ROBOTICS_POWERS.some(p => build.powers.includes(p)) === false;
+    }
+  },
+
+  // Critical Flow (reverse): Flame power → need Charge power
+  {
+    id: 'path-critflow-need-charge',
+    name: 'Path to Critical Flow',
+    description: 'You have Flame powers. Pick up a Charge power (Blade Matrix, Laser Strike, Overdrive, Photon Lance) to unlock Critical Flow.',
+    category: 'legendary-path',
+    check(build) {
+      if (build.powers.includes('Critical Flow')) return false;
+      return FLAME_POWERS.some(p => build.powers.includes(p)) && !CHARGE_POWERS.some(p => build.powers.includes(p)) &&
+        ROBOTICS_POWERS.some(p => build.powers.includes(p)) === false;
+    }
+  },
+
   // =====================
   // ARTIFACT-COMBO — Artifact+Power Real Interactions
   // =====================

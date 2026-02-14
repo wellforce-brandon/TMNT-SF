@@ -412,14 +412,35 @@ function renderSynergiesSection(synergies) {
     return;
   }
 
-  let html = `<div class="sidebar-section-title">Active Synergies <span class="sidebar-section-count">${synergies.length}</span></div>`;
-  for (const syn of synergies) {
-    html += `
-      <div class="synergy-item">
-        <div class="synergy-item-title">${syn.name}</div>
-        ${syn.description}
-      </div>
-    `;
+  const legendaryPaths = synergies.filter(s => s.category === 'legendary-path');
+  const otherSynergies = synergies.filter(s => s.category !== 'legendary-path');
+
+  let html = '';
+
+  // Legendary paths — golden styling, shown first
+  if (legendaryPaths.length > 0) {
+    html += `<div class="sidebar-section-title">Legendary Paths <span class="sidebar-section-count">${legendaryPaths.length}</span></div>`;
+    for (const syn of legendaryPaths) {
+      html += `
+        <div class="synergy-item synergy-legendary">
+          <div class="synergy-item-title">${syn.name}</div>
+          ${syn.description}
+        </div>
+      `;
+    }
+  }
+
+  // Regular synergies
+  if (otherSynergies.length > 0) {
+    html += `<div class="sidebar-section-title">Active Synergies <span class="sidebar-section-count">${otherSynergies.length}</span></div>`;
+    for (const syn of otherSynergies) {
+      html += `
+        <div class="synergy-item">
+          <div class="synergy-item-title">${syn.name}</div>
+          ${syn.description}
+        </div>
+      `;
+    }
   }
 
   container.innerHTML = html;

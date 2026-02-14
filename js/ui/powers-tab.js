@@ -302,6 +302,17 @@ function renderGrid() {
       prereqHtml += `<div class="card-unlocks">Unlocks ${childNames.join(', ')}</div>`;
     }
 
+    // Inline hint on legendary cards with partial progress — "Add X power"
+    if (power.type === 'legendary' && !isInBuild && metParts.length > 0) {
+      const metCount = metParts.filter(Boolean).length;
+      if (metCount > 0 && metCount < metParts.length) {
+        const needed = power.requiredPowers
+          .filter((_, i) => !metParts[i])
+          .join(', ');
+        prereqHtml += `<div class="card-legendary-hint">Add ${needed}</div>`;
+      }
+    }
+
     html += renderUpgradeCard({
       name: power.name,
       effect: power.effect,
