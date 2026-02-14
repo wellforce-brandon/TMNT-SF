@@ -520,8 +520,8 @@ function sortForDiscovery(filtered) {
         }
       }
     }
-    // Category T2s with no children
-    result.push(...unclaimed.filter(p => !directChildren.has(p.name)));
+    // Category T2s with no children (exclude any claimed by the chain loop above)
+    result.push(...unclaimed.filter(p => !directChildren.has(p.name) && !claimed.has(p.name)));
   }
 
   result.push(...legendaries);
