@@ -191,7 +191,7 @@ function renderStatsSection() {
 
   // ── Defense / Utility ──
   const defenseRows =
-    `<div class="stat-sub"><span class="stat-sub-label">HP</span><span class="stat-sub-value">${computed.health} <span class="stat-base">(base ${char.health}, max ${char.maxHealth})</span></span></div>`
+    `<div class="stat-sub"><span class="stat-sub-label">HP</span><span class="stat-sub-value">${computed.health}</span></div>`
     + bonus('Dodge', computed.dodgeChance)
     + bonus('Move Speed', computed.moveSpeed)
     + bonus('Heal Effect.', computed.healEffectiveness)
