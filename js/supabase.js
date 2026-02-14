@@ -86,6 +86,19 @@ export async function logout() {
   currentSession = null;
   stopCloudSync();
 
+  // Nuke Supabase's stored auth tokens so a page refresh doesn't auto-restore
+  // the session. The SDK stores them under a key like sb-<ref>-auth-token.
+  try {
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
+        localStorage.removeItem(key);
+        console.log('Logout: removed stored token:', key);
+      }
+    }
+  } catch (e) {
+    console.warn('Logout: failed to clear stored tokens:', e.message);
+  }
+
   // Reset all upgrades and build to defaults (suppress cloud save so we don't
   // push empty data to the cloud — the user's cloud data stays intact for next login)
   suppressCloudSave = true;
