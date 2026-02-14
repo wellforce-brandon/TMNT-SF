@@ -3,7 +3,7 @@
 
 import { characters } from '../data/characters.js';
 import { powers } from '../data/powers.js';
-import { state, upgradeState, removePower, setTool, setArtifact, toggleMastery, setInspirationLevel, isStartingInspiration, clearBuild, on } from '../state.js';
+import { state, settings, upgradeState, removePower, setTool, setArtifact, toggleMastery, setInspirationLevel, isStartingInspiration, clearBuild, setColorStats, on } from '../state.js';
 import { runFullAnalysis, computeCharacterStats } from '../engine.js';
 
 const TYPE_LABELS = {
@@ -95,11 +95,12 @@ function renderStatsSection() {
   const bonus = (label, value, suffix = '%') =>
     value ? `<div class="stat-sub"><span class="stat-sub-label">${label}</span><span class="stat-sub-value">+${value}${suffix}</span></div>` : '';
 
-  let html = `<div class="sidebar-section-title">Stats</div>`;
+  const colorClass = settings.colorStats ? ' stats-colored' : '';
+  let html = `<div class="sidebar-section-title">Stats <button class="stats-color-toggle${settings.colorStats ? ' active' : ''}" id="stats-color-toggle" title="Toggle stat colors">🎨</button></div>`;
 
   // ── Attack ──
   html += `
-    <div class="stat-group">
+    <div class="stat-group${colorClass}" data-stat="attack">
       <div class="stat-group-header">
         <span class="stat-label">Attack</span>
         <span class="stat-value">${computed.attackDamage}</span>
@@ -113,7 +114,7 @@ function renderStatsSection() {
 
   // ── Dash ──
   html += `
-    <div class="stat-group">
+    <div class="stat-group${colorClass}" data-stat="dash">
       <div class="stat-group-header">
         <span class="stat-label">Dash Attack</span>
         <span class="stat-value">${computed.dashAttack}</span>
@@ -125,7 +126,7 @@ function renderStatsSection() {
 
   // ── Special ──
   html += `
-    <div class="stat-group">
+    <div class="stat-group${colorClass}" data-stat="special">
       <div class="stat-group-header">
         <span class="stat-label">Special</span>
         <span class="stat-value">${computed.specialAttack}</span>
@@ -138,7 +139,7 @@ function renderStatsSection() {
   // ── Tool (only show if any bonus) ──
   if (computed.toolDamage || computed.toolChargeRate) {
     html += `
-      <div class="stat-group">
+      <div class="stat-group${colorClass}" data-stat="tool">
         <div class="stat-group-header">
           <span class="stat-label">Tool</span>
         </div>
@@ -151,7 +152,7 @@ function renderStatsSection() {
   // ── Elemental (only show if any bonus) ──
   if (computed.elementalDamage || computed.negativeEffectDuration || computed.negativeEffectDamage) {
     html += `
-      <div class="stat-group">
+      <div class="stat-group${colorClass}" data-stat="elemental">
         <div class="stat-group-header">
           <span class="stat-label">Elemental</span>
         </div>
@@ -171,7 +172,7 @@ function renderStatsSection() {
     + (computed.revives > 0 ? `<div class="stat-sub"><span class="stat-sub-label">Revives</span><span class="stat-sub-value">${computed.revives}</span></div>` : '');
 
   html += `
-    <div class="stat-group">
+    <div class="stat-group${colorClass}" data-stat="defense">
       <div class="stat-group-header">
         <span class="stat-label">Defense / Utility</span>
       </div>
@@ -180,6 +181,16 @@ function renderStatsSection() {
   `;
 
   container.innerHTML = html;
+
+  // Bind color toggle
+  const colorToggle = document.getElementById('stats-color-toggle');
+  if (colorToggle) {
+    colorToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setColorStats(!settings.colorStats);
+      renderStatsSection();
+    });
+  }
 }
 
 function renderToolSection() {

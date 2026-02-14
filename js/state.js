@@ -47,7 +47,8 @@ export const state = {
 // ---- Settings State ----
 export const settings = {
   autoTheme: true,
-  themeMode: 'dark'    // 'light' | 'dark' (only used when no character or autoTheme off)
+  themeMode: 'dark',   // 'light' | 'dark' (only used when no character or autoTheme off)
+  colorStats: false    // color-code stat groups in sidebar
 };
 
 // ---- Upgrade State ----
@@ -343,6 +344,12 @@ export function setAutoTheme(value) {
 
 export function setThemeMode(mode) {
   settings.themeMode = mode;
+  emit('settings-changed', settings);
+  saveSettings();
+}
+
+export function setColorStats(value) {
+  settings.colorStats = value;
   emit('settings-changed', settings);
   saveSettings();
 }

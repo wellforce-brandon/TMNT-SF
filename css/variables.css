@@ -41,6 +41,59 @@
   --el-legendary-bg: rgba(184, 134, 11, 0.12);
   --el-legendary-border: rgba(184, 134, 11, 0.35);
 
+  /* Gameplay Mechanic Tag Colors */
+  --el-attack: #e05a3a;
+  --el-attack-bg: rgba(224, 90, 58, 0.12);
+  --el-attack-border: rgba(224, 90, 58, 0.35);
+
+  --el-crit: #b83a2a;
+  --el-crit-bg: rgba(184, 58, 42, 0.12);
+  --el-crit-border: rgba(184, 58, 42, 0.35);
+
+  --el-dash: #14b8a6;
+  --el-dash-bg: rgba(20, 184, 166, 0.12);
+  --el-dash-border: rgba(20, 184, 166, 0.35);
+
+  --el-speed: #0f8c7f;
+  --el-speed-bg: rgba(15, 140, 127, 0.12);
+  --el-speed-border: rgba(15, 140, 127, 0.35);
+
+  --el-special: #d97706;
+  --el-special-bg: rgba(217, 119, 6, 0.12);
+  --el-special-border: rgba(217, 119, 6, 0.35);
+
+  --el-tool: #4a90d9;
+  --el-tool-bg: rgba(74, 144, 217, 0.12);
+  --el-tool-border: rgba(74, 144, 217, 0.35);
+
+  --el-shuriken: #c4543e;
+  --el-shuriken-bg: rgba(196, 84, 62, 0.12);
+  --el-shuriken-border: rgba(196, 84, 62, 0.35);
+
+  --el-defense: #4a8c6e;
+  --el-defense-bg: rgba(74, 140, 110, 0.12);
+  --el-defense-border: rgba(74, 140, 110, 0.35);
+
+  --el-health: #22a55a;
+  --el-health-bg: rgba(34, 165, 90, 0.12);
+  --el-health-border: rgba(34, 165, 90, 0.35);
+
+  --el-boss: #a83240;
+  --el-boss-bg: rgba(168, 50, 64, 0.12);
+  --el-boss-border: rgba(168, 50, 64, 0.35);
+
+  --el-barrier: #8a6d3b;
+  --el-barrier-bg: rgba(138, 109, 59, 0.12);
+  --el-barrier-border: rgba(138, 109, 59, 0.35);
+
+  --el-general: #7a7a7a;
+  --el-general-bg: rgba(122, 122, 122, 0.12);
+  --el-general-border: rgba(122, 122, 122, 0.35);
+
+  --el-astral: #a78bfa;
+  --el-astral-bg: rgba(167, 139, 250, 0.12);
+  --el-astral-border: rgba(167, 139, 250, 0.35);
+
   /* Contextual element color (set via data-type attribute) */
   --el-color: var(--el-water);
   --el-bg: var(--el-water-bg);
@@ -147,4 +200,83 @@
   --el-color: var(--el-legendary);
   --el-bg: var(--el-legendary-bg);
   --el-border: var(--el-legendary-border);
+}
+
+/* Gameplay mechanic tag selectors */
+[data-type="attack"] {
+  --el-color: var(--el-attack);
+  --el-bg: var(--el-attack-bg);
+  --el-border: var(--el-attack-border);
+}
+
+[data-type="crit"] {
+  --el-color: var(--el-crit);
+  --el-bg: var(--el-crit-bg);
+  --el-border: var(--el-crit-border);
+}
+
+[data-type="dash"] {
+  --el-color: var(--el-dash);
+  --el-bg: var(--el-dash-bg);
+  --el-border: var(--el-dash-border);
+}
+
+[data-type="speed"] {
+  --el-color: var(--el-speed);
+  --el-bg: var(--el-speed-bg);
+  --el-border: var(--el-speed-border);
+}
+
+[data-type="special"] {
+  --el-color: var(--el-special);
+  --el-bg: var(--el-special-bg);
+  --el-border: var(--el-special-border);
+}
+
+[data-type="tool"] {
+  --el-color: var(--el-tool);
+  --el-bg: var(--el-tool-bg);
+  --el-border: var(--el-tool-border);
+}
+
+[data-type="shuriken"] {
+  --el-color: var(--el-shuriken);
+  --el-bg: var(--el-shuriken-bg);
+  --el-border: var(--el-shuriken-border);
+}
+
+[data-type="defense"] {
+  --el-color: var(--el-defense);
+  --el-bg: var(--el-defense-bg);
+  --el-border: var(--el-defense-border);
+}
+
+[data-type="health"] {
+  --el-color: var(--el-health);
+  --el-bg: var(--el-health-bg);
+  --el-border: var(--el-health-border);
+}
+
+[data-type="boss"] {
+  --el-color: var(--el-boss);
+  --el-bg: var(--el-boss-bg);
+  --el-border: var(--el-boss-border);
+}
+
+[data-type="barrier"] {
+  --el-color: var(--el-barrier);
+  --el-bg: var(--el-barrier-bg);
+  --el-border: var(--el-barrier-border);
+}
+
+[data-type="general"] {
+  --el-color: var(--el-general);
+  --el-bg: var(--el-general-bg);
+  --el-border: var(--el-general-border);
+}
+
+[data-type="astral"] {
+  --el-color: var(--el-astral);
+  --el-bg: var(--el-astral-bg);
+  --el-border: var(--el-astral-border);
 }

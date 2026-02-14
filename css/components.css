@@ -445,6 +445,15 @@
   border: 1px solid var(--el-border);
 }
 
+.badge-type[data-type="elemental"] {
+  background: linear-gradient(135deg,
+    var(--el-water) 0%, var(--el-flame) 18%, var(--el-ooze) 36%,
+    var(--el-utrom) 54%, var(--el-light) 72%, var(--el-robotics) 90%);
+  color: #fff;
+  border: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
 .badge-slot {
   background: var(--muted);
   color: var(--muted-foreground);
@@ -715,6 +724,76 @@
 
 .stat-sub-value .stat-base {
   font-weight: 400;
+}
+
+/* ---- Color-coded stat groups (toggled via .stats-colored) ---- */
+.stats-colored .stat-group[data-stat="attack"] .stat-group-header {
+  border-bottom-color: var(--el-attack);
+}
+.stats-colored .stat-group[data-stat="attack"] .stat-label {
+  color: var(--el-attack);
+}
+
+.stats-colored .stat-group[data-stat="dash"] .stat-group-header {
+  border-bottom-color: var(--el-dash);
+}
+.stats-colored .stat-group[data-stat="dash"] .stat-label {
+  color: var(--el-dash);
+}
+
+.stats-colored .stat-group[data-stat="special"] .stat-group-header {
+  border-bottom-color: var(--el-special);
+}
+.stats-colored .stat-group[data-stat="special"] .stat-label {
+  color: var(--el-special);
+}
+
+.stats-colored .stat-group[data-stat="tool"] .stat-group-header {
+  border-bottom-color: var(--el-tool);
+}
+.stats-colored .stat-group[data-stat="tool"] .stat-label {
+  color: var(--el-tool);
+}
+
+.stats-colored .stat-group[data-stat="elemental"] .stat-group-header {
+  border-bottom-color: var(--el-special);
+}
+.stats-colored .stat-group[data-stat="elemental"] .stat-label {
+  background: linear-gradient(90deg, var(--el-water), var(--el-flame), var(--el-ooze), var(--el-utrom), var(--el-light), var(--el-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stats-colored .stat-group[data-stat="defense"] .stat-group-header {
+  border-bottom-color: var(--el-defense);
+}
+.stats-colored .stat-group[data-stat="defense"] .stat-label {
+  color: var(--el-defense);
+}
+
+/* Stats color toggle button */
+.stats-color-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  line-height: 1;
+  margin-left: auto;
+}
+
+.stats-color-toggle:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.stats-color-toggle.active {
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
 /* Legacy grid (used by other sections) */
