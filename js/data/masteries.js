@@ -30,7 +30,7 @@ export const masteries = [
     character: 'michelangelo',
     name: '+10% Multi-Hit chance',
     effect: '+10% Multi-Hit chance',
-    tags: ['attack', 'crit'],
+    tags: ['attack'],
     statBonuses: [{ stat: 'multiHitChance', value: 10 }]
   },
   {
@@ -79,7 +79,7 @@ export const masteries = [
     character: 'michelangelo',
     name: '+40% Multi-Hit damage',
     effect: '+40% Multi-Hit damage',
-    tags: ['attack', 'crit'],
+    tags: ['attack'],
     statBonuses: [{ stat: 'multiHitDamage', value: 40 }]
   },
   {
