@@ -50,11 +50,11 @@ export const inspirations = [
   {
     character: 'raphael',
     name: 'Raphael Inspiration 2',
-    effect: '+3% / +6% / +9% Attack Critical Hit chance. +3% / +6% / +9% Critical Damage.',
+    effect: '+5% / +10% / +15% Attack Critical Hit chance. +5% / +10% / +15% Critical Damage.',
     maxLevel: 3,
     statBonuses: [
-      { stat: 'critChance', values: [3, 6, 9] },
-      { stat: 'critDamage', values: [3, 6, 9] }
+      { stat: 'critChance', values: [5, 10, 15] },
+      { stat: 'critDamage', values: [5, 10, 15] }
     ]
   },
 

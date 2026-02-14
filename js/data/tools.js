@@ -71,12 +71,11 @@ export const tools = [
   },
   {
     name: 'The Juice',
-    effect: 'Gain 15% / 25% / 35% increased damage and 10% / 15% / 20% move speed for 4s / 5s / 6s.',
+    effect: 'Gain 30% / 40% / 50% increased damage and recover Special charges for 6s / 8s / 10s.',
     element: null,
     chargeRate: 1.2,
     statBonuses: [
-      { stat: 'attackDamage', values: [15, 25, 35], conditional: true, condition: 'timed buff' },
-      { stat: 'moveSpeed', values: [10, 15, 20], conditional: true, condition: 'timed buff' }
+      { stat: 'attackDamage', values: [30, 40, 50], conditional: true, condition: 'timed buff' }
     ]
   },
   {
