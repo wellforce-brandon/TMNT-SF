@@ -23,7 +23,7 @@ const STAT_LABELS = {
   specialCritChance: 'Crit Chance',
   toolDamage: 'Tool Dmg',
   toolChargeRate: 'Tool Charge',
-  elementalDamage: 'Elemental Dmg',
+  elementalDamage: 'Damage',
   negativeEffectDuration: 'Effect Dur.',
   negativeEffectDamage: 'Effect Dmg',
   dodgeChance: 'Dodge',
@@ -182,7 +182,7 @@ function renderStatsSection() {
         <div class="stat-group-header">
           <span class="stat-label">Elemental</span>
         </div>
-        ${bonus('Elemental Dmg', computed.elementalDamage)}
+        ${bonus('Damage', computed.elementalDamage)}
         ${bonus('Effect Duration', computed.negativeEffectDuration)}
         ${bonus('Effect Damage', computed.negativeEffectDamage)}
       </div>
