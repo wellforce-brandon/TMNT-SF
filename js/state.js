@@ -41,7 +41,8 @@ export const state = {
     slot: 'all',
     tier: 'all',
     search: '',
-    discovery: false   // Progressive discovery view for powers
+    discovery: false,  // Progressive discovery view for powers
+    grouped: false     // Element group headers in powers grid
   }
 };
 

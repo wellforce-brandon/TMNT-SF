@@ -1326,6 +1326,46 @@
   color: var(--text-tertiary);
 }
 
+/* ---- Power Element Group Header ---- */
+.power-group-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 4px solid var(--el-water);
+  background: var(--muted);
+  border-radius: var(--radius);
+  margin-top: var(--sp-2);
+}
+
+.power-group-header:first-child {
+  margin-top: 0;
+}
+
+.power-group-header span {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.power-group-count {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+/* Element-specific border colors for group headers */
+.power-group-header[data-type="water"] { border-color: var(--el-water); }
+.power-group-header[data-type="flame"] { border-color: var(--el-flame); }
+.power-group-header[data-type="ooze"] { border-color: var(--el-ooze); }
+.power-group-header[data-type="utrom"] { border-color: var(--el-utrom); }
+.power-group-header[data-type="ninja"] { border-color: var(--el-ninja); }
+.power-group-header[data-type="light"] { border-color: var(--el-light); }
+.power-group-header[data-type="dark"] { border-color: var(--el-dark); }
+.power-group-header[data-type="robotics"] { border-color: var(--el-robotics); }
+.power-group-header[data-type="legendary"] { border-color: var(--el-legendary); }
+
 /* ---- Inspiration Character Group Wrapper ---- */
 .inspiration-char-group {
   display: flex;

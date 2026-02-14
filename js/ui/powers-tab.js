@@ -144,6 +144,7 @@ function renderFilters() {
   html += '<div class="filter-group">';
   html += '<span class="filter-group-label">View</span>';
   html += `<button class="filter-pill ${state.filters.discovery ? 'active' : ''}" data-filter="discovery">Discovery</button>`;
+  html += `<button class="filter-pill ${state.filters.grouped ? 'active' : ''}" data-filter="grouped">Grouped</button>`;
   html += '</div>';
 
   container.innerHTML = html;
@@ -179,6 +180,12 @@ function renderFilters() {
     });
   });
 
+  container.querySelectorAll('[data-filter="grouped"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setFilter('grouped', !state.filters.grouped);
+    });
+  });
+
 }
 
 function updateFilterPills() {
@@ -209,6 +216,11 @@ function updateFilterPills() {
   // Update discovery pill
   container.querySelectorAll('[data-filter="discovery"]').forEach(btn => {
     btn.classList.toggle('active', state.filters.discovery);
+  });
+
+  // Update grouped pill
+  container.querySelectorAll('[data-filter="grouped"]').forEach(btn => {
+    btn.classList.toggle('active', state.filters.grouped);
   });
 }
 
@@ -254,7 +266,22 @@ function renderGrid() {
     return;
   }
 
-  container.innerHTML = filtered.map(power => {
+  // Build HTML — inject element group headers when grouped toggle is active
+  let html = '';
+  let lastType = null;
+
+  for (const power of filtered) {
+    // Group header when element type changes
+    if (state.filters.grouped && power.type !== lastType) {
+      lastType = power.type;
+      const count = filtered.filter(p => p.type === power.type).length;
+      html += `
+        <div class="power-group-header" data-type="${power.type}">
+          <span>${TYPE_LABELS[power.type]}</span>
+          <span class="power-group-count">${count}</span>
+        </div>`;
+    }
+
     const isInBuild = inBuild.has(power.name);
     const isAvailable = availableNames.has(power.name);
     const isLocked = power.tier === 'secondary' && !isAvailable && !isInBuild;
@@ -296,7 +323,7 @@ function renderGrid() {
       prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">Requires: ${power.requiredPowers.join(' + ')}</div>`;
     }
 
-    return renderUpgradeCard({
+    html += renderUpgradeCard({
       name: power.name,
       effect: power.effect,
       level,
@@ -311,7 +338,9 @@ function renderGrid() {
         + comboBadges,
       prereqHtml,
     });
-  }).join('');
+  }
+
+  container.innerHTML = html;
 
   // Edge zone decrease (left side)
   container.querySelectorAll('.card-edge-zone[data-dec-power]').forEach(zone => {
