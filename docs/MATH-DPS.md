@@ -68,6 +68,16 @@ Raphael's crit build dramatically outperforms Mikey's multi-hit build on raw att
 But Mikey has elemental damage, AoE, and utility that raw numbers don't capture.
 ```
 
+### Multi-Hit DPS Interactions
+
+The `multiHitMultiplier` in the formula above captures the base multi-hit DPS contribution, but two powers add further value that isn't reflected in the multiplier alone:
+
+1. **When It Rains** adds +30/45/60 flat Water damage per multi-hit proc. This is additive elemental damage on top of each extra hit, making each multi-hit proc worth significantly more than just a repeat of the base attack.
+
+2. **Torrent stack chain** (Torrential Strike + Torrential Rain) sustains higher multi-hit uptime. Torrential Rain generates Torrent stacks from Special/Tool use (not just Final Strike), giving Torrential Strike's conditional multi-hit bonus more consistent uptime across different combat patterns.
+
+3. **Cascade Drive** (legendary) adds +3% multi-hit chance per Charge activation for the room. In extended encounters, this can stack to significant levels, making it a ramping multi-hit source that complements the flat sources.
+
 ---
 
 ## Conditional Bonus Evaluation Guide

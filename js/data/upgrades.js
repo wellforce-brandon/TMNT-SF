@@ -77,7 +77,7 @@ export const upgrades = [
   },
   {
     name: 'enduringEffect',
-    displayName: 'Enduring Effect',
+    displayName: 'Enduring Effects',
     currency: 'dragon',
     maxLevel: 5,
     stat: 'negativeEffectDuration',

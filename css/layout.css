@@ -123,6 +123,7 @@ body {
 .card-grid {
   flex: 1;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   padding: var(--sp-4) var(--sp-6);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -167,6 +168,7 @@ body {
 #sidebar-content {
   flex: 1;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   padding: var(--sp-3) var(--sp-4);
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;

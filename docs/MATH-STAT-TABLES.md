@@ -111,7 +111,7 @@ For each stat key, every possible source in the game.
 
 | Source | Type | Value | Conditional? |
 |--------|------|-------|-------------|
-| HQ Enduring Effect | upgrade | +10% per level (max 5 = +50%) | No |
+| HQ Enduring Effects | upgrade | +10% per level (max 5 = +50%) | No |
 | Eternal Darkness | power | +50 / +80 / +100% | No |
 
 ## `negativeEffectDamage`

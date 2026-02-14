@@ -182,10 +182,18 @@ multiHitDPSMultiplier = 1 + (multiHitChance / 100) * (1 + multiHitDamage / 100)
 | Michelangelo Inspiration 2 | inspiration | +5 / +10 / +15% |
 | +10% Multi-Hit chance mastery | mastery (Mikey) | +10% |
 | Torrential Strike | power (conditional) | +8/10/12% per Torrent stack, max 5 |
+| Cascade Drive | power (legendary, conditional) | +3% per Charge activation (room) |
 
 | Source | Type | Value |
 |--------|------|-------|
 | +40% Multi-Hit damage mastery | mastery (Mikey) | +40% |
+
+### Multi-Hit Synergy Powers
+
+These powers don't directly grant multi-hit chance but significantly enhance multi-hit value:
+
+- **When It Rains**: Multi-hits deal +30/45/60 flat Water damage per extra hit. Not tracked as a stat bonus, but dramatically increases the effective value of each multi-hit proc.
+- **Torrential Rain**: Generates Torrent stacks via Special/Tool use (not just Final Strike). Enables Torrential Strike's multi-hit bonus from more activation sources, increasing uptime.
 
 ### Worked Example: Michelangelo Multi-Hit Build
 

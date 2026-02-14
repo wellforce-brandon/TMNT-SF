@@ -23,7 +23,7 @@ All bonuses come from 6 source types. They are all additive with each other.
 | Mechanical Genius | `toolChargeRate` | +10% | 5 | +50% |
 | Tool Damage | `toolDamage` | +15% | 10 | +150% |
 | Focused Forces | `elementalDamage` | +7.5% | 10 | +75% |
-| Enduring Effect | `negativeEffectDuration` | +10% | 5 | +50% |
+| Enduring Effects | `negativeEffectDuration` | +10% | 5 | +50% |
 | Stronger Stuff | `negativeEffectDamage` | +5% | 5 | +25% |
 | Hammertime | `dodgeChance` | +4% | 5 | +20% |
 | Swiftness | `moveSpeed` | +5% | 10 | +50% |

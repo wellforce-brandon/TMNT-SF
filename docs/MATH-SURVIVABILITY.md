@@ -102,7 +102,7 @@ Example: Full Ooze Build
   Potency Lv3: +3 stacks per application (4 total per source)
   Goo Lv3: +180% Ooze damage/sec
   HQ Focused Forces Lv10: +75% elementalDamage
-  HQ Enduring Effect Lv5: +50% negativeEffectDuration
+  HQ Enduring Effects Lv5: +50% negativeEffectDuration
 
   Ooze duration: 5 * (1 + 50/100) = 7.5 seconds per stack
   Ooze DPS at 10 stacks: 10 * baseDmg * (1 + 180/100) * (1 + 75/100)

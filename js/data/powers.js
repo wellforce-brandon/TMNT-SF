@@ -27,7 +27,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [80, 100, 120], conditional: true, condition: 'after 2s not attacking' }]
   },
   {
     name: 'Torrential Strike',
@@ -110,7 +111,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Dealing Water Damage',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [15, 20, 30], conditional: true, condition: 'vs Bosses' }]
   },
   {
     name: 'High Tide',
@@ -218,7 +220,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [40, 70, 100], conditional: true, condition: 'below 50% Health' }]
   },
   {
     name: 'Rapid Fire',
@@ -295,7 +298,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Inferno',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'critChance', values: [15, 30, 60], conditional: true, condition: 'vs Inferno targets' }]
   },
   {
     name: 'Trailblazer',
@@ -591,7 +595,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [5, 10, 15], conditional: true, condition: 'per Adrenaline stack (max 5)' }]
   },
   {
     name: 'First Strike',
@@ -646,7 +651,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Adrenaline',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'elementalDamage', values: [15, 20, 25], conditional: true, condition: 'per Adrenaline stack' }]
   },
   {
     name: 'Heightened Senses',
@@ -776,7 +782,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Shimmering Shield',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'elementalDamage', values: [20, 30, 40], conditional: true, condition: 'while Light Shell active' }]
   },
   {
     name: 'Daybreak',
@@ -840,7 +847,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Shimmering Shield',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [30, 40, 60], conditional: true, condition: 'while Light Shell active' }]
   },
   {
     name: 'Illumination',
@@ -919,7 +927,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Darkness',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [25, 40, 60], conditional: true, condition: 'vs Darkness enemies' }]
   },
   {
     name: 'Dark Embrace',
@@ -953,7 +962,11 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Darkness',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [
+      { stat: 'attackDamage', value: 10 },
+      { stat: 'attackDamage', values: [15, 20, 25], conditional: true, condition: 'per Dragon Coin selected' }
+    ]
   },
   {
     name: 'Eternal Darkness',
@@ -1010,7 +1023,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [100, 150, 200], conditional: true, condition: 'at max Scrap (2000)' }]
   },
   {
     name: 'Ascendancy',
@@ -1070,7 +1084,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'specialChargeRate', values: [50, 80, 120], conditional: true, condition: 'scales with low HP' }]
   },
   {
     name: 'Overdrive',
@@ -1111,7 +1126,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'toolChargeRate', values: [100, 125, 150], conditional: true, condition: 'below 50% Health' }]
   },
   {
     name: 'Wireless Charging',
@@ -1153,7 +1169,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Charge',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'elementalDamage', values: [5, 10, 15], conditional: true, condition: 'per Charge activation (room)' }]
   },
   {
     name: 'Photon Lance',
@@ -1193,7 +1210,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Charge',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'specialChargeRate', values: [15, 20, 30], conditional: true, condition: 'per Charge activation (room)' }]
   },
   {
     name: 'Thunderheart',
@@ -1213,7 +1231,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Charge',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'specialChargeRate', values: [100, 120, 150] }]
   },
 
   // ============================================================
@@ -1238,7 +1257,8 @@ export const powers = [
     tier: 'secondary',
     requires: null,
     combo: ['robotics', 'water'],
-    requiredPowers: ['Charge power', 'Water damage power']
+    requiredPowers: ['Charge power', 'Water damage power'],
+    statBonuses: [{ stat: 'multiHitChance', value: 3, conditional: true, condition: 'per Charge activation (room)' }]
   },
   {
     name: 'Critical Flow',
@@ -1248,7 +1268,8 @@ export const powers = [
     tier: 'secondary',
     requires: null,
     combo: ['robotics', 'flame'],
-    requiredPowers: ['Charge power', 'Flame damage power']
+    requiredPowers: ['Charge power', 'Flame damage power'],
+    statBonuses: [{ stat: 'critChance', value: 3, conditional: true, condition: 'per Charge activation (room)' }]
   },
   {
     name: 'Dark Flame',
@@ -1258,7 +1279,8 @@ export const powers = [
     tier: 'secondary',
     requires: null,
     combo: ['dark', 'flame'],
-    requiredPowers: ['Darkness power', 'Flame damage power']
+    requiredPowers: ['Darkness power', 'Flame damage power'],
+    statBonuses: [{ stat: 'elementalDamage', value: 40, conditional: true, condition: 'vs Darkness enemies' }]
   },
   {
     name: 'Finisher',
@@ -1338,7 +1360,12 @@ export const powers = [
     tier: 'secondary',
     requires: null,
     combo: ['ninja', 'ooze'],
-    requiredPowers: ['Adrenaline', 'Ooze applicator']
+    requiredPowers: ['Adrenaline', 'Ooze applicator'],
+    statBonuses: [
+      { stat: 'moveSpeed', value: 20, conditional: true, condition: 'at max Adrenaline' },
+      { stat: 'toolChargeRate', value: 100, conditional: true, condition: 'at max Adrenaline' },
+      { stat: 'specialChargeRate', value: 100, conditional: true, condition: 'at max Adrenaline' }
+    ]
   },
   {
     name: 'Solution to Pollution',
