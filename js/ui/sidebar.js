@@ -21,7 +21,7 @@ const STAT_LABELS = {
   specialAttack: 'Special Dmg',
   specialChargeRate: 'Spec. Charge',
   specialCritChance: 'Crit Chance',
-  toolDamage: 'Tool Dmg',
+  toolDamage: 'Damage',
   toolChargeRate: 'Tool Charge',
   elementalDamage: 'Damage',
   negativeEffectDuration: 'Effect Dur.',
@@ -145,7 +145,7 @@ function renderStatsSection() {
         <span class="stat-base">(base ${char.dashAttack})</span>
       </div>
       ${bonus('Dash Dmg Bonus', computed.dashAttackDamage)}
-      ${computed.dashCharges > 1 ? `<div class="stat-sub"><span class="stat-sub-label">Dash Charges</span><span class="stat-sub-value">${computed.dashCharges}</span></div>` : ''}
+      ${computed.dashCharges > 1 ? `<div class="stat-sub"><span class="stat-sub-label">Charges</span><span class="stat-sub-value">${computed.dashCharges}</span></div>` : ''}
     </div>
   `;
 
@@ -169,7 +169,7 @@ function renderStatsSection() {
         <div class="stat-group-header">
           <span class="stat-label">Tool</span>
         </div>
-        ${bonus('Tool Damage', computed.toolDamage)}
+        ${bonus('Damage', computed.toolDamage)}
         ${bonus('Charge Rate', computed.toolChargeRate)}
       </div>
     `;
