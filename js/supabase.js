@@ -7,13 +7,14 @@ import { on, upgradeState, artifactUpgrades, inspirationUpgrades, applyCloudStat
 const SUPABASE_URL = 'https://xpohaehzmszydlhxyylt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwb2hhZWh6bXN6eWRsaHh5eWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5ODk5MjcsImV4cCI6MjA4NjU2NTkyN30.MPcbZVkKgYVEbCa0hqh-wjqjcYXnJhMu9k-G8OmlWJ8';
 
-const SAVE_DEBOUNCE_MS = 2000;
+const SAVE_DEBOUNCE_MS = 500;
 
 // ---- Module State ----
 let supabaseClient = null;
 let currentSession = null;
 let saveTimer = null;
 let syncListeners = [];
+let suppressCloudSave = false;
 
 // ---- Auth Event System (uses app's on/emit pattern) ----
 const authListeners = new Set();
@@ -68,7 +69,11 @@ export async function logout() {
 // ---- Cloud Save (Debounced) ----
 
 function debouncedCloudSave() {
-  if (!isLoggedIn()) return;
+  if (suppressCloudSave) return;
+  if (!isLoggedIn()) {
+    console.warn('Cloud save skipped: not logged in');
+    return;
+  }
 
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
@@ -78,6 +83,23 @@ function debouncedCloudSave() {
       console.warn('Cloud save failed (data safe in localStorage):', err.message);
     }
   }, SAVE_DEBOUNCE_MS);
+}
+
+function flushPendingSave() {
+  if (!saveTimer) return;
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  saveUpgradesToCloud().catch(err =>
+    console.warn('Cloud save flush failed:', err.message)
+  );
+}
+
+function onPageHide() {
+  if (document.hidden) flushPendingSave();
+}
+
+function onBeforeUnload() {
+  flushPendingSave();
 }
 
 async function saveUpgradesToCloud() {
@@ -95,6 +117,7 @@ async function saveUpgradesToCloud() {
     });
 
   if (error) throw error;
+  console.log('Cloud save complete');
 }
 
 // ---- Cloud Load ----
@@ -124,6 +147,10 @@ function startCloudSync() {
     on('artifact-upgrades-changed', debouncedCloudSave),
     on('inspiration-upgrades-changed', debouncedCloudSave)
   );
+
+  // Flush pending saves on tab hide / page close
+  document.addEventListener('visibilitychange', onPageHide);
+  window.addEventListener('beforeunload', onBeforeUnload);
 }
 
 function stopCloudSync() {
@@ -135,6 +162,9 @@ function stopCloudSync() {
     clearTimeout(saveTimer);
     saveTimer = null;
   }
+
+  document.removeEventListener('visibilitychange', onPageHide);
+  window.removeEventListener('beforeunload', onBeforeUnload);
 }
 
 // ---- Merge Prompt ----
@@ -199,22 +229,26 @@ async function handleAuthChange(event, session) {
         if (hasLocalUpgrades() && event === 'SIGNED_IN') {
           const choice = await showMergePrompt();
           if (choice === 'cloud') {
+            suppressCloudSave = true;
             applyCloudState(
               cloudData.upgrade_state || {},
               cloudData.artifact_upgrades || {},
               cloudData.inspiration_upgrades || {}
             );
+            suppressCloudSave = false;
           } else {
             // Keep local — upload to cloud
             await saveUpgradesToCloud();
           }
         } else {
           // Returning session or no local upgrades — cloud wins silently
+          suppressCloudSave = true;
           applyCloudState(
             cloudData.upgrade_state || {},
             cloudData.artifact_upgrades || {},
             cloudData.inspiration_upgrades || {}
           );
+          suppressCloudSave = false;
         }
       } else {
         // No cloud data — upload current localStorage state (first login)
