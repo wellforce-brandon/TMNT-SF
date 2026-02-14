@@ -726,6 +726,27 @@
   font-weight: 400;
 }
 
+/* ---- Conditional stat bonuses ---- */
+.stat-sub-conditional {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.stat-sub-conditional .stat-sub-label {
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.stat-sub-cond-detail {
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
 /* ---- Color-coded stat groups (toggled via .stats-colored) ---- */
 .stats-colored .stat-group[data-stat="attack"] .stat-group-header {
   border-bottom-color: var(--el-attack);

@@ -37,7 +37,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'multiHitChance', values: [8, 10, 12], conditional: true, condition: 'per Torrent stack' }]
   },
   {
     name: 'Water Abilities',
@@ -119,7 +120,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Still Waters',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'moveSpeed', value: 15, conditional: true, condition: 'while Still Waters active' }]
   },
   {
     name: 'Torrential Rain',
@@ -205,7 +207,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'critChance', values: [20, 35, 50] }]
   },
   {
     name: 'Rage',
@@ -225,7 +228,11 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [
+      { stat: 'attackDamage', values: [20, 35, 50], conditional: true, condition: 'timed buff' },
+      { stat: 'moveSpeed', values: [25, 40, 55], conditional: true, condition: 'timed buff' }
+    ]
   },
 
   // Flame - Secondary
@@ -257,7 +264,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Furious Attacks',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'critDamage', values: [60, 120, 180] }]
   },
   {
     name: 'Incendiary Strikes',
@@ -553,7 +561,11 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Dealing Utrom Damage',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [
+      { stat: 'maxHealth', values: [10, 20, 30] },
+      { stat: 'moveSpeed', value: 15 }
+    ]
   },
   {
     name: 'Alternating Current',
@@ -589,7 +601,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [30, 45, 60], conditional: true, condition: '1s after Dash' }]
   },
   {
     name: 'Quick Feet',
@@ -599,7 +612,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'dashCharges', value: 1 }]
   },
   {
     name: 'Shinobi Supremacy',
@@ -609,7 +623,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'dodgeChance', values: [10, 15, 20] }]
   },
   {
     name: 'Shuriken Attacks',
@@ -711,7 +726,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Shinobi Supremacy',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'critChance', values: [15, 25, 25], conditional: true, condition: 'on Dodge' }]
   },
   {
     name: 'Extended Assault',
@@ -737,7 +753,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'attackDamage', values: [4, 7, 10], conditional: true, condition: '% of Max Health' }]
   },
   {
     name: 'Shimmering Shield',
@@ -809,7 +826,11 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Light',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [
+      { stat: 'revives', value: 1 },
+      { stat: 'maxHealthFlat', values: [30, 60] }
+    ]
   },
   {
     name: 'Astral Insight',
@@ -839,7 +860,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Daybreak',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'dodgeChance', values: [20, 25, 30], conditional: true, condition: 'vs Blinding Light enemies' }]
   },
 
   // ============================================================
@@ -907,7 +929,11 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Darkness',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [
+      { stat: 'attackDamage', values: [3, 4, 5], conditional: true, condition: 'per Dark power' },
+      { stat: 'moveSpeed', values: [5, 7, 10], conditional: true, condition: 'per Dark power' }
+    ]
   },
   {
     name: 'Dark Star',
@@ -937,7 +963,8 @@ export const powers = [
     tier: 'secondary',
     requires: 'After Darkness',
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'negativeEffectDuration', values: [50, 80, 100] }]
   },
   {
     name: 'Gift of the Dragon',
@@ -1073,7 +1100,8 @@ export const powers = [
     tier: 'initial',
     requires: null,
     combo: null,
-    requiredPowers: null
+    requiredPowers: null,
+    statBonuses: [{ stat: 'revives', value: 1 }]
   },
   {
     name: 'Survival Matrix',

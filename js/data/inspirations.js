@@ -10,13 +10,15 @@ export const inspirations = [
     character: 'michelangelo',
     name: 'Michelangelo Inspiration 1',
     effect: '+5% / +10% / +15% Attack area size. +5% / +10% / +15% Attack damage.',
-    maxLevel: 3
+    maxLevel: 3,
+    statBonuses: [{ stat: 'attackDamage', values: [5, 10, 15] }]
   },
   {
     character: 'michelangelo',
     name: 'Michelangelo Inspiration 2',
     effect: '+5% / +10% / +15% Multi-Hit chance.',
-    maxLevel: 3
+    maxLevel: 3,
+    statBonuses: [{ stat: 'multiHitChance', values: [5, 10, 15] }]
   },
 
   // =====================
@@ -42,13 +44,18 @@ export const inspirations = [
     character: 'raphael',
     name: 'Raphael Inspiration 1',
     effect: '+5% / +10% / +15% Special Critical Hit chance.',
-    maxLevel: 3
+    maxLevel: 3,
+    statBonuses: [{ stat: 'specialCritChance', values: [5, 10, 15] }]
   },
   {
     character: 'raphael',
     name: 'Raphael Inspiration 2',
     effect: '+3% / +6% / +9% Attack Critical Hit chance. +3% / +6% / +9% Critical Damage.',
-    maxLevel: 3
+    maxLevel: 3,
+    statBonuses: [
+      { stat: 'critChance', values: [3, 6, 9] },
+      { stat: 'critDamage', values: [3, 6, 9] }
+    ]
   },
 
   // =====================
@@ -64,7 +71,8 @@ export const inspirations = [
     character: 'donatello',
     name: 'Donatello Inspiration 2',
     effect: 'Tool charges 20% / 40% faster.',
-    maxLevel: 2
+    maxLevel: 2,
+    statBonuses: [{ stat: 'toolChargeRate', values: [20, 40] }]
   },
 
   // =====================

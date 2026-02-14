@@ -4,6 +4,10 @@
 import { powers } from './data/powers.js';
 import { synergyRules } from './data/synergy-rules.js';
 import { upgrades } from './data/upgrades.js';
+import { inspirations } from './data/inspirations.js';
+import { masteries } from './data/masteries.js';
+import { tools } from './data/tools.js';
+import { artifacts } from './data/artifacts.js';
 
 // ---- Lookup Maps (built once) ----
 let powersByName = null;
@@ -306,11 +310,35 @@ export function calcBuildFocus(buildPowerNames) {
   return { level, label, typeCount: count, types: [...types] };
 }
 
-// ---- Computed Stats with Upgrades ----
+// ---- Computed Stats with Upgrades + Build Bonuses ----
 
-export function computeCharacterStats(baseChar, upgradeState) {
+// Resolve the value from a statBonus entry for a given level
+function resolveStatValue(bonus, level) {
+  if (bonus.values) {
+    const idx = Math.min((level || 1) - 1, bonus.values.length - 1);
+    return bonus.values[Math.max(0, idx)];
+  }
+  return bonus.value || 0;
+}
+
+// Collect statBonuses from a card's statBonuses array
+function collectBonuses(statBonuses, level, source, permanentAcc, conditionalAcc) {
+  if (!statBonuses) return;
+  for (const b of statBonuses) {
+    const val = resolveStatValue(b, level);
+    if (b.conditional) {
+      conditionalAcc.push({ stat: b.stat, value: val, source, condition: b.condition || '' });
+    } else {
+      permanentAcc[b.stat] = (permanentAcc[b.stat] || 0) + val;
+    }
+  }
+}
+
+export function computeCharacterStats(baseChar, upgradeState, buildState) {
   if (!baseChar) return null;
+  ensureLookups();
 
+  // --- HQ upgrade bonuses (existing logic) ---
   const getBonus = (statKey) => {
     let bonus = 0;
     for (const upg of upgrades) {
@@ -319,11 +347,6 @@ export function computeCharacterStats(baseChar, upgradeState) {
       }
     }
     return bonus;
-  };
-
-  const applyPercent = (base, statKey) => {
-    const bonus = getBonus(statKey);
-    return Math.round(base * (1 + bonus / 100));
   };
 
   const applyFlat = (base, statKey) => {
@@ -336,31 +359,108 @@ export function computeCharacterStats(baseChar, upgradeState) {
     return base + flat;
   };
 
+  // --- Build card bonuses ---
+  const perm = {};    // { statKey: totalValue }
+  const cond = [];    // [{ stat, value, source, condition }]
+
+  if (buildState) {
+    // Powers
+    if (buildState.powers) {
+      for (const name of buildState.powers) {
+        const power = powersByName ? powersByName.get(name) : powers.find(p => p.name === name);
+        if (power) {
+          const level = (buildState.powerLevels && buildState.powerLevels[name]) || 1;
+          collectBonuses(power.statBonuses, level, name, perm, cond);
+        }
+      }
+    }
+
+    // Masteries
+    if (buildState.masteries) {
+      for (const name of buildState.masteries) {
+        const mastery = masteries.find(m => m.name === name);
+        if (mastery) {
+          collectBonuses(mastery.statBonuses, 1, name, perm, cond);
+        }
+      }
+    }
+
+    // Inspirations
+    if (buildState.inspirations) {
+      for (const [name, level] of Object.entries(buildState.inspirations)) {
+        if (level <= 0) continue;
+        const insp = inspirations.find(i => i.name === name);
+        if (insp) {
+          collectBonuses(insp.statBonuses, level, name, perm, cond);
+        }
+      }
+    }
+
+    // Tool
+    if (buildState.tool) {
+      const tool = tools.find(t => t.name === buildState.tool);
+      if (tool) {
+        const level = buildState.toolLevel || 1;
+        collectBonuses(tool.statBonuses, level, buildState.tool, perm, cond);
+      }
+    }
+
+    // Artifact
+    if (buildState.artifact) {
+      const artifact = artifacts.find(a => a.name === buildState.artifact);
+      if (artifact) {
+        const level = buildState.artifactLevel || 1;
+        collectBonuses(artifact.statBonuses, level, buildState.artifact, perm, cond);
+      }
+    }
+  }
+
+  // Helper: get total bonus for a stat (HQ upgrades + build permanent bonuses)
+  const totalBonus = (statKey) => getBonus(statKey) + (perm[statKey] || 0);
+
+  const applyPercent = (base, statKey) => {
+    const bonus = totalBonus(statKey);
+    return Math.round(base * (1 + bonus / 100));
+  };
+
+  // Flat bonuses from build (e.g., Revival's +30/60 Max Health)
+  const flatBonus = (statKey) => perm[statKey] || 0;
+
+  const baseHealth = Math.min(
+    Math.round(baseChar.health * (1 + getBonus('maxHealth') / 100 + (perm['maxHealth'] || 0) / 100)) + flatBonus('maxHealthFlat'),
+    baseChar.maxHealth
+  );
+
   return {
     // Attack group
-    health: Math.min(applyPercent(baseChar.health, 'maxHealth'), baseChar.maxHealth),
+    health: baseHealth,
     attackDamage: applyPercent(baseChar.attackDamage, 'attackDamage'),
-    critChance: getBonus('critChance'),
-    critDamage: getBonus('critDamage'),
-    multiHitChance: getBonus('multiHitChance'),
+    critChance: totalBonus('critChance'),
+    critDamage: totalBonus('critDamage'),
+    multiHitChance: totalBonus('multiHitChance'),
+    multiHitDamage: totalBonus('multiHitDamage'),
     // Dash group
     dashAttack: applyPercent(baseChar.dashAttack, 'dashAttackDamage'),
-    dashCharges: applyFlat(1, 'dashCharges'),
+    dashAttackDamage: totalBonus('dashAttackDamage'),
+    dashCharges: applyFlat(1, 'dashCharges') + (perm['dashCharges'] || 0),
     // Special group
     specialAttack: applyPercent(baseChar.specialAttack, 'specialAttack'),
-    specialChargeRate: getBonus('specialChargeRate'),
+    specialChargeRate: totalBonus('specialChargeRate'),
+    specialCritChance: totalBonus('specialCritChance'),
     // Tool group
-    toolDamage: getBonus('toolDamage'),
-    toolChargeRate: getBonus('toolChargeRate'),
+    toolDamage: totalBonus('toolDamage'),
+    toolChargeRate: totalBonus('toolChargeRate'),
     // Elemental group
-    elementalDamage: getBonus('elementalDamage'),
-    negativeEffectDuration: getBonus('negativeEffectDuration'),
-    negativeEffectDamage: getBonus('negativeEffectDamage'),
+    elementalDamage: totalBonus('elementalDamage'),
+    negativeEffectDuration: totalBonus('negativeEffectDuration'),
+    negativeEffectDamage: totalBonus('negativeEffectDamage'),
     // Defense / Utility
-    dodgeChance: getBonus('dodgeChance'),
-    moveSpeed: getBonus('moveSpeed'),
-    healEffectiveness: getBonus('healEffectiveness'),
-    revives: applyFlat(0, 'revives')
+    dodgeChance: totalBonus('dodgeChance'),
+    moveSpeed: totalBonus('moveSpeed'),
+    healEffectiveness: totalBonus('healEffectiveness'),
+    revives: applyFlat(0, 'revives') + (perm['revives'] || 0),
+    // Conditional bonuses (for separate display)
+    conditionalBonuses: cond
   };
 }
 

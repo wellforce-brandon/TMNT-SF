@@ -11,6 +11,29 @@ const TYPE_LABELS = {
   ninja: 'Ninja', light: 'Light', dark: 'Dark', robotics: 'Robotics', legendary: 'Legendary'
 };
 
+const STAT_LABELS = {
+  attackDamage: 'Attack Dmg',
+  critChance: 'Crit Chance',
+  critDamage: 'Crit Damage',
+  multiHitChance: 'Multi-Hit',
+  multiHitDamage: 'Multi-Hit Dmg',
+  dashAttackDamage: 'Dash Dmg',
+  specialAttack: 'Special Dmg',
+  specialChargeRate: 'Spec. Charge',
+  specialCritChance: 'Spec. Crit',
+  toolDamage: 'Tool Dmg',
+  toolChargeRate: 'Tool Charge',
+  elementalDamage: 'Elemental Dmg',
+  negativeEffectDuration: 'Effect Dur.',
+  negativeEffectDamage: 'Effect Dmg',
+  dodgeChance: 'Dodge',
+  moveSpeed: 'Move Speed',
+  healEffectiveness: 'Heal Effect.',
+  maxHealth: 'Max Health',
+  maxHealthFlat: 'Max Health',
+  revives: 'Revives'
+};
+
 // Power type lookup
 const powerTypeMap = new Map();
 
@@ -89,7 +112,7 @@ function renderStatsSection() {
   }
 
   const char = characters.find(c => c.id === state.character);
-  const computed = computeCharacterStats(char, upgradeState);
+  const computed = computeCharacterStats(char, upgradeState, state);
 
   // Helper: render a bonus sub-row (only if value > 0)
   const bonus = (label, value, suffix = '%') =>
@@ -109,6 +132,7 @@ function renderStatsSection() {
       ${bonus('Crit Chance', computed.critChance)}
       ${bonus('Crit Damage', computed.critDamage)}
       ${bonus('Multi-Hit', computed.multiHitChance)}
+      ${bonus('Multi-Hit Dmg', computed.multiHitDamage)}
     </div>
   `;
 
@@ -120,6 +144,7 @@ function renderStatsSection() {
         <span class="stat-value">${computed.dashAttack}</span>
         <span class="stat-base">(base ${char.dashAttack})</span>
       </div>
+      ${bonus('Dash Dmg Bonus', computed.dashAttackDamage)}
       ${computed.dashCharges > 1 ? `<div class="stat-sub"><span class="stat-sub-label">Dash Charges</span><span class="stat-sub-value">${computed.dashCharges}</span></div>` : ''}
     </div>
   `;
@@ -133,6 +158,7 @@ function renderStatsSection() {
         <span class="stat-base">(base ${char.specialAttack})</span>
       </div>
       ${bonus('Charge Rate', computed.specialChargeRate)}
+      ${bonus('Spec. Crit', computed.specialCritChance)}
     </div>
   `;
 
@@ -179,6 +205,22 @@ function renderStatsSection() {
       ${defenseRows}
     </div>
   `;
+
+  // ── Conditional Bonuses ──
+  if (computed.conditionalBonuses && computed.conditionalBonuses.length > 0) {
+    html += `<div class="stat-group" data-stat="conditional">
+      <div class="stat-group-header">
+        <span class="stat-label">Conditional Bonuses</span>
+      </div>`;
+    for (const cb of computed.conditionalBonuses) {
+      const statLabel = STAT_LABELS[cb.stat] || cb.stat;
+      html += `<div class="stat-sub stat-sub-conditional">
+        <span class="stat-sub-label">${statLabel} +${cb.value}%</span>
+        <span class="stat-sub-cond-detail" title="${cb.source}">${cb.condition}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  }
 
   container.innerHTML = html;
 

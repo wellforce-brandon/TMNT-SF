@@ -23,13 +23,15 @@ export const masteries = [
     character: 'michelangelo',
     name: '+10% Elemental damage',
     effect: '+10% Elemental damage',
-    tags: ['elemental', 'attack']
+    tags: ['elemental', 'attack'],
+    statBonuses: [{ stat: 'elementalDamage', value: 10 }]
   },
   {
     character: 'michelangelo',
     name: '+10% Multi-Hit chance',
     effect: '+10% Multi-Hit chance',
-    tags: ['attack', 'crit']
+    tags: ['attack', 'crit'],
+    statBonuses: [{ stat: 'multiHitChance', value: 10 }]
   },
   {
     character: 'michelangelo',
@@ -41,7 +43,11 @@ export const masteries = [
     character: 'michelangelo',
     name: '+20% Damage dealt and Move Speed for 3s after defeating an enemy',
     effect: '+20% Damage dealt and Move Speed for 3s after defeating an enemy',
-    tags: ['attack', 'speed']
+    tags: ['attack', 'speed'],
+    statBonuses: [
+      { stat: 'attackDamage', value: 20, conditional: true, condition: '3s on kill' },
+      { stat: 'moveSpeed', value: 20, conditional: true, condition: '3s on kill' }
+    ]
   },
   {
     character: 'michelangelo',
@@ -53,13 +59,15 @@ export const masteries = [
     character: 'michelangelo',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'michelangelo',
     name: '+30% Special area size. Special charges 20% faster',
     effect: '+30% Special area size. Special charges 20% faster',
-    tags: ['special', 'attack']
+    tags: ['special', 'attack'],
+    statBonuses: [{ stat: 'specialChargeRate', value: 20 }]
   },
   {
     character: 'michelangelo',
@@ -71,7 +79,8 @@ export const masteries = [
     character: 'michelangelo',
     name: '+40% Multi-Hit damage',
     effect: '+40% Multi-Hit damage',
-    tags: ['attack', 'crit']
+    tags: ['attack', 'crit'],
+    statBonuses: [{ stat: 'multiHitDamage', value: 40 }]
   },
   {
     character: 'michelangelo',
@@ -83,7 +92,8 @@ export const masteries = [
     character: 'michelangelo',
     name: '+15% Attack area size. +15% Attack damage',
     effect: '+15% Attack area size. +15% Attack damage',
-    tags: ['attack', 'general']
+    tags: ['attack', 'general'],
+    statBonuses: [{ stat: 'attackDamage', value: 15 }]
   },
   {
     character: 'michelangelo',
@@ -117,7 +127,8 @@ export const masteries = [
     character: 'leonardo',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'leonardo',
@@ -165,7 +176,8 @@ export const masteries = [
     character: 'leonardo',
     name: 'Special charges 30% faster',
     effect: 'Special charges 30% faster',
-    tags: ['special']
+    tags: ['special'],
+    statBonuses: [{ stat: 'specialChargeRate', value: 30 }]
   },
   {
     character: 'leonardo',
@@ -187,13 +199,15 @@ export const masteries = [
     character: 'raphael',
     name: '+3% Critical Hit damage for the rest of the encounter upon defeating an enemy',
     effect: '+3% Critical Hit damage for the rest of the encounter upon defeating an enemy',
-    tags: ['crit', 'attack']
+    tags: ['crit', 'attack'],
+    statBonuses: [{ stat: 'critDamage', value: 3, conditional: true, condition: 'per kill' }]
   },
   {
     character: 'raphael',
     name: '+20% Attack Critical Hit chance',
     effect: '+20% Attack Critical Hit chance',
-    tags: ['crit', 'attack']
+    tags: ['crit', 'attack'],
+    statBonuses: [{ stat: 'critChance', value: 20 }]
   },
   {
     character: 'raphael',
@@ -205,13 +219,15 @@ export const masteries = [
     character: 'raphael',
     name: '+20% Special Critical Hit chance',
     effect: '+20% Special Critical Hit chance',
-    tags: ['crit', 'special']
+    tags: ['crit', 'special'],
+    statBonuses: [{ stat: 'specialCritChance', value: 20 }]
   },
   {
     character: 'raphael',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'raphael',
@@ -223,7 +239,8 @@ export const masteries = [
     character: 'raphael',
     name: '+30% Special damage',
     effect: '+30% Special damage',
-    tags: ['special', 'attack']
+    tags: ['special', 'attack'],
+    statBonuses: [{ stat: 'specialAttack', value: 30 }]
   },
   {
     character: 'raphael',
@@ -235,7 +252,8 @@ export const masteries = [
     character: 'raphael',
     name: '+50% Critical Hit damage',
     effect: '+50% Critical Hit damage',
-    tags: ['crit', 'attack']
+    tags: ['crit', 'attack'],
+    statBonuses: [{ stat: 'critDamage', value: 50 }]
   },
   {
     character: 'raphael',
@@ -281,7 +299,8 @@ export const masteries = [
     character: 'donatello',
     name: '+15% all damage dealt',
     effect: '+15% all damage dealt',
-    tags: ['attack', 'general']
+    tags: ['attack', 'general'],
+    statBonuses: [{ stat: 'attackDamage', value: 15 }]
   },
   {
     character: 'donatello',
@@ -299,7 +318,8 @@ export const masteries = [
     character: 'donatello',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'donatello',
@@ -323,7 +343,8 @@ export const masteries = [
     character: 'donatello',
     name: '+75% Special damage',
     effect: '+75% Special damage',
-    tags: ['special', 'attack']
+    tags: ['special', 'attack'],
+    statBonuses: [{ stat: 'specialAttack', value: 75 }]
   },
   {
     character: 'donatello',
@@ -353,7 +374,8 @@ export const masteries = [
     character: 'donatello',
     name: 'Tool charges 30% faster',
     effect: 'Tool charges 30% faster',
-    tags: ['tool']
+    tags: ['tool'],
+    statBonuses: [{ stat: 'toolChargeRate', value: 30 }]
   },
 
   // =====================
@@ -375,7 +397,8 @@ export const masteries = [
     character: 'casey',
     name: '+15% Attack area size. +15% Attack damage',
     effect: '+15% Attack area size. +15% Attack damage',
-    tags: ['attack', 'general']
+    tags: ['attack', 'general'],
+    statBonuses: [{ stat: 'attackDamage', value: 15 }]
   },
   {
     character: 'casey',
@@ -387,7 +410,8 @@ export const masteries = [
     character: 'casey',
     name: '+20% Special Critical Hit chance',
     effect: '+20% Special Critical Hit chance',
-    tags: ['crit', 'special']
+    tags: ['crit', 'special'],
+    statBonuses: [{ stat: 'specialCritChance', value: 20 }]
   },
   {
     character: 'casey',
@@ -399,7 +423,8 @@ export const masteries = [
     character: 'casey',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'casey',
@@ -429,7 +454,8 @@ export const masteries = [
     character: 'casey',
     name: 'Special charges 30% faster',
     effect: 'Special charges 30% faster',
-    tags: ['special']
+    tags: ['special'],
+    statBonuses: [{ stat: 'specialChargeRate', value: 30 }]
   },
   {
     character: 'casey',
@@ -469,7 +495,8 @@ export const masteries = [
     character: 'metalhead',
     name: '+20% Attack Critical Hit chance',
     effect: '+20% Attack Critical Hit chance',
-    tags: ['crit', 'attack']
+    tags: ['crit', 'attack'],
+    statBonuses: [{ stat: 'critChance', value: 20 }]
   },
   {
     character: 'metalhead',
@@ -487,7 +514,8 @@ export const masteries = [
     character: 'metalhead',
     name: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
     effect: '+30% Dash Attack damage. Gain 1 charge of Dash upon defeating an enemy',
-    tags: ['dash', 'attack']
+    tags: ['dash', 'attack'],
+    statBonuses: [{ stat: 'dashAttackDamage', value: 30 }]
   },
   {
     character: 'metalhead',
@@ -523,7 +551,8 @@ export const masteries = [
     character: 'metalhead',
     name: 'Increase movement speed by 50% during Special',
     effect: 'Increase movement speed by 50% during Special',
-    tags: ['special', 'speed']
+    tags: ['special', 'speed'],
+    statBonuses: [{ stat: 'moveSpeed', value: 50, conditional: true, condition: 'during Special' }]
   },
   {
     character: 'metalhead',

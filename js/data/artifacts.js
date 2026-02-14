@@ -92,7 +92,8 @@ export const artifacts = [
     effect: '+5% / +7.5% / +10% / +12.5% / +15% / +17.5% dodge chance. Increased dash invulnerability.',
     maxLevel: 6,
     tags: ['dodge', 'defense'],
-    category: 'utility'
+    category: 'utility',
+    statBonuses: [{ stat: 'dodgeChance', values: [5, 7.5, 10, 12.5, 15, 17.5] }]
   },
   {
     name: 'Astral Charm',
@@ -159,7 +160,8 @@ export const artifacts = [
     effect: "+1 Splinter's Revive. +10% / +15% / +20% additional Health on revive.",
     maxLevel: 3,
     tags: ['revive', 'survivability'],
-    category: 'advanced'
+    category: 'advanced',
+    statBonuses: [{ stat: 'revives', value: 1 }]
   },
   {
     name: 'Cracked Stasis Beacon',

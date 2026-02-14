@@ -60,7 +60,8 @@ export const tools = [
     name: 'Smoke Bomb',
     effect: 'Create a smoke cloud for 2s / 3s / 4s. Enemies inside are stunned. Gain 20% / 30% / 40% dodge while inside.',
     element: 'physical',
-    chargeRate: 1.0
+    chargeRate: 1.0,
+    statBonuses: [{ stat: 'dodgeChance', values: [20, 30, 40], conditional: true, condition: 'while in cloud' }]
   },
   {
     name: 'Taunt',
@@ -72,7 +73,11 @@ export const tools = [
     name: 'The Juice',
     effect: 'Gain 15% / 25% / 35% increased damage and 10% / 15% / 20% move speed for 4s / 5s / 6s.',
     element: null,
-    chargeRate: 1.2
+    chargeRate: 1.2,
+    statBonuses: [
+      { stat: 'attackDamage', values: [15, 25, 35], conditional: true, condition: 'timed buff' },
+      { stat: 'moveSpeed', values: [10, 15, 20], conditional: true, condition: 'timed buff' }
+    ]
   },
   {
     name: 'Turtle Line',
