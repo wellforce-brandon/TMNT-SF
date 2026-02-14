@@ -42,7 +42,7 @@ export const state = {
     tier: 'all',
     search: '',
     discovery: false,  // Progressive discovery view for powers
-    grouped: false     // Element group headers in powers grid
+    grouped: true      // Element group headers in powers grid
   }
 };
 

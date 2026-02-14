@@ -245,10 +245,7 @@ function renderGrid() {
   const container = document.getElementById('card-grid');
   if (!container) return;
 
-  let filtered = getFilteredPowers();
-  if (state.filters.discovery) {
-    filtered = sortForDiscovery(filtered);
-  }
+  let filtered = sortByChain(getFilteredPowers());
   const { available } = checkPrerequisites(state.powers);
   const availableNames = new Set(available.map(p => p.name));
   const inBuild = new Set(state.powers);
@@ -446,9 +443,9 @@ function getFilteredPowers() {
   });
 }
 
-// ---- Discovery mode: reorder powers into prerequisite chains ----
+// ---- Prerequisite-chain sort (always active) ----
 // Groups by element, puts attack slots first, chains T2/T3 after their parent
-function sortForDiscovery(filtered) {
+function sortByChain(filtered) {
   const legendaries = filtered.filter(p => p.type === 'legendary');
   const nonLegendary = filtered.filter(p => p.type !== 'legendary');
 
