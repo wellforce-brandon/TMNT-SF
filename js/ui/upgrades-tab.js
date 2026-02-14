@@ -171,11 +171,49 @@ function renderDragonDreamer(container, currency) {
   }
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      for (const upg of filtered) {
-        setUpgradeLevel(upg.name, 0);
-      }
+      confirmReset(label).then(confirmed => {
+        if (!confirmed) return;
+        for (const upg of filtered) {
+          setUpgradeLevel(upg.name, 0);
+        }
+      });
     });
   }
+}
+
+function confirmReset(label) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    overlay.innerHTML = `
+      <div class="modal" style="max-width: 420px;">
+        <div class="modal-header">
+          <h2>Reset ${label}</h2>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--foreground); margin-bottom: var(--sp-2);">
+            Are you sure you want to reset all ${label} to 0?
+          </p>
+          <div class="modal-actions" style="justify-content: flex-end;">
+            <button class="btn btn-small btn-ghost" id="confirm-reset-cancel">Cancel</button>
+            <button class="btn btn-small" id="confirm-reset-yes" style="background: var(--destructive); color: var(--destructive-foreground);">Reset All</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document.getElementById('confirm-reset-cancel').addEventListener('click', () => {
+      overlay.remove();
+      resolve(false);
+    });
+
+    document.getElementById('confirm-reset-yes').addEventListener('click', () => {
+      overlay.remove();
+      resolve(true);
+    });
+  });
 }
 
 function renderSettings(container) {
