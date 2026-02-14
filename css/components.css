@@ -748,48 +748,48 @@
 }
 
 /* ---- Color-coded stat groups (toggled via .stats-colored) ---- */
-.stats-colored .stat-group[data-stat="attack"] .stat-group-header {
+.stat-group.stats-colored[data-stat="attack"] .stat-group-header {
   border-bottom-color: var(--el-attack);
 }
-.stats-colored .stat-group[data-stat="attack"] .stat-label {
+.stat-group.stats-colored[data-stat="attack"] .stat-label {
   color: var(--el-attack);
 }
 
-.stats-colored .stat-group[data-stat="dash"] .stat-group-header {
+.stat-group.stats-colored[data-stat="dash"] .stat-group-header {
   border-bottom-color: var(--el-dash);
 }
-.stats-colored .stat-group[data-stat="dash"] .stat-label {
+.stat-group.stats-colored[data-stat="dash"] .stat-label {
   color: var(--el-dash);
 }
 
-.stats-colored .stat-group[data-stat="special"] .stat-group-header {
+.stat-group.stats-colored[data-stat="special"] .stat-group-header {
   border-bottom-color: var(--el-special);
 }
-.stats-colored .stat-group[data-stat="special"] .stat-label {
+.stat-group.stats-colored[data-stat="special"] .stat-label {
   color: var(--el-special);
 }
 
-.stats-colored .stat-group[data-stat="tool"] .stat-group-header {
+.stat-group.stats-colored[data-stat="tool"] .stat-group-header {
   border-bottom-color: var(--el-tool);
 }
-.stats-colored .stat-group[data-stat="tool"] .stat-label {
+.stat-group.stats-colored[data-stat="tool"] .stat-label {
   color: var(--el-tool);
 }
 
-.stats-colored .stat-group[data-stat="elemental"] .stat-group-header {
+.stat-group.stats-colored[data-stat="elemental"] .stat-group-header {
   border-bottom-color: var(--el-special);
 }
-.stats-colored .stat-group[data-stat="elemental"] .stat-label {
+.stat-group.stats-colored[data-stat="elemental"] .stat-label {
   background: linear-gradient(90deg, var(--el-water), var(--el-flame), var(--el-ooze), var(--el-utrom), var(--el-light), var(--el-dark));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.stats-colored .stat-group[data-stat="defense"] .stat-group-header {
+.stat-group.stats-colored[data-stat="defense"] .stat-group-header {
   border-bottom-color: var(--el-defense);
 }
-.stats-colored .stat-group[data-stat="defense"] .stat-label {
+.stat-group.stats-colored[data-stat="defense"] .stat-label {
   color: var(--el-defense);
 }
 
