@@ -59,7 +59,7 @@ function renderColumn(containerId, currency) {
 
   // Keep the title, replace the rest
   const title = container.querySelector('.upgrade-column-title');
-  const titleHtml = title ? title.outerHTML : `<h3 class="upgrade-column-title">${currency === 'dragon' ? 'Dragon' : 'Dreamer'} Upgrades</h3>`;
+  const titleHtml = title ? title.outerHTML : `<h3 class="upgrade-column-title">${currency === 'dragon' ? 'Dragon Powers' : 'Dreamer Powers'} Upgrades</h3>`;
 
   let html = titleHtml;
 

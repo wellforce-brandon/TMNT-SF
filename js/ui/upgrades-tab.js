@@ -13,8 +13,8 @@ let activeSection = 'dragon';
 let _suppressRender = false;
 
 const SECTIONS = [
-  { id: 'dragon', label: 'Dragon' },
-  { id: 'dreamer', label: 'Dreamer' },
+  { id: 'dragon', label: 'Dragon Powers' },
+  { id: 'dreamer', label: 'Dreamer Powers' },
   { id: 'artifacts', label: 'Artifacts →', redirect: 'artifacts' },
   { id: 'inspirations', label: 'Inspirations →', redirect: 'inspirations' },
   { id: 'settings', label: 'Settings' }
@@ -89,7 +89,7 @@ function renderDragonDreamer(container, currency) {
   if (searchLower) {
     filtered = filtered.filter(u => matchesUpgrade(u, searchLower));
   }
-  const label = currency === 'dragon' ? 'Dragon' : 'Dreamer';
+  const label = currency === 'dragon' ? 'Dragon Powers' : 'Dreamer Powers';
 
   let html = `
     <div style="grid-column: 1 / -1; display: flex; gap: var(--sp-2); margin-bottom: var(--sp-2)">
