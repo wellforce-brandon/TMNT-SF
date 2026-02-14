@@ -130,6 +130,12 @@ body {
   align-content: start;
 }
 
+/* Inspirations tab: 2-column grid for character groups */
+.card-grid.inspirations-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-4);
+}
+
 /* ---- Sidebar ---- */
 #sidebar {
   width: var(--sidebar-width);
@@ -292,6 +298,10 @@ body {
   .card-grid {
     grid-template-columns: 1fr;
     padding: var(--sp-3);
+  }
+
+  .card-grid.inspirations-grid {
+    grid-template-columns: 1fr;
   }
 
   .filter-bar {

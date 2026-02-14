@@ -16,8 +16,26 @@ for (const c of characters) {
 // Character display order
 const CHAR_ORDER = ['michelangelo', 'leonardo', 'raphael', 'donatello', 'casey', 'metalhead'];
 
+// Character theme primary colors (from themes.css --primary values)
+const CHAR_COLORS = {
+  michelangelo: 'hsl(16, 100%, 58%)',
+  leonardo: 'hsl(215, 80%, 55%)',
+  raphael: 'hsl(2, 76%, 56%)',
+  donatello: 'hsl(270, 55%, 58%)',
+  casey: 'hsl(180, 70%, 48%)',
+  metalhead: 'hsl(50, 85%, 55%)'
+};
+
 export function initInspirationsTab() {
   on('tab-changed', (tab) => {
+    const grid = document.getElementById('card-grid');
+    if (grid) {
+      if (tab === 'inspirations') {
+        grid.classList.add('inspirations-grid');
+      } else {
+        grid.classList.remove('inspirations-grid');
+      }
+    }
     if (tab === 'inspirations') render();
   });
   on('inspiration-upgrades-changed', () => {
@@ -35,6 +53,8 @@ export function initInspirationsTab() {
 }
 
 export function render() {
+  const grid = document.getElementById('card-grid');
+  if (grid) grid.classList.add('inspirations-grid');
   renderFilters();
   renderGrid();
 }
@@ -70,10 +90,16 @@ function renderGrid() {
 
   let html = '';
   for (const group of grouped) {
-    const isSelectedChar = state.character && group.charId === state.character;
-    html += `<div class="inspiration-group-header" style="grid-column: 1 / -1">
-      <span class="filter-group-label">${group.charName}${isSelectedChar ? ' (Starting)' : ''}</span>
-    </div>`;
+    const color = CHAR_COLORS[group.charId] || 'var(--primary)';
+
+    html += `<div class="inspiration-char-group">`;
+    html += `
+      <div class="mastery-char-header" style="border-color: ${color}">
+        <img src="assets/faces/${group.charId}.png" alt="${group.charName}">
+        <span>${group.charName}</span>
+        <span class="mastery-char-count">${group.inspirations.length}</span>
+      </div>
+    `;
 
     for (const insp of group.inspirations) {
       const currentLevel = getInspirationUpgradeLevel(insp.name);
@@ -92,6 +118,8 @@ function renderGrid() {
         headerExtra: isStarter ? '<span class="badge badge-starting">Starting</span>' : '',
       });
     }
+
+    html += `</div>`;
   }
 
   container.innerHTML = html;
