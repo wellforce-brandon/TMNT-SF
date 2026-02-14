@@ -16,13 +16,13 @@ export function matchesTool(tool, searchLower) {
 export function matchesArtifact(artifact, searchLower) {
   if (artifact.name.toLowerCase().includes(searchLower)) return true;
   if (artifact.tags.some(t => t.toLowerCase().includes(searchLower))) return true;
-  if (artifact.levels.some(l => l.effect.toLowerCase().includes(searchLower))) return true;
+  if (artifact.effect.toLowerCase().includes(searchLower)) return true;
   return false;
 }
 
 export function matchesInspiration(insp, searchLower) {
   if (insp.name.toLowerCase().includes(searchLower)) return true;
-  if (insp.levels.some(l => l.effect.toLowerCase().includes(searchLower))) return true;
+  if (insp.effect.toLowerCase().includes(searchLower)) return true;
   return false;
 }
 

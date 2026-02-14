@@ -30,6 +30,7 @@ export const state = {
   artifact: null,
   artifactLevel: 1,
   tool: null,
+  toolLevel: 1,        // 1-3 (temporary in-run upgrade)
   powers: [],
   powerLevels: {},     // { powerName: level (1-3) }
   masteries: [],
@@ -85,6 +86,7 @@ export function selectCharacter(charId) {
   if (state.character === charId) {
     state.character = null;
     state.tool = null;
+    state.toolLevel = 1;
   } else {
     state.character = charId;
     const char = characters.find(c => c.id === charId);
@@ -143,7 +145,26 @@ export function setPowerLevel(powerName, level) {
 }
 
 export function setTool(toolName) {
-  state.tool = toolName;
+  if (state.tool === toolName) {
+    // Toggle off
+    state.tool = null;
+    state.toolLevel = 1;
+  } else {
+    state.tool = toolName;
+    state.toolLevel = 1;
+  }
+  emit('build-changed', state);
+  saveBuild();
+}
+
+export function setToolLevel(level) {
+  if (level <= 0) {
+    state.tool = null;
+    state.toolLevel = 1;
+  } else {
+    if (level > 3) level = 3;
+    state.toolLevel = level;
+  }
   emit('build-changed', state);
   saveBuild();
 }
@@ -234,6 +255,7 @@ export function clearBuild() {
   state.inspirations = {};
   state.artifact = null;
   state.artifactLevel = 1;
+  state.toolLevel = 1;
   if (state.character) {
     const char = characters.find(c => c.id === state.character);
     if (char) state.tool = char.defaultTool;
@@ -366,6 +388,7 @@ function saveBuild() {
       powers: state.powers,
       powerLevels: state.powerLevels,
       tool: state.tool,
+      toolLevel: state.toolLevel,
       artifact: state.artifact,
       artifactLevel: state.artifactLevel,
       masteries: state.masteries,
@@ -474,6 +497,7 @@ export function loadPersistedState() {
       if (data.powers) state.powers = data.powers;
       if (data.powerLevels) state.powerLevels = data.powerLevels;
       if (data.tool) state.tool = data.tool;
+      if (data.toolLevel) state.toolLevel = data.toolLevel;
       if (data.artifact) state.artifact = data.artifact;
       if (data.artifactLevel) state.artifactLevel = data.artifactLevel;
       if (data.masteries) state.masteries = data.masteries;

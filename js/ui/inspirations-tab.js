@@ -5,6 +5,7 @@ import { inspirations } from '../data/inspirations.js';
 import { characters } from '../data/characters.js';
 import { state, setInspirationUpgradeLevel, getInspirationUpgradeLevel, isStartingInspiration, on } from '../state.js';
 import { matchesInspiration } from './search.js';
+import { renderUpgradeCard } from './format.js';
 
 // Build a character name lookup
 const charNameMap = new Map();
@@ -54,6 +55,16 @@ function renderGrid() {
   // Group inspirations by character, selected character first (if any)
   const grouped = getGroupedInspirations();
 
+  if (grouped.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1">
+        <div class="empty-state-title">No Inspirations Found</div>
+        <div class="empty-state-desc">Try adjusting your search</div>
+      </div>
+    `;
+    return;
+  }
+
   let html = '';
   for (const group of grouped) {
     const isSelectedChar = state.character && group.charId === state.character;
@@ -62,33 +73,49 @@ function renderGrid() {
     </div>`;
 
     for (const insp of group.inspirations) {
-      html += renderInspirationCard(insp);
+      const currentLevel = getInspirationUpgradeLevel(insp.name);
+      const isStarter = isStartingInspiration(insp.name);
+
+      html += renderUpgradeCard({
+        name: insp.name,
+        effect: insp.effect,
+        level: currentLevel,
+        maxLevel: insp.maxLevel,
+        isInBuild: isStarter,
+        alwaysShowControls: true,
+        extraClasses: isStarter ? 'starting-inspiration' : '',
+        dataAttr: `data-inspiration="${insp.name}"`,
+        headerExtra: isStarter ? '<span class="badge badge-starting">Starting</span>' : '',
+      });
     }
   }
 
   container.innerHTML = html;
 
   // Bind level buttons
-  container.querySelectorAll('.level-btn[data-insp]').forEach(btn => {
+  container.querySelectorAll('.level-selector[data-level-inspiration] .level-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      setInspirationUpgradeLevel(btn.dataset.insp, parseInt(btn.dataset.level));
+      const name = btn.closest('.level-selector').dataset.levelInspiration;
+      setInspirationUpgradeLevel(name, parseInt(btn.dataset.level));
     });
   });
 
-  // Bind edge zone +/- for inspirations
-  container.querySelectorAll('.card-edge-zone[data-insp-dec]').forEach(zone => {
+  // Edge zone decrease
+  container.querySelectorAll('.card-edge-zone[data-dec-inspiration]').forEach(zone => {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
-      const name = zone.dataset.inspDec;
+      const name = zone.dataset.decInspiration;
       const current = getInspirationUpgradeLevel(name);
       if (current > 1) setInspirationUpgradeLevel(name, current - 1);
     });
   });
-  container.querySelectorAll('.card-edge-zone[data-insp-inc]').forEach(zone => {
+
+  // Edge zone increase
+  container.querySelectorAll('.card-edge-zone[data-inc-inspiration]').forEach(zone => {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
-      const name = zone.dataset.inspInc;
+      const name = zone.dataset.incInspiration;
       const max = parseInt(zone.dataset.max);
       const current = getInspirationUpgradeLevel(name);
       if (current < max) setInspirationUpgradeLevel(name, current + 1);
@@ -120,41 +147,4 @@ function getGroupedInspirations() {
   }
 
   return groups;
-}
-
-function renderInspirationCard(insp) {
-  const currentLevel = getInspirationUpgradeLevel(insp.name);
-  const activeLevel = insp.levels.find(l => l.level === currentLevel) || insp.levels[0];
-  const isStarter = isStartingInspiration(insp.name);
-  const maxLevel = insp.levels.length;
-
-  let classes = 'card upgrade-card';
-  if (isStarter) classes += ' in-build starting-inspiration';
-
-  const levelButtons = insp.levels.map(l =>
-    `<button class="level-btn ${currentLevel === l.level ? 'active' : ''}" data-insp="${insp.name}" data-level="${l.level}">Lv${l.level}</button>`
-  ).join('');
-
-  return `
-    <div class="${classes}" data-inspiration="${insp.name}">
-      <div class="card-edge-zone card-edge-dec" data-insp-dec="${insp.name}">&minus;</div>
-      <div class="card-edge-zone card-edge-inc" data-insp-inc="${insp.name}" data-max="${maxLevel}">+</div>
-      <div class="card-header">
-        <span class="card-name">${insp.name}</span>
-        ${isStarter ? '<span class="badge badge-starting">Starting</span>' : ''}
-        <span class="badge badge-slot">Lv${currentLevel}/${maxLevel}</span>
-      </div>
-      <div class="card-effect">${activeLevel.effect}</div>
-      <div class="card-meta">
-        <div class="level-selector">
-          ${levelButtons}
-        </div>
-      </div>
-      <div style="margin-top: var(--sp-2)">
-        ${insp.levels.map(l =>
-          `<div class="card-prereq ${currentLevel >= l.level ? 'card-prereq-met' : ''}">Lv${l.level}: ${l.effect}</div>`
-        ).join('')}
-      </div>
-    </div>
-  `;
 }

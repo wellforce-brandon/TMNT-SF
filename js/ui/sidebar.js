@@ -190,7 +190,7 @@ function renderToolSection() {
     <div class="sidebar-section-title">Tool</div>
     ${state.tool
       ? `<div class="sidebar-item" data-sidebar-tool="${state.tool}">
-           <span>${state.tool}</span>
+           <span>${state.tool} (Lv${state.toolLevel || 1})</span>
            <span class="sidebar-item-remove">x</span>
          </div>`
       : '<div style="color: var(--text-tertiary); font-size: var(--text-sm)">None equipped</div>'

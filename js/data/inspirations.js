@@ -1,6 +1,6 @@
 // TMNT: Splintered Fate - Inspirations Data
 // 2 per character from tmntsplinteredfate.pages.dev
-// Most have 3 levels; Leo #2 and Donnie #2 have 2 levels
+// Effect text uses "X / Y / Z" inline patterns for level-scaled values
 
 export const inspirations = [
   // =====================
@@ -9,20 +9,14 @@ export const inspirations = [
   {
     character: 'michelangelo',
     name: 'Michelangelo Inspiration 1',
-    levels: [
-      { level: 1, effect: '+5% Attack area size. +5% Attack damage.' },
-      { level: 2, effect: '+10% Attack area size. +10% Attack damage.' },
-      { level: 3, effect: '+15% Attack area size. +15% Attack damage.' }
-    ]
+    effect: '+5% / +10% / +15% Attack area size. +5% / +10% / +15% Attack damage.',
+    maxLevel: 3
   },
   {
     character: 'michelangelo',
     name: 'Michelangelo Inspiration 2',
-    levels: [
-      { level: 1, effect: '+5% Multi-Hit chance.' },
-      { level: 2, effect: '+10% Multi-Hit chance.' },
-      { level: 3, effect: '+15% Multi-Hit chance.' }
-    ]
+    effect: '+5% / +10% / +15% Multi-Hit chance.',
+    maxLevel: 3
   },
 
   // =====================
@@ -31,19 +25,14 @@ export const inspirations = [
   {
     character: 'leonardo',
     name: 'Leonardo Inspiration 1',
-    levels: [
-      { level: 1, effect: '+5 Master Strike damage.' },
-      { level: 2, effect: '+10 Master Strike damage.' },
-      { level: 3, effect: '+15 Master Strike damage.' }
-    ]
+    effect: '+5 / +10 / +15 Master Strike damage.',
+    maxLevel: 3
   },
   {
     character: 'leonardo',
     name: 'Leonardo Inspiration 2',
-    levels: [
-      { level: 1, effect: 'Grants +1 Special charge.' },
-      { level: 2, effect: 'Grants +2 Special charges.' }
-    ]
+    effect: '+1 / +2 Special charges.',
+    maxLevel: 2
   },
 
   // =====================
@@ -52,20 +41,14 @@ export const inspirations = [
   {
     character: 'raphael',
     name: 'Raphael Inspiration 1',
-    levels: [
-      { level: 1, effect: '+5% Special Critical Hit chance.' },
-      { level: 2, effect: '+10% Special Critical Hit chance.' },
-      { level: 3, effect: '+15% Special Critical Hit chance.' }
-    ]
+    effect: '+5% / +10% / +15% Special Critical Hit chance.',
+    maxLevel: 3
   },
   {
     character: 'raphael',
     name: 'Raphael Inspiration 2',
-    levels: [
-      { level: 1, effect: '+3% Attack Critical Hit chance. +3% Critical Damage.' },
-      { level: 2, effect: '+6% Attack Critical Hit chance. +6% Critical Damage.' },
-      { level: 3, effect: '+9% Attack Critical Hit chance. +9% Critical Damage.' }
-    ]
+    effect: '+3% / +6% / +9% Attack Critical Hit chance. +3% / +6% / +9% Critical Damage.',
+    maxLevel: 3
   },
 
   // =====================
@@ -74,19 +57,14 @@ export const inspirations = [
   {
     character: 'donatello',
     name: 'Donatello Inspiration 1',
-    levels: [
-      { level: 1, effect: 'Restore 1 Health upon starting an encounter.' },
-      { level: 2, effect: 'Restore 2 Health upon starting an encounter.' },
-      { level: 3, effect: 'Restore 3 Health upon starting an encounter.' }
-    ]
+    effect: 'Restore 1 / 2 / 3 Health upon starting an encounter.',
+    maxLevel: 3
   },
   {
     character: 'donatello',
     name: 'Donatello Inspiration 2',
-    levels: [
-      { level: 1, effect: 'Tool charges 20% faster.' },
-      { level: 2, effect: 'Tool charges 40% faster.' }
-    ]
+    effect: 'Tool charges 20% / 40% faster.',
+    maxLevel: 2
   },
 
   // =====================
@@ -95,20 +73,14 @@ export const inspirations = [
   {
     character: 'casey',
     name: 'Casey Jones Inspiration 1',
-    levels: [
-      { level: 1, effect: 'Special applies Guard Break for +1s to enemies hit.' },
-      { level: 2, effect: 'Special applies Guard Break for +2s to enemies hit.' },
-      { level: 3, effect: 'Special applies Guard Break for +3s to enemies hit.' }
-    ]
+    effect: 'Special applies Guard Break for +1s / +2s / +3s to enemies hit.',
+    maxLevel: 3
   },
   {
     character: 'casey',
     name: 'Casey Jones Inspiration 2',
-    levels: [
-      { level: 1, effect: 'Using your Special makes your next attack a Final Strike with +33% Crit Chance.' },
-      { level: 2, effect: 'Using your Special makes your next attack a Final Strike with +66% Crit Chance.' },
-      { level: 3, effect: 'Using your Special makes your next attack a Final Strike with +100% Crit Chance.' }
-    ]
+    effect: 'Using your Special makes your next attack a Final Strike with +33% / +66% / +100% Crit Chance.',
+    maxLevel: 3
   },
 
   // =====================
@@ -117,19 +89,13 @@ export const inspirations = [
   {
     character: 'metalhead',
     name: 'Metalhead Inspiration 1',
-    levels: [
-      { level: 1, effect: 'On Boss defeat, upgrade a random enhancement and gain 25 Scrap.' },
-      { level: 2, effect: 'On Boss defeat, upgrade a random enhancement and gain 50 Scrap.' },
-      { level: 3, effect: 'On Boss defeat, upgrade a random enhancement and gain 75 Scrap.' }
-    ]
+    effect: 'On Boss defeat, upgrade a random enhancement and gain 25 / 50 / 75 Scrap.',
+    maxLevel: 3
   },
   {
     character: 'metalhead',
     name: 'Metalhead Inspiration 2',
-    levels: [
-      { level: 1, effect: 'Tool applies Guard Break to enemies hit for 3 seconds.' },
-      { level: 2, effect: 'Tool applies Guard Break to enemies hit for 6 seconds.' },
-      { level: 3, effect: 'Tool applies Guard Break to enemies hit for 9 seconds.' }
-    ]
+    effect: 'Tool applies Guard Break to enemies hit for 3 / 6 / 9 seconds.',
+    maxLevel: 3
   }
 ];

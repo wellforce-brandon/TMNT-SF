@@ -4,6 +4,7 @@
 import { powers } from '../data/powers.js';
 import { state, setPowerLevel, setFilter, toggleTypeFilter, on } from '../state.js';
 import { checkPrerequisites, getDependentsInBuild, CATEGORY_REQUIRES_LABELS } from '../engine.js';
+import { renderUpgradeCard } from './format.js';
 
 const TYPE_ORDER = ['water', 'flame', 'ooze', 'utrom', 'ninja', 'light', 'dark', 'robotics', 'legendary'];
 const TYPE_LABELS = {
@@ -50,21 +51,6 @@ function tierBadge(power) {
   const cls = depth === 3 ? 'badge-tier-3' : depth === 2 ? 'badge-tier-2' : 'badge-tier-1';
   const slices = PIZZA_SLICE.repeat(depth);
   return `<span class="badge ${cls}" title="Tier ${depth}">${slices}</span>`;
-}
-
-// Resolve effect text for a specific level.
-// Replaces "20% / 30% / 40%" patterns with the single value for the given level.
-function resolveEffectForLevel(text, level) {
-  if (!level || level < 1) return text;
-  return text.replace(
-    /([+-]?\d+(?:\.\d+)?[%s]?)\s*\/\s*([+-]?\d+(?:\.\d+)?[%s]?)(?:\s*\/\s*([+-]?\d+(?:\.\d+)?[%s]?))?/g,
-    (match, v1, v2, v3) => {
-      const vals = [v1, v2];
-      if (v3) vals.push(v3);
-      const idx = Math.min(level - 1, vals.length - 1);
-      return `<span class="effect-value">${vals[idx]}</span>`;
-    }
-  );
 }
 
 export function initPowersTab() {
@@ -219,35 +205,22 @@ function renderGrid() {
     const isLocked = power.tier === 'secondary' && !isAvailable && !isInBuild;
     const level = isInBuild ? (state.powerLevels[power.name] || 1) : 0;
 
-    let classes = 'card';
-    if (isInBuild) classes += ' in-build upgrade-card';
-    if (isAvailable && !isInBuild) classes += ' available-highlight';
-    if (isLocked) classes += ' locked';
+    // Build extra classes
+    let extra = '';
+    if (isAvailable && !isInBuild) extra += 'available-highlight';
+    if (isLocked) extra += (extra ? ' ' : '') + 'locked';
 
-    // Edge zones only when in build (matching artifact pattern)
-    const edgeZones = isInBuild ? `
-      <div class="card-edge-zone card-edge-dec" data-power-dec="${power.name}">&minus;</div>
-      <div class="card-edge-zone card-edge-inc" data-power-inc="${power.name}">+</div>
-    ` : '';
-
-    // Level buttons (only when in build) — same numbered buttons as artifacts
-    const levelButtons = isInBuild ? `
-      <div class="level-selector" data-power-level="${power.name}">
-        <button class="level-btn ${level === 1 ? 'active' : ''}" data-level="1">1</button>
-        <button class="level-btn ${level === 2 ? 'active' : ''}" data-level="2">2</button>
-        <button class="level-btn ${level === 3 ? 'active' : ''}" data-level="3">3</button>
-      </div>
-    ` : '';
-
-    let badges = '';
+    // Legendary combo badges
+    let comboBadges = '';
     if (power.type === 'legendary' && power.combo) {
-      badges += `<div class="legendary-combo" data-type="legendary">`;
-      badges += power.combo.map(el =>
+      comboBadges += `<div class="legendary-combo" data-type="legendary">`;
+      comboBadges += power.combo.map(el =>
         `<span class="badge badge-type" data-type="${el}">${TYPE_LABELS[el]}</span>`
       ).join('<span class="legendary-combo-plus">+</span>');
-      badges += `</div>`;
+      comboBadges += `</div>`;
     }
 
+    // Prerequisite display
     let prereqHtml = '';
     if (power.requires) {
       const met = isAvailable || isInBuild;
@@ -259,30 +232,28 @@ function renderGrid() {
       prereqHtml = `<div class="card-prereq ${met ? 'card-prereq-met' : ''}">Requires: ${power.requiredPowers.join(' + ')}</div>`;
     }
 
-    return `
-      <div class="${classes}" data-type="${power.type}" data-power="${power.name}">
-        ${edgeZones}
-        <div class="card-header">
-          <span class="card-name">${power.name}</span>
-        </div>
-        <div class="card-effect">${isInBuild ? resolveEffectForLevel(power.effect, level) : power.effect}</div>
-        ${prereqHtml}
-        <div class="card-meta">
-          <span class="badge badge-type" data-type="${power.type}">${TYPE_LABELS[power.type]}</span>
-          <span class="badge badge-slot">${power.slot}</span>
-          ${tierBadge(power)}
-          ${badges}
-        </div>
-        ${levelButtons}
-      </div>
-    `;
+    return renderUpgradeCard({
+      name: power.name,
+      effect: power.effect,
+      level,
+      maxLevel: 3,
+      isInBuild,
+      extraClasses: extra,
+      dataAttr: `data-power="${power.name}"`,
+      typeAttr: `data-type="${power.type}"`,
+      badges: `<span class="badge badge-type" data-type="${power.type}">${TYPE_LABELS[power.type]}</span>`
+        + `<span class="badge badge-slot">${power.slot}</span>`
+        + tierBadge(power)
+        + comboBadges,
+      prereqHtml,
+    });
   }).join('');
 
   // Edge zone decrease (left side)
-  container.querySelectorAll('.card-edge-zone[data-power-dec]').forEach(zone => {
+  container.querySelectorAll('.card-edge-zone[data-dec-power]').forEach(zone => {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
-      const name = zone.dataset.powerDec;
+      const name = zone.dataset.decPower;
       const current = state.powerLevels[name] || 0;
       if (current - 1 <= 0) {
         const deps = getDependentsInBuild(name, state.powers);
@@ -297,20 +268,20 @@ function renderGrid() {
   });
 
   // Edge zone increase (right side)
-  container.querySelectorAll('.card-edge-zone[data-power-inc]').forEach(zone => {
+  container.querySelectorAll('.card-edge-zone[data-inc-power]').forEach(zone => {
     zone.addEventListener('click', (e) => {
       e.stopPropagation();
-      const name = zone.dataset.powerInc;
+      const name = zone.dataset.incPower;
       const current = state.powerLevels[name] || 0;
       setPowerLevel(name, current + 1);
     });
   });
 
   // Level buttons
-  container.querySelectorAll('.level-selector[data-power-level] .level-btn').forEach(btn => {
+  container.querySelectorAll('.level-selector[data-level-power] .level-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const name = btn.closest('.level-selector').dataset.powerLevel;
+      const name = btn.closest('.level-selector').dataset.levelPower;
       setPowerLevel(name, parseInt(btn.dataset.level));
     });
   });
